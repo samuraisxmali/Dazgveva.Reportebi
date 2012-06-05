@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 10.25" name="Pirvelckaroebi">
+  <DataContextMoniker Name="/PirvelckaroebiDataContext" />
+  <nestedChildShapes>
+    <classShape Id="253358c1-45b7-480e-a9aa-746da31395ba" absoluteBounds="0.75, 0.75, 2, 9.2706526692708326">
+      <DataClassMoniker Name="/PirvelckaroebiDataContext/Source_Data" />
+      <nestedChildShapes>
+        <elementListCompartment Id="132a7055-750e-46c8-9ab3-67451fd3d1c2" absoluteBounds="0.765, 1.21, 1.9700000000000002, 8.7106526692708321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="88b6d74a-aa13-4d4c-b0b7-f73507c7096a" absoluteBounds="3.75, 0.75, 2, 4.8477197265625">
+      <DataClassMoniker Name="/PirvelckaroebiDataContext/Pirvelckaro_01_UMCEOEBI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="46d15462-2afb-465d-80a2-62c5f829c70c" absoluteBounds="3.765, 1.21, 1.9700000000000002, 4.2877197265625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -1,0 +1,161 @@
+﻿@model IEnumerable<Dazgveva.Reportebi.Models.Kontrakti>
+
+@{
+    ViewBag.Title = "Dzebna";
+}
+
+<h2>Dzebna</h2>
+
+<p>
+</p>
+<table>
+    <tr>
+             <th></th><th>
+            Base_Description
+        </th>
+        <th>
+            Unnom
+        </th>
+        <th>
+            FID
+        </th>
+        <th>
+            PID
+            FIRST_NAME
+            LAST_NAME
+            BIRTH_DATE
+        </th>
+        <th>
+            RAI
+            CITY
+            ADDRESS_FULL
+        </th>
+        <th>
+            ADD_DATE
+        </th>
+        <th>
+            dagv_tar
+        </th>
+        <th>
+            CONTINUE_DATE
+        </th>
+        <th>
+            End_Date
+        </th>
+        <th>
+            STOP_DATE
+        </th>
+        <th>
+            Company
+        </th>
+        <th>
+            STATE
+        </th>
+        <th>
+            POLISIS_NOMERI
+        </th>
+   
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                <span class="Periodebi ButtonLink " data-id="@item.ID">Periodebi</span>
+                <span class="Gadarickhvebi ButtonLink " data-id="@item.ID">Gadarickhvebi</span>
+               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Base_Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unnom)
+            </td>
+            <td>
+                @if(!string.IsNullOrWhiteSpace(item.FID))
+                {
+                    @Html.ActionLink(item.FID, "Dzebna", new {q = item.FID})
+                    <span class="FamiliDatas ButtonLink " data-id="@item.FID">H</span>
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(item.PID))
+                {
+                    @Html.ActionLink(item.PID, "Dzebna", new {q = item.PID})
+                }
+                @Html.DisplayFor(modelItem => item.FIRST_NAME)
+                @Html.DisplayFor(modelItem => item.LAST_NAME)
+                @Html.DisplayFor(modelItem => item.BIRTH_DATE)
+                @if (item.BIRTH_DATE.HasValue)
+                {
+                    <em>@((DateTime.Today.Year - item.BIRTH_DATE.Value.Year))წლის.</em>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RAI)
+                @Html.DisplayFor(modelItem => item.CITY)
+                @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ADD_DATE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dagv_tar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CONTINUE_DATE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.End_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STOP_DATE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STATE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.POLISIS_NOMERI)
+            </td>
+            
+        </tr>
+    }
+
+</table>
+
+<div id="NoteDialog" title="" class="Hidden"></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#NoteDialog").dialog({
+            autoOpen: false, width: 800, height: 630, modal: false,
+            buttons: {
+                "Close": function () { $(this).dialog("close"); }
+            }
+        });
+        $(".Periodebi").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./Periodebi/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+        $(".Gadarickhvebi").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./Gadarickhvebi/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+        $(".FamiliDatas").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./FamiliDatas/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+        
+
+    });
+    
+
+</script>

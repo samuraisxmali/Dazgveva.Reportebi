@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Pirvelckaroebi" Class="PirvelckaroebiDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=megamozg;Initial Catalog=Pirvelckaroebi;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="PirvelckaroebiConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Source_Data" Member="Source_Datas">
+    <Type Name="Source_Data">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Pirvelckaro" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Base_Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Source_Rec_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Periodi" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="First_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Last_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Birth_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Sex" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Region_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Rai_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Village" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Street" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Full_Address" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Dacesebuleba" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Dac_Region_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Dac_Rai_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Dac_City" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Dac_Village" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Dac_Full_Address" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Region_ID" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Rai" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ITEM_NO" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Unnom" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DEC_REC_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Xarvezi" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="J_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Piroba" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MapDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ServiceStartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ServiceEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Akhali" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Org_PID" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Org_First_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Org_Last_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Org_Birth_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Foto" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="UnnomisKhariskhi" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CONDITION_DESCRIPTION" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CONDITION_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="GaukmebuliPid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pirvelckaro_01_UMCEOEBI" Member="Pirvelckaro_01_UMCEOEBIs">
+    <Type Name="Pirvelckaro_01_UMCEOEBI">
+      <Column Name="RecId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RecDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Base_Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SourceDataId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FID" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FAMILY_SCORE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="REGION_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="REGION" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ZIP_CODE" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CITY" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="GOVERNMENT" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="VILLAGE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="FULL_ADDRESS" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="PID" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BIRTH_DATE" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FIRST_NAME" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LAST_NAME" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SCORE_DATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="VISIT_DATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="RESORE_DOC_NO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="RESTORE_DOC_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
