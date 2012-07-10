@@ -80,10 +80,10 @@
     </Compile>
     <Compile Include="Models\Kontrakti.cs" />
     <Compile Include="Models\KontraktisPeriodi.cs" />
-    <Compile Include="Models\Pirvelckaroebi.designer.cs">
+    <Compile Include="Models\Pirvelckaroebi2.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Pirvelckaroebi.dbml</DependentUpon>
+      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -124,6 +124,7 @@
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.xdomainajax.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Web.config" />
@@ -171,13 +172,13 @@
     <Content Include="Views\Home\Dzebna.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Home\Gadarickhvebi.cshtml" />
-    <None Include="Models\Pirvelckaroebi.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Pirvelckaroebi.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Home\FamiliDatas.cshtml" />
     <Content Include="Views\Home\Periodebi.cshtml" />
+    <None Include="Models\Pirvelckaroebi2.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Pirvelckaroebi2.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -188,8 +189,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\Pirvelckaroebi.dbml.layout">
-      <DependentUpon>Pirvelckaroebi.dbml</DependentUpon>
+    <None Include="Models\Pirvelckaroebi2.dbml.layout">
+      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,17 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 25, 75" name="InsuranceW">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 25, 76.75" name="InsuranceW">
   <DataContextMoniker Name="/InsuranceWDataContext" />
   <nestedChildShapes>
     <classShape Id="d19b8b29-1adb-4d21-915d-b2c9f3c06823" absoluteBounds="8.125, 3.5, 2, 4.4631168619791666">
       <DataClassMoniker Name="/InsuranceWDataContext/GADARICXVA_FULL" />
       <nestedChildShapes>
         <elementListCompartment Id="11188539-2129-4171-8ac2-b280d022b4e6" absoluteBounds="8.14, 3.96, 1.9700000000000002, 3.903116861979167" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="b223eead-a411-4a28-9501-2f3e69cd5c73" absoluteBounds="4.75, 2.75, 2, 71.960919596354145">
-      <DataClassMoniker Name="/InsuranceWDataContext/DAZGVEVA_201206" />
-      <nestedChildShapes>
-        <elementListCompartment Id="58f7c664-970e-4c26-a22e-31927975d5ab" absoluteBounds="4.765, 3.21, 1.9700000000000002, 71.400919596354157" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <classShape Id="0db3424e-3878-49e8-b5c2-908615ed7698" absoluteBounds="0.75, 0.75, 2, 7.9245426432291648">
@@ -102,6 +96,12 @@
       <DataClassMoniker Name="/InsuranceWDataContext/FAMILY_DATA_201203" />
       <nestedChildShapes>
         <elementListCompartment Id="4088f4f0-60d0-47c9-877f-779d44bd7d27" absoluteBounds="22.765, 1.21, 1.9700000000000002, 8.7106526692708321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e6f7e4d0-f8a3-41b3-aaf0-19858bdcaf48" absoluteBounds="3.625, 2, 2, 74.460838216145817">
+      <DataClassMoniker Name="/InsuranceWDataContext/DAZGVEVA_201207" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a7fa8d5f-4176-4878-bee9-3d21e13106b2" absoluteBounds="3.6399999999999997, 2.46, 1.9700000000000002, 73.900838216145829" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

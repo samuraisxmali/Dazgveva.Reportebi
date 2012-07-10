@@ -23,7 +23,7 @@ namespace Dazgveva.Reportebi.Models
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Pirvelckaroebi")]
-	public partial class PirvelckaroebiDataContext : System.Data.Linq.DataContext
+	public partial class Pirvelckaroebi2DataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
@@ -38,31 +38,31 @@ namespace Dazgveva.Reportebi.Models
     partial void DeletePirvelckaro_01_UMCEOEBI(Pirvelckaro_01_UMCEOEBI instance);
     #endregion
 		
-		public PirvelckaroebiDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString"].ConnectionString, mappingSource)
+		public Pirvelckaroebi2DataContext() : 
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public PirvelckaroebiDataContext(string connection) : 
+		public Pirvelckaroebi2DataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public PirvelckaroebiDataContext(System.Data.IDbConnection connection) : 
+		public Pirvelckaroebi2DataContext(System.Data.IDbConnection connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public PirvelckaroebiDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public Pirvelckaroebi2DataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public PirvelckaroebiDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public Pirvelckaroebi2DataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
@@ -101,7 +101,13 @@ namespace Dazgveva.Reportebi.Models
 		
 		private System.DateTime _Periodi;
 		
+		private System.DateTime _MapDate;
+		
 		private string _FID;
+		
+		private System.Nullable<int> _Unnom;
+		
+		private int _UnnomisKhariskhi;
 		
 		private string _PID;
 		
@@ -112,6 +118,14 @@ namespace Dazgveva.Reportebi.Models
 		private System.Nullable<System.DateTime> _Birth_Date;
 		
 		private System.Nullable<int> _Sex;
+		
+		private string _IdentPID;
+		
+		private System.Nullable<int> _J_ID;
+		
+		private System.Nullable<int> _Piroba;
+		
+		private string _Rai;
 		
 		private string _Region_Name;
 		
@@ -137,47 +151,13 @@ namespace Dazgveva.Reportebi.Models
 		
 		private string _Dac_Full_Address;
 		
-		private string _Region_ID;
-		
-		private string _Rai;
-		
-		private System.Nullable<int> _ITEM_NO;
-		
-		private System.Nullable<int> _Unnom;
-		
-		private System.Nullable<int> _DEC_REC_ID;
-		
-		private string _Xarvezi;
-		
-		private System.Nullable<int> _J_ID;
-		
-		private System.Nullable<int> _Piroba;
-		
-		private System.Nullable<System.DateTime> _MapDate;
-		
-		private System.Nullable<System.DateTime> _ServiceStartDate;
-		
-		private System.Nullable<System.DateTime> _ServiceEndDate;
-		
-		private string _Akhali;
-		
-		private string _Org_PID;
-		
-		private string _Org_First_Name;
-		
-		private string _Org_Last_Name;
-		
-		private System.Nullable<System.DateTime> _Org_Birth_Date;
-		
-		private string _Foto;
-		
-		private int _UnnomisKhariskhi;
-		
 		private string _CONDITION_DESCRIPTION;
 		
 		private System.Nullable<long> _CONDITION_ID;
 		
 		private System.Nullable<bool> _GaukmebuliPid;
+		
+		private EntitySet<Pirvelckaro_01_UMCEOEBI> _Pirvelckaro_01_UMCEOEBIs;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -193,8 +173,14 @@ namespace Dazgveva.Reportebi.Models
     partial void OnSource_Rec_IdChanged();
     partial void OnPeriodiChanging(System.DateTime value);
     partial void OnPeriodiChanged();
+    partial void OnMapDateChanging(System.DateTime value);
+    partial void OnMapDateChanged();
     partial void OnFIDChanging(string value);
     partial void OnFIDChanged();
+    partial void OnUnnomChanging(System.Nullable<int> value);
+    partial void OnUnnomChanged();
+    partial void OnUnnomisKhariskhiChanging(int value);
+    partial void OnUnnomisKhariskhiChanged();
     partial void OnPIDChanging(string value);
     partial void OnPIDChanged();
     partial void OnFirst_NameChanging(string value);
@@ -205,6 +191,14 @@ namespace Dazgveva.Reportebi.Models
     partial void OnBirth_DateChanged();
     partial void OnSexChanging(System.Nullable<int> value);
     partial void OnSexChanged();
+    partial void OnIdentPIDChanging(string value);
+    partial void OnIdentPIDChanged();
+    partial void OnJ_IDChanging(System.Nullable<int> value);
+    partial void OnJ_IDChanged();
+    partial void OnPirobaChanging(System.Nullable<int> value);
+    partial void OnPirobaChanged();
+    partial void OnRaiChanging(string value);
+    partial void OnRaiChanged();
     partial void OnRegion_NameChanging(string value);
     partial void OnRegion_NameChanged();
     partial void OnRai_NameChanging(string value);
@@ -229,42 +223,6 @@ namespace Dazgveva.Reportebi.Models
     partial void OnDac_VillageChanged();
     partial void OnDac_Full_AddressChanging(string value);
     partial void OnDac_Full_AddressChanged();
-    partial void OnRegion_IDChanging(string value);
-    partial void OnRegion_IDChanged();
-    partial void OnRaiChanging(string value);
-    partial void OnRaiChanged();
-    partial void OnITEM_NOChanging(System.Nullable<int> value);
-    partial void OnITEM_NOChanged();
-    partial void OnUnnomChanging(System.Nullable<int> value);
-    partial void OnUnnomChanged();
-    partial void OnDEC_REC_IDChanging(System.Nullable<int> value);
-    partial void OnDEC_REC_IDChanged();
-    partial void OnXarveziChanging(string value);
-    partial void OnXarveziChanged();
-    partial void OnJ_IDChanging(System.Nullable<int> value);
-    partial void OnJ_IDChanged();
-    partial void OnPirobaChanging(System.Nullable<int> value);
-    partial void OnPirobaChanged();
-    partial void OnMapDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnMapDateChanged();
-    partial void OnServiceStartDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnServiceStartDateChanged();
-    partial void OnServiceEndDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnServiceEndDateChanged();
-    partial void OnAkhaliChanging(string value);
-    partial void OnAkhaliChanged();
-    partial void OnOrg_PIDChanging(string value);
-    partial void OnOrg_PIDChanged();
-    partial void OnOrg_First_NameChanging(string value);
-    partial void OnOrg_First_NameChanged();
-    partial void OnOrg_Last_NameChanging(string value);
-    partial void OnOrg_Last_NameChanged();
-    partial void OnOrg_Birth_DateChanging(System.Nullable<System.DateTime> value);
-    partial void OnOrg_Birth_DateChanged();
-    partial void OnFotoChanging(string value);
-    partial void OnFotoChanged();
-    partial void OnUnnomisKhariskhiChanging(int value);
-    partial void OnUnnomisKhariskhiChanged();
     partial void OnCONDITION_DESCRIPTIONChanging(string value);
     partial void OnCONDITION_DESCRIPTIONChanged();
     partial void OnCONDITION_IDChanging(System.Nullable<long> value);
@@ -275,6 +233,7 @@ namespace Dazgveva.Reportebi.Models
 		
 		public Source_Data()
 		{
+			this._Pirvelckaro_01_UMCEOEBIs = new EntitySet<Pirvelckaro_01_UMCEOEBI>(new Action<Pirvelckaro_01_UMCEOEBI>(this.attach_Pirvelckaro_01_UMCEOEBIs), new Action<Pirvelckaro_01_UMCEOEBI>(this.detach_Pirvelckaro_01_UMCEOEBIs));
 			OnCreated();
 		}
 		
@@ -298,7 +257,7 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Pirvelckaro", DbType="NVarChar(255)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Pirvelckaro", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
 		public string Pirvelckaro
 		{
 			get
@@ -378,6 +337,26 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MapDate", DbType="DateTime NOT NULL")]
+		public System.DateTime MapDate
+		{
+			get
+			{
+				return this._MapDate;
+			}
+			set
+			{
+				if ((this._MapDate != value))
+				{
+					this.OnMapDateChanging(value);
+					this.SendPropertyChanging();
+					this._MapDate = value;
+					this.SendPropertyChanged("MapDate");
+					this.OnMapDateChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FID", DbType="NVarChar(50)")]
 		public string FID
 		{
@@ -394,6 +373,46 @@ namespace Dazgveva.Reportebi.Models
 					this._FID = value;
 					this.SendPropertyChanged("FID");
 					this.OnFIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Unnom", DbType="Int")]
+		public System.Nullable<int> Unnom
+		{
+			get
+			{
+				return this._Unnom;
+			}
+			set
+			{
+				if ((this._Unnom != value))
+				{
+					this.OnUnnomChanging(value);
+					this.SendPropertyChanging();
+					this._Unnom = value;
+					this.SendPropertyChanged("Unnom");
+					this.OnUnnomChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnnomisKhariskhi", DbType="Int NOT NULL")]
+		public int UnnomisKhariskhi
+		{
+			get
+			{
+				return this._UnnomisKhariskhi;
+			}
+			set
+			{
+				if ((this._UnnomisKhariskhi != value))
+				{
+					this.OnUnnomisKhariskhiChanging(value);
+					this.SendPropertyChanging();
+					this._UnnomisKhariskhi = value;
+					this.SendPropertyChanged("UnnomisKhariskhi");
+					this.OnUnnomisKhariskhiChanged();
 				}
 			}
 		}
@@ -494,6 +513,86 @@ namespace Dazgveva.Reportebi.Models
 					this._Sex = value;
 					this.SendPropertyChanged("Sex");
 					this.OnSexChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IdentPID", DbType="NVarChar(50)")]
+		public string IdentPID
+		{
+			get
+			{
+				return this._IdentPID;
+			}
+			set
+			{
+				if ((this._IdentPID != value))
+				{
+					this.OnIdentPIDChanging(value);
+					this.SendPropertyChanging();
+					this._IdentPID = value;
+					this.SendPropertyChanged("IdentPID");
+					this.OnIdentPIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_J_ID", DbType="Int")]
+		public System.Nullable<int> J_ID
+		{
+			get
+			{
+				return this._J_ID;
+			}
+			set
+			{
+				if ((this._J_ID != value))
+				{
+					this.OnJ_IDChanging(value);
+					this.SendPropertyChanging();
+					this._J_ID = value;
+					this.SendPropertyChanged("J_ID");
+					this.OnJ_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Piroba", DbType="Int")]
+		public System.Nullable<int> Piroba
+		{
+			get
+			{
+				return this._Piroba;
+			}
+			set
+			{
+				if ((this._Piroba != value))
+				{
+					this.OnPirobaChanging(value);
+					this.SendPropertyChanging();
+					this._Piroba = value;
+					this.SendPropertyChanged("Piroba");
+					this.OnPirobaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rai", DbType="NVarChar(255)")]
+		public string Rai
+		{
+			get
+			{
+				return this._Rai;
+			}
+			set
+			{
+				if ((this._Rai != value))
+				{
+					this.OnRaiChanging(value);
+					this.SendPropertyChanging();
+					this._Rai = value;
+					this.SendPropertyChanged("Rai");
+					this.OnRaiChanged();
 				}
 			}
 		}
@@ -738,366 +837,6 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Region_ID", DbType="NVarChar(255)")]
-		public string Region_ID
-		{
-			get
-			{
-				return this._Region_ID;
-			}
-			set
-			{
-				if ((this._Region_ID != value))
-				{
-					this.OnRegion_IDChanging(value);
-					this.SendPropertyChanging();
-					this._Region_ID = value;
-					this.SendPropertyChanged("Region_ID");
-					this.OnRegion_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rai", DbType="NVarChar(255)")]
-		public string Rai
-		{
-			get
-			{
-				return this._Rai;
-			}
-			set
-			{
-				if ((this._Rai != value))
-				{
-					this.OnRaiChanging(value);
-					this.SendPropertyChanging();
-					this._Rai = value;
-					this.SendPropertyChanged("Rai");
-					this.OnRaiChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ITEM_NO", DbType="Int")]
-		public System.Nullable<int> ITEM_NO
-		{
-			get
-			{
-				return this._ITEM_NO;
-			}
-			set
-			{
-				if ((this._ITEM_NO != value))
-				{
-					this.OnITEM_NOChanging(value);
-					this.SendPropertyChanging();
-					this._ITEM_NO = value;
-					this.SendPropertyChanged("ITEM_NO");
-					this.OnITEM_NOChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Unnom", DbType="Int")]
-		public System.Nullable<int> Unnom
-		{
-			get
-			{
-				return this._Unnom;
-			}
-			set
-			{
-				if ((this._Unnom != value))
-				{
-					this.OnUnnomChanging(value);
-					this.SendPropertyChanging();
-					this._Unnom = value;
-					this.SendPropertyChanged("Unnom");
-					this.OnUnnomChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DEC_REC_ID", DbType="Int")]
-		public System.Nullable<int> DEC_REC_ID
-		{
-			get
-			{
-				return this._DEC_REC_ID;
-			}
-			set
-			{
-				if ((this._DEC_REC_ID != value))
-				{
-					this.OnDEC_REC_IDChanging(value);
-					this.SendPropertyChanging();
-					this._DEC_REC_ID = value;
-					this.SendPropertyChanged("DEC_REC_ID");
-					this.OnDEC_REC_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Xarvezi", DbType="NVarChar(MAX)")]
-		public string Xarvezi
-		{
-			get
-			{
-				return this._Xarvezi;
-			}
-			set
-			{
-				if ((this._Xarvezi != value))
-				{
-					this.OnXarveziChanging(value);
-					this.SendPropertyChanging();
-					this._Xarvezi = value;
-					this.SendPropertyChanged("Xarvezi");
-					this.OnXarveziChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_J_ID", DbType="Int")]
-		public System.Nullable<int> J_ID
-		{
-			get
-			{
-				return this._J_ID;
-			}
-			set
-			{
-				if ((this._J_ID != value))
-				{
-					this.OnJ_IDChanging(value);
-					this.SendPropertyChanging();
-					this._J_ID = value;
-					this.SendPropertyChanged("J_ID");
-					this.OnJ_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Piroba", DbType="Int")]
-		public System.Nullable<int> Piroba
-		{
-			get
-			{
-				return this._Piroba;
-			}
-			set
-			{
-				if ((this._Piroba != value))
-				{
-					this.OnPirobaChanging(value);
-					this.SendPropertyChanging();
-					this._Piroba = value;
-					this.SendPropertyChanged("Piroba");
-					this.OnPirobaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MapDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> MapDate
-		{
-			get
-			{
-				return this._MapDate;
-			}
-			set
-			{
-				if ((this._MapDate != value))
-				{
-					this.OnMapDateChanging(value);
-					this.SendPropertyChanging();
-					this._MapDate = value;
-					this.SendPropertyChanged("MapDate");
-					this.OnMapDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceStartDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> ServiceStartDate
-		{
-			get
-			{
-				return this._ServiceStartDate;
-			}
-			set
-			{
-				if ((this._ServiceStartDate != value))
-				{
-					this.OnServiceStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._ServiceStartDate = value;
-					this.SendPropertyChanged("ServiceStartDate");
-					this.OnServiceStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceEndDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> ServiceEndDate
-		{
-			get
-			{
-				return this._ServiceEndDate;
-			}
-			set
-			{
-				if ((this._ServiceEndDate != value))
-				{
-					this.OnServiceEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._ServiceEndDate = value;
-					this.SendPropertyChanged("ServiceEndDate");
-					this.OnServiceEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Akhali", DbType="NVarChar(255)")]
-		public string Akhali
-		{
-			get
-			{
-				return this._Akhali;
-			}
-			set
-			{
-				if ((this._Akhali != value))
-				{
-					this.OnAkhaliChanging(value);
-					this.SendPropertyChanging();
-					this._Akhali = value;
-					this.SendPropertyChanged("Akhali");
-					this.OnAkhaliChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Org_PID", DbType="NVarChar(255)")]
-		public string Org_PID
-		{
-			get
-			{
-				return this._Org_PID;
-			}
-			set
-			{
-				if ((this._Org_PID != value))
-				{
-					this.OnOrg_PIDChanging(value);
-					this.SendPropertyChanging();
-					this._Org_PID = value;
-					this.SendPropertyChanged("Org_PID");
-					this.OnOrg_PIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Org_First_Name", DbType="NVarChar(255)")]
-		public string Org_First_Name
-		{
-			get
-			{
-				return this._Org_First_Name;
-			}
-			set
-			{
-				if ((this._Org_First_Name != value))
-				{
-					this.OnOrg_First_NameChanging(value);
-					this.SendPropertyChanging();
-					this._Org_First_Name = value;
-					this.SendPropertyChanged("Org_First_Name");
-					this.OnOrg_First_NameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Org_Last_Name", DbType="NVarChar(255)")]
-		public string Org_Last_Name
-		{
-			get
-			{
-				return this._Org_Last_Name;
-			}
-			set
-			{
-				if ((this._Org_Last_Name != value))
-				{
-					this.OnOrg_Last_NameChanging(value);
-					this.SendPropertyChanging();
-					this._Org_Last_Name = value;
-					this.SendPropertyChanged("Org_Last_Name");
-					this.OnOrg_Last_NameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Org_Birth_Date", DbType="DateTime")]
-		public System.Nullable<System.DateTime> Org_Birth_Date
-		{
-			get
-			{
-				return this._Org_Birth_Date;
-			}
-			set
-			{
-				if ((this._Org_Birth_Date != value))
-				{
-					this.OnOrg_Birth_DateChanging(value);
-					this.SendPropertyChanging();
-					this._Org_Birth_Date = value;
-					this.SendPropertyChanged("Org_Birth_Date");
-					this.OnOrg_Birth_DateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Foto", DbType="VarChar(32)")]
-		public string Foto
-		{
-			get
-			{
-				return this._Foto;
-			}
-			set
-			{
-				if ((this._Foto != value))
-				{
-					this.OnFotoChanging(value);
-					this.SendPropertyChanging();
-					this._Foto = value;
-					this.SendPropertyChanged("Foto");
-					this.OnFotoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnnomisKhariskhi", DbType="Int NOT NULL")]
-		public int UnnomisKhariskhi
-		{
-			get
-			{
-				return this._UnnomisKhariskhi;
-			}
-			set
-			{
-				if ((this._UnnomisKhariskhi != value))
-				{
-					this.OnUnnomisKhariskhiChanging(value);
-					this.SendPropertyChanging();
-					this._UnnomisKhariskhi = value;
-					this.SendPropertyChanged("UnnomisKhariskhi");
-					this.OnUnnomisKhariskhiChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CONDITION_DESCRIPTION", DbType="NVarChar(100)")]
 		public string CONDITION_DESCRIPTION
 		{
@@ -1158,6 +897,19 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Source_Data_Pirvelckaro_01_UMCEOEBI", Storage="_Pirvelckaro_01_UMCEOEBIs", ThisKey="ID", OtherKey="SourceDataId")]
+		public EntitySet<Pirvelckaro_01_UMCEOEBI> Pirvelckaro_01_UMCEOEBIs
+		{
+			get
+			{
+				return this._Pirvelckaro_01_UMCEOEBIs;
+			}
+			set
+			{
+				this._Pirvelckaro_01_UMCEOEBIs.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1176,6 +928,18 @@ namespace Dazgveva.Reportebi.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_Pirvelckaro_01_UMCEOEBIs(Pirvelckaro_01_UMCEOEBI entity)
+		{
+			this.SendPropertyChanging();
+			entity.Source_Data = this;
+		}
+		
+		private void detach_Pirvelckaro_01_UMCEOEBIs(Pirvelckaro_01_UMCEOEBI entity)
+		{
+			this.SendPropertyChanging();
+			entity.Source_Data = null;
 		}
 	}
 	
@@ -1197,10 +961,6 @@ namespace Dazgveva.Reportebi.Models
 		
 		private int _FAMILY_SCORE;
 		
-		private int _REGION_ID;
-		
-		private string _REGION;
-		
 		private string _ZIP_CODE;
 		
 		private string _CITY;
@@ -1221,11 +981,19 @@ namespace Dazgveva.Reportebi.Models
 		
 		private System.DateTime _SCORE_DATE;
 		
-		private System.DateTime _VISIT_DATE;
+		private System.Nullable<System.DateTime> _VISIT_DATE;
 		
 		private string _RESORE_DOC_NO;
 		
 		private System.Nullable<System.DateTime> _RESTORE_DOC_DATE;
+		
+		private System.Nullable<int> _N;
+		
+		private string _RAI_ID;
+		
+		private string _COMMENT;
+		
+		private EntityRef<Source_Data> _Source_Data;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1243,10 +1011,6 @@ namespace Dazgveva.Reportebi.Models
     partial void OnFIDChanged();
     partial void OnFAMILY_SCOREChanging(int value);
     partial void OnFAMILY_SCOREChanged();
-    partial void OnREGION_IDChanging(int value);
-    partial void OnREGION_IDChanged();
-    partial void OnREGIONChanging(string value);
-    partial void OnREGIONChanged();
     partial void OnZIP_CODEChanging(string value);
     partial void OnZIP_CODEChanged();
     partial void OnCITYChanging(string value);
@@ -1267,16 +1031,23 @@ namespace Dazgveva.Reportebi.Models
     partial void OnLAST_NAMEChanged();
     partial void OnSCORE_DATEChanging(System.DateTime value);
     partial void OnSCORE_DATEChanged();
-    partial void OnVISIT_DATEChanging(System.DateTime value);
+    partial void OnVISIT_DATEChanging(System.Nullable<System.DateTime> value);
     partial void OnVISIT_DATEChanged();
     partial void OnRESORE_DOC_NOChanging(string value);
     partial void OnRESORE_DOC_NOChanged();
     partial void OnRESTORE_DOC_DATEChanging(System.Nullable<System.DateTime> value);
     partial void OnRESTORE_DOC_DATEChanged();
+    partial void OnNChanging(System.Nullable<int> value);
+    partial void OnNChanged();
+    partial void OnRAI_IDChanging(string value);
+    partial void OnRAI_IDChanged();
+    partial void OnCOMMENTChanging(string value);
+    partial void OnCOMMENTChanged();
     #endregion
 		
 		public Pirvelckaro_01_UMCEOEBI()
 		{
+			this._Source_Data = default(EntityRef<Source_Data>);
 			OnCreated();
 		}
 		
@@ -1351,6 +1122,10 @@ namespace Dazgveva.Reportebi.Models
 			{
 				if ((this._SourceDataId != value))
 				{
+					if (this._Source_Data.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnSourceDataIdChanging(value);
 					this.SendPropertyChanging();
 					this._SourceDataId = value;
@@ -1396,46 +1171,6 @@ namespace Dazgveva.Reportebi.Models
 					this._FAMILY_SCORE = value;
 					this.SendPropertyChanged("FAMILY_SCORE");
 					this.OnFAMILY_SCOREChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_REGION_ID", DbType="Int NOT NULL")]
-		public int REGION_ID
-		{
-			get
-			{
-				return this._REGION_ID;
-			}
-			set
-			{
-				if ((this._REGION_ID != value))
-				{
-					this.OnREGION_IDChanging(value);
-					this.SendPropertyChanging();
-					this._REGION_ID = value;
-					this.SendPropertyChanged("REGION_ID");
-					this.OnREGION_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_REGION", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string REGION
-		{
-			get
-			{
-				return this._REGION;
-			}
-			set
-			{
-				if ((this._REGION != value))
-				{
-					this.OnREGIONChanging(value);
-					this.SendPropertyChanging();
-					this._REGION = value;
-					this.SendPropertyChanged("REGION");
-					this.OnREGIONChanged();
 				}
 			}
 		}
@@ -1640,8 +1375,8 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VISIT_DATE", DbType="DateTime NOT NULL")]
-		public System.DateTime VISIT_DATE
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VISIT_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> VISIT_DATE
 		{
 			get
 			{
@@ -1696,6 +1431,100 @@ namespace Dazgveva.Reportebi.Models
 					this._RESTORE_DOC_DATE = value;
 					this.SendPropertyChanged("RESTORE_DOC_DATE");
 					this.OnRESTORE_DOC_DATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_N", DbType="Int")]
+		public System.Nullable<int> N
+		{
+			get
+			{
+				return this._N;
+			}
+			set
+			{
+				if ((this._N != value))
+				{
+					this.OnNChanging(value);
+					this.SendPropertyChanging();
+					this._N = value;
+					this.SendPropertyChanged("N");
+					this.OnNChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RAI_ID", DbType="VarChar(10) NOT NULL", CanBeNull=false)]
+		public string RAI_ID
+		{
+			get
+			{
+				return this._RAI_ID;
+			}
+			set
+			{
+				if ((this._RAI_ID != value))
+				{
+					this.OnRAI_IDChanging(value);
+					this.SendPropertyChanging();
+					this._RAI_ID = value;
+					this.SendPropertyChanged("RAI_ID");
+					this.OnRAI_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_COMMENT", DbType="NVarChar(100)")]
+		public string COMMENT
+		{
+			get
+			{
+				return this._COMMENT;
+			}
+			set
+			{
+				if ((this._COMMENT != value))
+				{
+					this.OnCOMMENTChanging(value);
+					this.SendPropertyChanging();
+					this._COMMENT = value;
+					this.SendPropertyChanged("COMMENT");
+					this.OnCOMMENTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Source_Data_Pirvelckaro_01_UMCEOEBI", Storage="_Source_Data", ThisKey="SourceDataId", OtherKey="ID", IsForeignKey=true, DeleteRule="SET NULL")]
+		public Source_Data Source_Data
+		{
+			get
+			{
+				return this._Source_Data.Entity;
+			}
+			set
+			{
+				Source_Data previousValue = this._Source_Data.Entity;
+				if (((previousValue != value) 
+							|| (this._Source_Data.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Source_Data.Entity = null;
+						previousValue.Pirvelckaro_01_UMCEOEBIs.Remove(this);
+					}
+					this._Source_Data.Entity = value;
+					if ((value != null))
+					{
+						value.Pirvelckaro_01_UMCEOEBIs.Add(this);
+						this._SourceDataId = value.ID;
+					}
+					else
+					{
+						this._SourceDataId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Source_Data");
 				}
 			}
 		}
