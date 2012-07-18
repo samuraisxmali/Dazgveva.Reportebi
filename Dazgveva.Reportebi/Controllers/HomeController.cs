@@ -8,6 +8,7 @@ using Dazgveva.Reportebi.Models;
 
 namespace Dazgveva.Reportebi.Controllers
 {
+
     public class FamiliData
     {
         public string FID { get; set; }
@@ -31,36 +32,40 @@ namespace Dazgveva.Reportebi.Controllers
             return View();
         }
 
+        private List<Token> Tokenize(string q = "")
+        {
+            return q.Trim()
+                    .Split(new[] { ' ', ';', ',' })
+                    .Select(x => x.Trim())
+                    .Select<string, Token>(x =>
+                    {
+                        if (x.All(char.IsNumber) && x.Length == 11)
+                            return new PidToken(x);
+                        if (x.Replace("-", "").Replace("z", "").All(char.IsNumber))
+                            return new FidToken(x);
+                        var unnom = default(int);
+                        if (int.TryParse(x, out unnom))
+                            return new UnnomToken(unnom);
+                        var date = default(DateTime);
+                        if (DateTime.TryParse(x, CultureInfo.CreateSpecificCulture("ka-GE"), DateTimeStyles.None, out date))
+                            return new DateToken(date);
+                        return new TextToken(x);
+                    }).ToList();
+        }
+
         public ActionResult Dzebna(string q = "")
         {
             using (var dc = new InsuranceWDataContext())
             {
-                var tokens = q.Trim()
-                    .Split(new[] {' ', ';', ','})
-                    .Select(x => x.Trim())
-                    .Select<string, Token>(x =>
-                                  {
-                                      if (x.All(char.IsNumber) && x.Length == 11)
-                                          return new PidToken(x); 
-                                      if (x.Replace("-", "").Replace("z", "").All(char.IsNumber))
-                                          return new FidToken(x);
-                                      var unnom = default(int);
-                                      if (int.TryParse(x, out unnom))
-                                          return new UnnomToken(unnom);
-                                      var date = default(DateTime);
-                                      if (DateTime.TryParse(x, CultureInfo.CreateSpecificCulture("ka-GE"), DateTimeStyles.None, out date))
-                                          return new DateToken(date);
-                                      return new TextToken(x);
-                                  }).ToList();
-
+                var tokens = Tokenize(q);
 
                 IQueryable<DAZGVEVA_201207> dazgveva201206S = dc.DAZGVEVA_201207s;
                 foreach (var t in tokens)
                 {
                     Token t1 = t;
                     dazgveva201206S = t1.AddWhere(dazgveva201206S);
-                }   
-               
+                }
+
                 var kontraktebi = dazgveva201206S.Take(50).AsEnumerable()
                                     .Select(d => new Kontrakti
                                     {
@@ -86,10 +91,61 @@ namespace Dazgveva.Reportebi.Controllers
                                         End_Date = d.End_Date,
                                         POLISIS_NOMERI = d.POLISIS_NOMERI
                                     }).ToList();
-                return View(kontraktebi
-                                    .OrderBy(x => x.End_Date)
+
+                ViewBag.query = q;
+                if (kontraktebi.Count() == 0)
+                {
+                    ViewBag.kontraqtebiarmoidzebna = true;
+                    return View(kontraktebi);
+                }
+                else
+                {
+                    return View(kontraktebi
+                                        .OrderBy(x => x.End_Date)
+                                        .OrderBy(x => x.FIRST_NAME)
+                                        .ToList());
+                }
+            }
+        }
+
+        public ActionResult SourceData(string q = "")
+        {
+            using (var sd = new Pirvelckaroebi2DataContext())
+            {
+                var tokens = Tokenize(q);
+
+                IQueryable<Source_Data> sdata = sd.Source_Datas;
+                foreach (var t in tokens)
+                {
+                    Token t1 = t;
+                    sdata = t1.AddWhere(sdata);
+                }
+                
+                var sourcedata = sdata.Take(50).AsEnumerable()
+                                    .Select(d => new SourceData
+                                    {
+                                        Pirvelckaro = d.Pirvelckaro,
+                                        Base_Type = d.Base_Type,
+                                        Periodi = d.Periodi,
+                                        FID = d.FID,
+                                        PID = d.PID,
+                                        Unnom = d.Unnom,
+                                        FIRST_NAME = d.FIRST_NAME,
+                                        LAST_NAME = d.LAST_NAME,
+                                        BIRTH_DATE = d.BIRTH_DATE,
+                                        Sex = d.Sex,
+                                        Region_Name = d.Region_Name,
+                                        Rai_Name = d.Rai_Name,
+                                        City = d.City,
+                                        Village = d.Village,
+                                        Street = d.Street,
+                                        Full_Address = d.Full_Address,
+                                        J_ID = d.J_ID
+                                    })
                                     .OrderBy(x => x.FIRST_NAME)
-                                    .ToList());
+                                    .ToList();
+
+                return View("SourceData", sourcedata);
             }
         }
 
@@ -164,9 +220,9 @@ namespace Dazgveva.Reportebi.Controllers
                                               Periodi = sd.MapDate.Year * 100 + sd.MapDate.Month, 
                                               FID = sd.FID, 
                                               PID = sd.PID, 
-                                              FIRST_NAME = sd.First_Name, 
-                                              LAST_NAME = sd.Last_Name, 
-                                              BIRTH_DATE = sd.Birth_Date, 
+                                              FIRST_NAME = sd.FIRST_NAME,
+                                              LAST_NAME = sd.LAST_NAME, 
+                                              BIRTH_DATE = sd.BIRTH_DATE, 
                                               FAMILY_SCORE = u == null ? (int?)null : u.FAMILY_SCORE,
                                               SCORE_DATE = u == null ? (DateTime?)null : u.SCORE_DATE, 
                                               PIROBA = sd.Piroba 
@@ -249,11 +305,13 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
     }
+
     public abstract class Token
     {
-        public abstract IQueryable<DAZGVEVA_201207> AddWhere(IQueryable<DAZGVEVA_201207> d);
+        public abstract IQueryable<T> AddWhere<T>(IQueryable<T> d) where T:IChevicavPirovnebisRekvizitebs;
     }
-    public class TextToken:Token
+    
+    public class TextToken : Token
     {
         private readonly string _text;
 
@@ -263,13 +321,11 @@ namespace Dazgveva.Reportebi.Controllers
             _text = text;
         }
 
-        public override IQueryable<DAZGVEVA_201207> AddWhere(IQueryable<DAZGVEVA_201207> d)
+        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
         {
             return d.Where(x=>x.FIRST_NAME.StartsWith(_text) || x.LAST_NAME.StartsWith(_text) || x.PID.StartsWith(_text));
         }
     }
-
-
 
     public class DateToken : Token
     {
@@ -280,7 +336,7 @@ namespace Dazgveva.Reportebi.Controllers
             _date = date;
         }
 
-        public override IQueryable<DAZGVEVA_201207> AddWhere(IQueryable<DAZGVEVA_201207> d)
+        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
         {
             return d.Where(x => x.BIRTH_DATE == _date);
         }
@@ -295,7 +351,7 @@ namespace Dazgveva.Reportebi.Controllers
             _unnom = unnom;
         }
 
-        public override IQueryable<DAZGVEVA_201207> AddWhere(IQueryable<DAZGVEVA_201207> d)
+        public override IQueryable<T> AddWhere<T>(IQueryable<T> d) 
         {
             return d.Where(x => x.Unnom == _unnom);
         }
@@ -311,7 +367,7 @@ namespace Dazgveva.Reportebi.Controllers
             _pid = pid;
         }
 
-        public override IQueryable<DAZGVEVA_201207> AddWhere(IQueryable<DAZGVEVA_201207> d)
+        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
         {
             return d.Where(x => x.PID == _pid);
         }
@@ -327,7 +383,7 @@ namespace Dazgveva.Reportebi.Controllers
             _fid = fid;
         }
 
-        public override IQueryable<DAZGVEVA_201207> AddWhere(IQueryable<DAZGVEVA_201207> d)
+        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
         {
             return d.Where(x => x.FID == _fid);
         }

@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Class1.cs" />
+    <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
     <Compile Include="Models\FamiliDataPeriodi.cs" />
     <Compile Include="Models\Gadarickhva.cs" />
@@ -179,6 +180,7 @@
       <LastGenOutput>Pirvelckaroebi2.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Home\SourceData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

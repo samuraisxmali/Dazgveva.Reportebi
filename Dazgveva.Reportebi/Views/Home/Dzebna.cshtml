@@ -31,6 +31,7 @@
         </div>
         
     </div>
+
 @foreach (var item in Model)
 {
     <div class="kontrakti">
@@ -94,6 +95,17 @@
     </div>
 }
 <div class="clearboth"></div>
+
+@if (ViewBag.kontraqtebiarmoidzebna != null)
+{
+    <h3>თქვენს მიერ მოთხოვნილი ინფორმაცია არ მოიძებნა დაზღვევებში</h3>
+}
+
+@if (ViewBag.query != null)
+{
+    @Html.ActionLink("Source Data", "SourceData", new { q = ViewBag.query });
+}
+
 <div id="NoteDialog" title="" class="Hidden">
 </div>
 <script type="text/javascript">

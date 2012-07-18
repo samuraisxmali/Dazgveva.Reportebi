@@ -12,9 +12,9 @@
       <Column Name="Unnom" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="UnnomisKhariskhi" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="First_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="Last_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="Birth_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="First_Name" Member="FIRST_NAME" Storage="_First_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Last_Name" Member="LAST_NAME" Storage="_Last_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Birth_Date" Member="BIRTH_DATE" Storage="_Birth_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="Sex" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="IdentPID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="J_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
