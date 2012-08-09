@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Dazgveva.Reportebi.Models.Gadarickhva>
+
+<p>
+</p>
+<table>
+    <tr>
+        <th>
+            OP_DATE
+        </th>
+        <th>
+            TRANSFER_DATE
+        </th>
+        <th>
+            Company_ID
+        </th>
+        <th>
+            TRANSFER
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OP_DATE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TRANSFER_DATE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TRANSFER)
+        </td>
+        <td>
+           
+        </td>
+    </tr>
+}
+
+</table>

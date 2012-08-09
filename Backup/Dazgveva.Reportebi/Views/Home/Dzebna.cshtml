@@ -1,0 +1,142 @@
+﻿@model IEnumerable<Dazgveva.Reportebi.Models.Kontrakti>
+@{
+    ViewBag.Title = "Dzebna";
+}
+<h2>Dzebna</h2>
+    <div class="kontrakti">
+        <div class="controls">
+            &nbsp;
+        </div>
+        <div class="baseDescription">
+            &nbsp;
+            </div>
+        <div class="unnom">
+            &nbsp;
+            </div>
+        <div class="fid">
+            &nbsp;
+            </div>
+        <div class="personalData">
+        &nbsp;</div>
+        <div class="state">&nbsp;</div>
+        <div class="attribs">
+            <div>ADD</div>
+            <div>dagv_tar</div>
+            <div>CONTINUE</div>
+            <div>End</div>
+            <div>STOP</div>
+        </div>
+        <div class="address">
+           
+        </div>
+        
+    </div>
+
+@foreach (var item in Model)
+{
+    <div class="kontrakti">
+        <div class="controls">
+            <span class="Periodebi ButtonLink " data-id="@item.ID">P</span>
+            <span class="Gadarickhvebi ButtonLink " data-id="@item.ID">G</span>
+        </div>
+        <div class="baseDescription">
+            @Html.DisplayFor(modelItem => item.Base_Description)&nbsp;
+        </div>
+        <div class="unnom">
+            @Html.DisplayFor(modelItem => item.Unnom)&nbsp;
+        </div>
+        <div class="fid"> <!-- TODO -->
+            @if (!string.IsNullOrWhiteSpace(item.FID))
+            {
+                @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })
+                <span class="FamiliDatas ButtonLink " data-id="@item.FID">H</span>
+                <a class="ButtonLink" href="http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=@item.FID" target="blank">A</a>
+                
+            }&nbsp;
+        </div>
+        <div class="personalData">
+            @if (!string.IsNullOrWhiteSpace(item.PID))
+            {
+                <a class="ButtonLink "href="http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=@item.PID" target="blank">R</a>
+                @Html.ActionLink(item.PID, "Dzebna", new { q = item.PID })
+            }
+            @Html.DisplayFor(modelItem => item.FIRST_NAME)
+            @Html.DisplayFor(modelItem => item.LAST_NAME)
+            @Html.DisplayFor(modelItem => item.BIRTH_DATE)
+            @if (item.BIRTH_DATE.HasValue)
+            {
+                <em>@((DateTime.Today.Year - item.BIRTH_DATE.Value.Year))წლის.</em>
+            }&nbsp;
+        </div>
+        <div class="state">@Html.DisplayFor(modelItem => item.STATE)</div>
+        <div class="attribs">
+            <div>@Html.DisplayFor(modelItem => item.ADD_DATE)&nbsp;</div>
+            
+            <div>@Html.DisplayFor(modelItem => item.dagv_tar)&nbsp;</div>
+            
+            <div>@Html.DisplayFor(modelItem => item.CONTINUE_DATE)&nbsp;</div>
+            
+            <div>@Html.DisplayFor(modelItem => item.End_Date)&nbsp;</div>
+            
+            <div>@Html.DisplayFor(modelItem => item.STOP_DATE)&nbsp;</div>
+            
+        </div>
+        <div class="address">
+            @Html.DisplayFor(modelItem => item.RAI)
+            @Html.DisplayFor(modelItem => item.CITY)
+            @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
+            @if (!string.IsNullOrWhiteSpace(item.POLISIS_NOMERI))
+            {
+                <em>POL:</em>@Html.DisplayFor(modelItem => item.POLISIS_NOMERI)
+            }
+            @Html.DisplayFor(modelItem => item.Company)&nbsp;
+        </div>
+        
+    </div>
+}
+<div class="clearboth"></div>
+
+@if (ViewBag.kontraqtebiarmoidzebna != null)
+{
+    <h3>თქვენს მიერ მოთხოვნილი ინფორმაცია არ მოიძებნა დაზღვევებში</h3>
+}
+
+@if (ViewBag.query != null)
+{
+    @Html.ActionLink("Source Data", "SourceData", new { q = ViewBag.query });
+}
+
+<div id="NoteDialog" title="" class="Hidden">
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#NoteDialog").dialog({
+            autoOpen: false, width: 800, height: 630, modal: false,
+            buttons: {
+                "Close": function () { $(this).dialog("close"); }
+            }
+        });
+        $(".Periodebi").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./Periodebi/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+        $(".Gadarickhvebi").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./Gadarickhvebi/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+        $(".FamiliDatas").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./FamiliDatas/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+
+      
+    });
+    
+
+</script>

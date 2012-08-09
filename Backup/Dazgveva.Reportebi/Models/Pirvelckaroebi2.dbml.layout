@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 11" name="Pirvelckaroebi2">
+  <DataContextMoniker Name="/Pirvelckaroebi2DataContext" />
+  <nestedChildShapes>
+    <classShape Id="270d76c8-0d17-4636-a51e-b7e4cf8dd992" absoluteBounds="4, 4.5, 2, 6.1909204101562505">
+      <DataClassMoniker Name="/Pirvelckaroebi2DataContext/Source_Data" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a78e4481-9929-43cb-81e2-48f0d0a59ae5" absoluteBounds="4.015, 4.96, 1.9700000000000002, 5.63092041015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cf1d724d-ff86-4ce1-a362-23a92cf527a9" absoluteBounds="6.625, 3, 2, 4.3830997721354166">
+      <DataClassMoniker Name="/Pirvelckaroebi2DataContext/Pirvelckaro_01_UMCEOEBI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="90d050c4-afdd-4f6f-8c31-8b18ae707aac" absoluteBounds="6.64, 3.46, 1.9700000000000002, 3.8230997721354165" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6 : 6.27001057942708); (6.625 : 6.27001057942708)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/Pirvelckaroebi2DataContext/Source_Data/Source_Data_Pirvelckaro_01_UMCEOEBI" />
+      <nodes>
+        <classShapeMoniker Id="270d76c8-0d17-4636-a51e-b7e4cf8dd992" />
+        <classShapeMoniker Id="cf1d724d-ff86-4ce1-a362-23a92cf527a9" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -1,105 +1,179 @@
 ﻿@model IEnumerable<Dazgveva.Reportebi.Models.Kontrakti>
 @{
-    ViewBag.Title = "Dzebna";
+    ViewBag.Title = "ძებნა";
+    Func<int,string> statusisFeri = s =>
+                                        {
+                                            if (s == -25)
+                                            {
+                                                return "#F90";
+                                            }
+                                            else if (s == 0)
+                                            {
+                                                return "#CCC";
+                                            }
+                                            else if (s < 0)
+                                            {
+                                                return "#FF5B47";
+                                            }
+                                            else
+                                            {
+                                                return "#7AC946";
+                                            }
+                                        }
+    ;
 }
-<h2>Dzebna</h2>
-    <div class="kontrakti">
-        <div class="controls">
-            &nbsp;
-        </div>
-        <div class="baseDescription">
-            &nbsp;
-            </div>
-        <div class="unnom">
-            &nbsp;
-            </div>
-        <div class="fid">
-            &nbsp;
-            </div>
-        <div class="personalData">
-        &nbsp;</div>
-        <div class="state">&nbsp;</div>
-        <div class="attribs">
-            <div>ADD</div>
-            <div>dagv_tar</div>
-            <div>CONTINUE</div>
-            <div>End</div>
-            <div>STOP</div>
-        </div>
-        <div class="address">
-           
-        </div>
-        
-    </div>
 
-@foreach (var item in Model)
-{
-    <div class="kontrakti">
-        <div class="controls">
-            <span class="Periodebi ButtonLink " data-id="@item.ID">P</span>
-            <span class="Gadarickhvebi ButtonLink " data-id="@item.ID">G</span>
-        </div>
-        <div class="baseDescription">
-            @Html.DisplayFor(modelItem => item.Base_Description)&nbsp;
-        </div>
-        <div class="unnom">
-            @Html.DisplayFor(modelItem => item.Unnom)&nbsp;
-        </div>
-        <div class="fid">
-            @if (!string.IsNullOrWhiteSpace(item.FID))
-            {
-                @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })
-                <span class="FamiliDatas ButtonLink " data-id="@item.FID">H</span>
-                <a class="ButtonLink" href="http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=@item.FID" target="blank">A</a>
+
+<p>შეიტანე ფიდი, პიდი, Unnom-ი, დაბადების თარიღი , სახელი  გვარი ან ნებისმიერი კომბინაცია</p>
+<form action="@Url.Action("Dzebna")" method="GET">
+    <input type="text" name="q"/>
+    <input type="submit" value="ძებნა"/>
+</form>
+
+<br/>
+
+<table width="100%">
+    <thead>
+        <tr>
+            <th width="10%">
+            </th>
+            <th width="30%">
+                პიროვნების შესახებ ინფორმაცია
+            </th>
+            <th width="15%">
+                სტატუსი
+            </th>
+            <th width="45%">
+                სადაზღვეო ინფორმაცია
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button class="Periodebi ButtonLink " data-id="@item.ID">პერიოდები</button>
+                    <br/>
+                    <button class="Gadarickhvebi ButtonLink " data-id="@item.ID">გადარიცხვები</button>
+                    <br />
+                    @if (!string.IsNullOrWhiteSpace(item.FID))
+                    {
+                        <button class="FamiliDatas ButtonLink " data-id="@item.FID">ისტორია</button>
+                        <br />
+                        <a class="ButtonLink" href="http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=@item.FID" target="blank"><button>ამონაწერი</button></a>
+                        <br />
                 
-            }&nbsp;
-        </div>
-        <div class="personalData">
-            @if (!string.IsNullOrWhiteSpace(item.PID))
-            {
-                <a class="ButtonLink "href="http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=@item.PID" target="blank">R</a>
-                @Html.ActionLink(item.PID, "Dzebna", new { q = item.PID })
-            }
-            @Html.DisplayFor(modelItem => item.FIRST_NAME)
-            @Html.DisplayFor(modelItem => item.LAST_NAME)
-            @Html.DisplayFor(modelItem => item.BIRTH_DATE)
-            @if (item.BIRTH_DATE.HasValue)
-            {
-                <em>@((DateTime.Today.Year - item.BIRTH_DATE.Value.Year))წლის.</em>
-            }&nbsp;
-        </div>
-        <div class="state">@Html.DisplayFor(modelItem => item.STATE)</div>
-        <div class="attribs">
-            <div>@Html.DisplayFor(modelItem => item.ADD_DATE)&nbsp;</div>
-            
-            <div>@Html.DisplayFor(modelItem => item.dagv_tar)&nbsp;</div>
-            
-            <div>@Html.DisplayFor(modelItem => item.CONTINUE_DATE)&nbsp;</div>
-            
-            <div>@Html.DisplayFor(modelItem => item.End_Date)&nbsp;</div>
-            
-            <div>@Html.DisplayFor(modelItem => item.STOP_DATE)&nbsp;</div>
-            
-        </div>
-        <div class="address">
-            @Html.DisplayFor(modelItem => item.RAI)
-            @Html.DisplayFor(modelItem => item.CITY)
-            @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
-            @if (!string.IsNullOrWhiteSpace(item.POLISIS_NOMERI))
-            {
-                <em>POL:</em>@Html.DisplayFor(modelItem => item.POLISIS_NOMERI)
-            }
-            @Html.DisplayFor(modelItem => item.Company)&nbsp;
-        </div>
-        
-    </div>
-}
-<div class="clearboth"></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(item.PID))
+                    {
+                        <a class="ButtonLink "href="http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=@item.PID" target="blank"><button>რეესტრი</button></a>
+                    }
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Base_Description)
+                <br/>
+
+                @Html.DisplayFor(modelItem => item.FIRST_NAME)
+                @Html.DisplayFor(modelItem => item.LAST_NAME)                    
+                <br />
+                    
+                @if (!string.IsNullOrWhiteSpace(item.FID))
+                {
+                    @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })
+                    <br />
+                }
+
+                @if (!string.IsNullOrWhiteSpace(item.PID))
+                {
+                    @Html.ActionLink(item.PID, "Dzebna", new {q = item.PID})
+                    <br/>
+                }
+
+                @Html.DisplayFor(modelItem => item.BIRTH_DATE)
+                @if (item.BIRTH_DATE.HasValue)
+                {
+                    <b>@((DateTime.Today.Year - item.BIRTH_DATE.Value.Year)) წლის.</b>
+                }
+                <br/>
+                @Html.DisplayFor(modelItem => item.RAI)
+                <br/>
+                @Html.DisplayFor(modelItem => item.CITY)
+                <br />
+                @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
+            </td>
+            <td style="text-align: center">
+                    <span style="font-size: 50px; color: @(statusisFeri(item.STATE.Value))">@Html.DisplayFor(modelItem => item.STATE)</span>
+                    <br />
+                    @if (ViewBag.status.ContainsKey(item.STATE.ToString()))
+                    {
+                        @ViewBag.status[item.STATE.ToString()]
+                    }
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <th>
+                                დამატების
+                            </th>
+                            <th>
+                                დაზღვევის
+                            </th>
+                            <th>
+                                გაგრძელების
+                            </th>
+                            <th>
+                                დასრულების
+                            </th>
+                            <th>
+                                გაჩერების
+                            </th>
+                            <th>
+                                კომპანია
+                            </th>
+                            <th>
+                                პოლისი
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ADD_DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dagv_tar)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CONTINUE_DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.End_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.STOP_DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Company)
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.POLISIS_NOMERI))
+                                {
+                                    @Html.DisplayFor(modelItem => item.POLISIS_NOMERI)
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @if (ViewBag.kontraqtebiarmoidzebna != null)
 {
     <h3>თქვენს მიერ მოთხოვნილი ინფორმაცია არ მოიძებნა დაზღვევებში</h3>
 }
+
+<br/>
 
 @if (ViewBag.query != null)
 {

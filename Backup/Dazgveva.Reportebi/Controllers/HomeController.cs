@@ -92,27 +92,6 @@ namespace Dazgveva.Reportebi.Controllers
                                         POLISIS_NOMERI = d.POLISIS_NOMERI
                                     }).ToList();
 
-                var status = new Dictionary<string, string>();
-
-                status.Add("-32", "გაუქმებული ხარვეზის გამო");
-                status.Add("-27", "ხარვეზიანი პოლისი");
-                status.Add("-26", "გადაზღვეულია კომპანია ვესტში");
-                status.Add("-16", "დუბლირების გამო გაუქმებული კონტრაქტი");
-                status.Add("-15", "გაუქმებული ხარვეზის გამო");
-                status.Add("-5",  "გარდაცვალება");
-                status.Add("33",  "დაზღვეულია");
-                status.Add("44",  "დაზღვეულია");
-                status.Add("-31", "გაუქმებულია ხარვეზის გამო");
-                status.Add("-30", "გაუქმებულია ხარვეზის გამო");
-                status.Add("-25", "პოლისი გაუქმებულია ჩაუბარებლობის გამო");
-                status.Add("-20", "გაუქმებული ხარვეზის გამო");
-                status.Add("-6",  "გაუქმებული ხარვეზის გამო");
-                status.Add("0",   "დასრულებული კონტრაქტი");
-                status.Add("21",  "დაზღვეულია");
-                status.Add("22",  "დაზღვეულია");
-
-                ViewBag.status = status;
-
                 ViewBag.query = q;
                 if (kontraktebi.Count() == 0)
                 {

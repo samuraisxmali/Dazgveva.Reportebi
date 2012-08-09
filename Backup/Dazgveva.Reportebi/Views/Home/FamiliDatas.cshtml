@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Dazgveva.Reportebi.Models.FamiliDataPeriodi>
+<h1>@Model.First().FID</h1>
+@foreach (var item in Model)
+{
+    <div>
+        <br />
+        <div>
+            <span>@Html.DisplayFor(modelItem => item.MinPeriodi) - @Html.DisplayFor(modelItem => item.MaxPeriodi)</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @if (item.SCORE_DATE.HasValue && item.FAMILY_SCORE.HasValue)
+            {
+                <span>@Html.DisplayFor(modelItem => item.SCORE_DATE)</span> <em><span>@Html.DisplayFor(modelItem => item.FAMILY_SCORE)</span></em>
+            }
+        </div>
+        <table>
+            @foreach (var c in item.Cevrebi)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(c.PID))
+                        {
+                            @Html.ActionLink(@c.PID, "Dzebna", new { q = @c.PID }, new { target = "blank" })
+                        }
+                    </td>
+                    <td>@c.FIRST_NAME
+                    </td>
+                    <td>@c.LAST_NAME
+                    </td>
+                    <td>
+                        @(c.BIRTH_DATE.HasValue ? c.BIRTH_DATE.Value.ToString("dd.MM.yyyy") : string.Empty)
+                    </td>
+                    <td>
+                        @if (c.BIRTH_DATE.HasValue)
+                        {
+                            <em>@((DateTime.Today.Year - c.BIRTH_DATE.Value.Year))წლის.</em>
+                        }
+                    </td>
+                    <td>@c.PIROBA
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
