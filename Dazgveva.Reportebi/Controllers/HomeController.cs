@@ -19,17 +19,17 @@ namespace Dazgveva.Reportebi.Controllers
         public List<FamiliDataCevri> Cevrebi { get; set; }
     }
 
+    public class DeklarirebisIstoria
+    {
+        public int FID_VERSION { get; set; }
+        public List<DeklaraciebisIstoriaList> istoria { get; set; }
+    }
+
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
-
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            return View();
+            return RedirectToAction("Dzebna");
         }
 
         private List<Token> Tokenize(string q = "")
@@ -59,7 +59,7 @@ namespace Dazgveva.Reportebi.Controllers
             {
                 var tokens = Tokenize(q);
 
-                IQueryable<DAZGVEVA_201208> dazgveva201206S = dc.DAZGVEVA_201208s;
+                IQueryable<DAZGVEVA_201209> dazgveva201206S = dc.DAZGVEVA_201209s;
                 foreach (var t in tokens)
                 {
                     Token t1 = t;
@@ -82,11 +82,11 @@ namespace Dazgveva.Reportebi.Controllers
                                         ADDRESS_FULL = d.ADDRESS_FULL,
                                         dagv_tar = d.dagv_tar,
                                         
-                                        STATE = d.STATE_201208,                    //d.STATE
-                                        ADD_DATE = d.ADD_DATE_201208_TMP,          //d.ADD_DATE
-                                        CONTINUE_DATE = d.CONTINUE_DATE_201208_TMP,//d.CONTINUE_DATE
-                                        STOP_DATE = d.STOP_DATE_201208_TMP,        //d.STOP_DATE
-                                        Company = d.Company_201208,                //d.Company
+                                        STATE = d.STATE_201209,                    //d.STATE
+                                        ADD_DATE = d.ADD_DATE_201209_TMP,          //d.ADD_DATE
+                                        CONTINUE_DATE = d.CONTINUE_DATE_201209_TMP,//d.CONTINUE_DATE
+                                        STOP_DATE = d.STOP_DATE_201209_TMP,        //d.STOP_DATE
+                                        Company = d.Company_201209,                //d.Company
 
                                         End_Date = d.End_Date,
                                         POLISIS_NOMERI = d.POLISIS_NOMERI
@@ -114,7 +114,12 @@ namespace Dazgveva.Reportebi.Controllers
                 ViewBag.status = status;
 
                 ViewBag.query = q;
-                if (kontraktebi.Count() == 0)
+                if (q == "")
+                {
+                    ViewBag.carieliq = true;
+                    return View(kontraktebi);
+                }
+                else if (kontraktebi.Count() == 0)
                 {
                     ViewBag.kontraqtebiarmoidzebna = true;
                     return View(kontraktebi);
@@ -175,7 +180,7 @@ namespace Dazgveva.Reportebi.Controllers
         {
             using (var dc = new InsuranceWDataContext())
             {
-                var kontraktebi = dc.DAZGVEVA_201208s.Where(x => x.ID == id).ToList();
+                var kontraktebi = dc.DAZGVEVA_201209s.Where(x => x.ID == id).ToList();
                 var periodebi = kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201006, Dasabechdi = (int?)null, State = d.STATE_06, CONTINUE_DATE = d.CONTINUE_DATE_06, Company = d.Company_06, STOP_DATE = d.STOP_DATE_06, ADD_DATE = d.ADD_DATE_06 })
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201007, Dasabechdi = (int?)null, State = d.STATE_07, CONTINUE_DATE = d.CONTINUE_DATE_07, Company = d.Company_07, STOP_DATE = d.STOP_DATE_07, ADD_DATE = d.ADD_DATE_07 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201008, Dasabechdi = (int?)null, State = d.STATE_08, CONTINUE_DATE = d.CONTINUE_DATE_08, Company = d.Company_08, STOP_DATE = d.STOP_DATE_08, ADD_DATE = d.ADD_DATE_08 }))
@@ -203,8 +208,9 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201204, Dasabechdi = d.DASABECHDI_201204, State = d.STATE_201204, CONTINUE_DATE = d.CONTINUE_DATE_201204, Company = d.Company_201204, STOP_DATE = d.STOP_DATE_201204, ADD_DATE = d.ADD_DATE_201204 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201205, Dasabechdi = d.DASABECHDI_201205, State = d.STATE_201205, CONTINUE_DATE = d.CONTINUE_DATE_201205, Company = d.Company_201205, STOP_DATE = d.STOP_DATE_201205, ADD_DATE = d.ADD_DATE_201205 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201206, Dasabechdi = d.DASABECHDI_201206, State = d.STATE_201206, CONTINUE_DATE = d.CONTINUE_DATE_201206, Company = d.Company_201206, STOP_DATE = d.STOP_DATE_201206, ADD_DATE = d.ADD_DATE_201206 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201207, Dasabechdi = d.DASABECHDI_201207, State = d.STATE,        CONTINUE_DATE = d.CONTINUE_DATE,        Company = d.Company,        STOP_DATE = d.STOP_DATE,        ADD_DATE = d.ADD_DATE }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201208, Dasabechdi = d.DASABECHDI_201206, State = d.STATE_201208, CONTINUE_DATE = d.CONTINUE_DATE_201208_TMP, Company = d.Company_201208, STOP_DATE = d.STOP_DATE_201208_TMP, ADD_DATE = d.ADD_DATE_201208_TMP }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201207, Dasabechdi = d.DASABECHDI_201207, State = d.STATE_201207, CONTINUE_DATE = d.CONTINUE_DATE_201207, Company = d.Company_201207, STOP_DATE = d.STOP_DATE_201207, ADD_DATE = d.ADD_DATE_201207 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201208, Dasabechdi = d.DASABECHDI_201208, State = d.STATE,        CONTINUE_DATE = d.CONTINUE_DATE,        Company = d.Company,        STOP_DATE = d.STOP_DATE,        ADD_DATE = d.ADD_DATE }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201209, Dasabechdi = d.DASABECHDI_201209, State = d.STATE_201209, CONTINUE_DATE = d.CONTINUE_DATE_201209_TMP, Company = d.Company_201209, STOP_DATE = d.STOP_DATE_201209_TMP, ADD_DATE = d.ADD_DATE_201209_TMP }))
 
                         .GroupBy(p => new { p.ID, p.Dasabechdi, p.State,p.CONTINUE_DATE,p.Company,p.STOP_DATE,p.ADD_DATE })
                         .Select(g => g.First(x => x.Periodi == g.Min(x_ => x_.Periodi)))
@@ -325,6 +331,44 @@ namespace Dazgveva.Reportebi.Controllers
                 var familiDataPeriodis = fds2
                     .Select(x => new FamiliDataPeriodi(x.Min(x_ => x_.Periodi), x.Max(x_ => x_.Periodi), x.First())).ToList();
                 return PartialView(familiDataPeriodis);
+            }
+        }
+
+        public PartialViewResult DeklaraciebisIstoria(string id ="")
+        {
+            using (var p = new Pirvelckaroebi2DataContext())
+            {
+                var form3 = p.vForm_3s.FirstOrDefault(x => x.FID == id);
+                ViewBag.form3 = form3;
+
+                var istoria = p.VDeklaraciebisIstorias
+                    .Where(x => x.FID == id)
+                    .AsEnumerable()
+                    .GroupBy(x => x.FID_VERSION)
+                    .Select(s => new DeklarirebisIstoria
+                    {
+                        FID_VERSION = s.Key,
+                        istoria = s.Select(g => new DeklaraciebisIstoriaList
+                                                    {
+                                                        MOB_PHONE = g.MOB_PHONE,
+                                                        LAST_NAME = g.LAST_NAME,
+                                                        BIRTH_DATE = g.BIRTH_DATE,
+                                                        CALC_DATE = g.CALC_DATE,
+                                                        FID = g.FID,
+                                                        FID_VERSION = g.FID_VERSION,
+                                                        FIRST_NAME = g.FIRST_NAME,
+                                                        FULL_ADDRESS = g.FULL_ADDRESS,
+                                                        HOME_PHONE = g.HOME_PHONE,
+                                                        LEGAL_SCORE_DATE = g.LEGAL_SCORE_DATE,
+                                                        ON_CONTROL = g.ON_CONTROL,
+                                                        PID = g.PID,
+                                                        ACTION_TYPE = g.ACTION_TYPE,
+                                                        RESTORE_DOC_DATE = g.RESTORE_DOC_DATE
+                                                    }).ToList()
+                    })
+                    .ToList();
+
+                return PartialView(istoria);
             }
         }
     }

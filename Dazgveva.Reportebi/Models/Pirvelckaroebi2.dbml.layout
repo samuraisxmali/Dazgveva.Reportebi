@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 11" name="Pirvelckaroebi2">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11.75, 11" name="Pirvelckaroebi2">
   <DataContextMoniker Name="/Pirvelckaroebi2DataContext" />
   <nestedChildShapes>
     <classShape Id="270d76c8-0d17-4636-a51e-b7e4cf8dd992" absoluteBounds="4, 4.5, 2, 6.1909204101562505">
@@ -21,5 +21,17 @@
         <classShapeMoniker Id="cf1d724d-ff86-4ce1-a362-23a92cf527a9" />
       </nodes>
     </associationConnector>
+    <classShape Id="46abfded-622d-4a22-bbc7-76f261cded40" absoluteBounds="9.5, 3, 2, 3.0683211263020831">
+      <DataClassMoniker Name="/Pirvelckaroebi2DataContext/VDeklaraciebisIstoria" />
+      <nestedChildShapes>
+        <elementListCompartment Id="efe0eb9f-ddef-46f5-b580-463f73702912" absoluteBounds="9.515, 3.46, 1.9700000000000002, 2.508321126302083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="28e82099-f162-4335-bdad-e7bcdf70456a" absoluteBounds="9.5, 7.125, 2, 1.26050048828125">
+      <DataClassMoniker Name="/Pirvelckaroebi2DataContext/vForm_3" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c6f6a0a4-eaf1-4fba-bd4c-f4d8d9d0c7b8" absoluteBounds="9.515, 7.5850000000000009, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

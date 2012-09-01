@@ -69,13 +69,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Class1.cs" />
+    <Compile Include="Models\DeklaraciebisIstoriaList.cs" />
     <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
     <Compile Include="Models\FamiliDataPeriodi.cs" />
@@ -153,14 +152,8 @@
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Account\ChangePassword.cshtml" />
-    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -171,6 +164,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\helpers.cshtml" />
     <None Include="Models\InsuranceW.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>InsuranceW.designer.cs</LastGenOutput>
@@ -187,6 +181,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\Home\SourceData.cshtml" />
+    <Content Include="Views\Home\DeklaraciebisIstoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -223,7 +218,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>21068</DevelopmentServerPort>
+          <DevelopmentServerPort>1345</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

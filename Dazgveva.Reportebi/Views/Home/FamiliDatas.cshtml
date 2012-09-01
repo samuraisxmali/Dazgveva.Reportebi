@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<Dazgveva.Reportebi.Models.FamiliDataPeriodi>
-<h1>@Model.First().FID</h1>
+@if (@Model.FirstOrDefault() != null)
+{
+    <h1>@Model.FirstOrDefault().FID</h1>
+}
 @foreach (var item in Model)
 {
     <div>
@@ -31,7 +34,7 @@
                     <td>
                         @if (c.BIRTH_DATE.HasValue)
                         {
-                            <em>@((DateTime.Today.Year - c.BIRTH_DATE.Value.Year))წლის.</em>
+                            <em>@helpers.weli(c.BIRTH_DATE.Value)</em>
                         }
                     </td>
                     <td>@c.PIROBA

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Dazgveva.Reportebi.Controllers.DeklarirebisIstoria>
+
+@if (ViewBag.form3 != null)
+{
+    <b style="color: red">Form3</b>
+    <table>
+        <tr>
+            <th>FID</th>
+            <th>DATE</th>
+            <th>მიზეზი</th>
+        </tr>
+        <tr>
+            <td>@ViewBag.form3.FID</td>
+            <td>@ViewBag.form3.DT</td>
+            <td>@ViewBag.form3.Mizezi</td>
+        </tr>
+    </table>
+    <br/>
+}
+
+@foreach (var item in Model)
+{
+    <b>@item.FID_VERSION</b>
+    <br/>
+
+    <table>
+    <tr>
+        <th>LAST_NAME</th>
+        <th>FULL_ADDRESS</th>
+        <th>CALC_DATE</th>
+        <th>LEGAL_SCORE_DATE</th>
+        <th>RESTORE_DOC_DATE</th>
+        <th>ON_CONTROL</th>
+        <th>ACTION_TYPE</th>
+    </tr>
+    @foreach (var i in @item.istoria)
+    {
+        <tr>
+            <td>
+                @i.FIRST_NAME @i.LAST_NAME
+                <br/>
+                @i.BIRTH_DATE
+                <br/>
+                @i.FID
+                <br/>
+                @i.PID
+            </td>
+            <td>
+                @i.FULL_ADDRESS
+                <br/>
+                @i.HOME_PHONE
+                <br/>
+                @i.MOB_PHONE
+            </td>
+            <td>@i.CALC_DATE</td>
+            <td>@i.LEGAL_SCORE_DATE</td>
+            <td>@i.RESTORE_DOC_DATE</td>
+            <td>@i.ON_CONTROL</td>
+            <td>@i.ACTION_TYPE</td>
+        </tr>
+    }
+    </table>
+}

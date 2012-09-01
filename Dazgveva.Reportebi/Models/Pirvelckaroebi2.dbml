@@ -65,4 +65,29 @@
       <Association Name="Source_Data_Pirvelckaro_01_UMCEOEBI" Member="Source_Data" ThisKey="SourceDataId" OtherKey="ID" Type="Source_Data" IsForeignKey="true" DeleteRule="SET NULL" />
     </Type>
   </Table>
+  <Table Name="dbo.VDeklaraciebisIstoria" Member="VDeklaraciebisIstorias">
+    <Type Name="VDeklaraciebisIstoria">
+      <Column Name="FID" Type="System.String" DbType="Char(12) NOT NULL" CanBeNull="false" />
+      <Column Name="PID" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="LAST_NAME" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="FIRST_NAME" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="BIRTH_DATE" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FULL_ADDRESS" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="FID_VERSION" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HOME_PHONE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="MOB_PHONE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CALC_DATE" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="LEGAL_SCORE_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RESTORE_DOC_DATE" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="ON_CONTROL" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ACTION_TYPE" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.vForm_3" Member="vForm_3s">
+    <Type Name="vForm_3">
+      <Column Name="FID" Type="System.String" DbType="Char(12) NOT NULL" CanBeNull="false" />
+      <Column Name="DT" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Mizezi" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

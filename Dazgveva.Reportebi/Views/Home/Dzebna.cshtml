@@ -1,25 +1,25 @@
 ﻿@model IEnumerable<Dazgveva.Reportebi.Models.Kontrakti>
 @{
     ViewBag.Title = "ძებნა";
-    Func<int,string> statusisFeri = s =>
-                                        {
-                                            if (s == -25)
-                                            {
-                                                return "#F90";
-                                            }
-                                            else if (s == 0)
-                                            {
-                                                return "#CCC";
-                                            }
-                                            else if (s < 0)
-                                            {
-                                                return "#FF5B47";
-                                            }
-                                            else
-                                            {
-                                                return "#7AC946";
-                                            }
-                                        }
+    Func<int, string> statusisFeri = s =>
+    {
+        if (s == -25)
+        {
+            return "#F90";
+        }
+        else if (s == 0)
+        {
+            return "#CCC";
+        }
+        else if (s < 0)
+        {
+            return "#FF5B47";
+        }
+        else
+        {
+            return "#7AC946";
+        }
+    }
     ;
 }
 
@@ -32,7 +32,17 @@
 
 <br/>
 
-<table width="100%">
+@if (ViewBag.carieliq == true)
+{
+    
+}
+else if (ViewBag.kontraqtebiarmoidzebna == true)
+{
+    <h3>თქვენს მიერ მოთხოვნილი ინფორმაცია არ მოიძებნა დაზღვევებში</h3>
+}
+else
+{
+    <table width="100%">
     <thead>
         <tr>
             <th width="10%">
@@ -63,6 +73,8 @@
                         <br />
                         <a class="ButtonLink" href="http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=@item.FID" target="blank"><button>ამონაწერი</button></a>
                         <br />
+                        <a class="DeklaraciebisIstoria ButtonLink" target="blank" data-id="@item.FID"><button>დეკლარაციები</button></a>
+                        <br />
                 
                     }
                     @if (!string.IsNullOrWhiteSpace(item.PID))
@@ -72,28 +84,29 @@
                 </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Base_Description)
-                <br/>
-
+                <br />
+                Unnom: @Html.DisplayFor(modelItem => item.Unnom)
+                <br />
                 @Html.DisplayFor(modelItem => item.FIRST_NAME)
                 @Html.DisplayFor(modelItem => item.LAST_NAME)                    
                 <br />
                     
                 @if (!string.IsNullOrWhiteSpace(item.FID))
                 {
-                    @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })
+                    <span>Fid: @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })</span>
                     <br />
                 }
 
                 @if (!string.IsNullOrWhiteSpace(item.PID))
                 {
-                    @Html.ActionLink(item.PID, "Dzebna", new {q = item.PID})
+                    <span>Pid: @Html.ActionLink(item.PID, "Dzebna", new { q = item.PID })</span>
                     <br/>
                 }
 
                 @Html.DisplayFor(modelItem => item.BIRTH_DATE)
                 @if (item.BIRTH_DATE.HasValue)
                 {
-                    <b>@((DateTime.Today.Year - item.BIRTH_DATE.Value.Year)) წლის.</b>
+                    <b>@helpers.weli(item.BIRTH_DATE.Value)</b>
                 }
                 <br/>
                 @Html.DisplayFor(modelItem => item.RAI)
@@ -167,16 +180,11 @@
         }
     </tbody>
 </table>
-
-@if (ViewBag.kontraqtebiarmoidzebna != null)
-{
-    <h3>თქვენს მიერ მოთხოვნილი ინფორმაცია არ მოიძებნა დაზღვევებში</h3>
 }
-
-<br/>
 
 @if (ViewBag.query != null)
 {
+    <br/>
     @Html.ActionLink("Source Data", "SourceData", new { q = ViewBag.query });
 }
 
@@ -207,6 +215,12 @@
             $("#NoteDialog").html("")
                 .dialog("option", "title", "Edit Note")
                 .load("./FamiliDatas/" + id, function () { $("#NoteDialog").dialog("open"); });
+        });
+        $(".DeklaraciebisIstoria").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .dialog("option", "title", "Edit Note")
+                .load("./DeklaraciebisIstoria/" + id, function () { $("#NoteDialog").dialog("open"); });
         });
 
       

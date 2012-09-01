@@ -15,7 +15,7 @@ namespace Dazgveva.Reportebi.Models
         DateTime? BIRTH_DATE { get; }
     }
 
-    public partial class DAZGVEVA_201208 : IChevicavPirovnebisRekvizitebs
+    public partial class DAZGVEVA_201209 : IChevicavPirovnebisRekvizitebs
     {
     }
 

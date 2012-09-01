@@ -11,18 +11,7 @@
 <body>
     <div class="page">
         <div id="header">
-            <div id="title">
-                <h1>დაზღვევის ანგარიშები</h1>
-            </div>
-            <div id="logindisplay">
-                @Html.Partial("_LogOnPartial")
-            </div>
-            <div id="menucontainer">
-                <ul id="menu">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                </ul>
-            </div>
+            <h1>დაზღვევის ანგარიშები</h1>
         </div>
         <div id="main">
             @RenderBody()
