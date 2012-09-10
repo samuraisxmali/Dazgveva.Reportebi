@@ -182,6 +182,7 @@
     </None>
     <Content Include="Views\Home\SourceData.cshtml" />
     <Content Include="Views\Home\DeklaraciebisIstoria.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
