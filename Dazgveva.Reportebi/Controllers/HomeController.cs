@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Dazgveva.Reportebi.Models;
+using System.Net;
+using System.Text;
 
 namespace Dazgveva.Reportebi.Controllers
 {
@@ -370,6 +372,23 @@ namespace Dazgveva.Reportebi.Controllers
 
                 return PartialView(istoria);
             }
+        }
+
+        public string Reestri(string pid = "")
+        {
+            WebClient client = new WebClient();
+            client.Encoding = Encoding.UTF8;
+
+            return client.DownloadString(@"http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=" + pid);
+        }
+
+        public FileResult Amonaceri(string pid = "")
+        {
+            WebClient client = new WebClient();
+
+            byte[] data = client.DownloadData(@"http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=" + pid);
+
+            return File(data, "application/pdf", pid + ".pdf");
         }
     }
 

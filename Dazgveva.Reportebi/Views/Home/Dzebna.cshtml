@@ -71,7 +71,7 @@ else
                     {
                         <button class="FamiliDatas ButtonLink " data-id="@item.FID">ისტორია</button>
                         <br />
-                        <a class="ButtonLink" href="http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=@item.FID" target="blank"><button>ამონაწერი</button></a>
+                        <a class="ButtonLink" href="@Url.Content("~/Home/Amonaceri?pid=" + @item.FID)" target="blank"><button>ამონაწერი</button></a>
                         <br />
                         <a class="DeklaraciebisIstoria ButtonLink" target="blank" data-id="@item.FID"><button>დეკლარაციები</button></a>
                         <br />
@@ -79,7 +79,7 @@ else
                     }
                     @if (!string.IsNullOrWhiteSpace(item.PID))
                     {
-                        <a class="ButtonLink "href="http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=@item.PID" target="blank"><button>რეესტრი</button></a>
+                        <button class="Reestri ButtonLink" data-id="@item.PID">რეესტრი</button>
                     }
                 </td>
             <td>
@@ -191,40 +191,42 @@ else
 <div id="NoteDialog" title="" class="Hidden">
 </div>
 <script type="text/javascript">
-    $(function () {
-        $("#NoteDialog").dialog({
-            autoOpen: false, width: 800, height: 630, modal: false,
-            buttons: {
-                "Close": function () { $(this).dialog("close"); }
-            }
-        });
-        $(".Periodebi").click(function () {
-            var id = $(this).attr("data-id");
-            $("#NoteDialog").html("")
-                .dialog("option", "title", "Edit Note")
-                .load("./Periodebi/" + id, function () { $("#NoteDialog").dialog("open"); });
-        });
-        $(".Gadarickhvebi").click(function () {
-            var id = $(this).attr("data-id");
-            $("#NoteDialog").html("")
-                .dialog("option", "title", "Edit Note")
-                .load("./Gadarickhvebi/" + id, function () { $("#NoteDialog").dialog("open"); });
-        });
-        $(".FamiliDatas").click(function () {
-            var id = $(this).attr("data-id");
-            $("#NoteDialog").html("")
-                .dialog("option", "title", "Edit Note")
-                .load("./FamiliDatas/" + id, function () { $("#NoteDialog").dialog("open"); });
-        });
-        $(".DeklaraciebisIstoria").click(function () {
-            var id = $(this).attr("data-id");
-            $("#NoteDialog").html("")
-                .dialog("option", "title", "Edit Note")
-                .load("./DeklaraciebisIstoria/" + id, function () { $("#NoteDialog").dialog("open"); });
-        });
-
-      
+$(function () {
+    $("#NoteDialog").dialog({
+        autoOpen: false, width: 800, height: 630, modal: false,
+        buttons: {
+            "Close": function () { $(this).dialog("close"); }
+        }
     });
-    
-
+    $(".Periodebi").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .dialog("option", "title", "Edit Note")
+            .load("./Periodebi/" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
+    $(".Gadarickhvebi").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .dialog("option", "title", "Edit Note")
+            .load("./Gadarickhvebi/" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
+    $(".FamiliDatas").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .dialog("option", "title", "Edit Note")
+            .load("./FamiliDatas/" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
+    $(".DeklaraciebisIstoria").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .dialog("option", "title", "Edit Note")
+            .load("./DeklaraciebisIstoria/" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
+    $(".Reestri").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .dialog("option", "title", "Edit Note")
+            .load("./Reestri?pid=" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
+});
 </script>
