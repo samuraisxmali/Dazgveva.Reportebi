@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 using Dazgveva.Reportebi.Models;
 using System.Net;
 using System.Text;
+using Dapper;
 
 namespace Dazgveva.Reportebi.Controllers
 {
@@ -213,7 +215,7 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201207, Dasabechdi = d.DASABECHDI_201207, State = d.STATE_201207, CONTINUE_DATE = d.CONTINUE_DATE_201207, Company = d.Company_201207, STOP_DATE = d.STOP_DATE_201207, ADD_DATE = d.ADD_DATE_201207 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201208, Dasabechdi = d.DASABECHDI_201208, State = d.STATE_201208, CONTINUE_DATE = d.CONTINUE_DATE_201208, Company = d.Company_201208, STOP_DATE = d.STOP_DATE_201208, ADD_DATE = d.ADD_DATE_201208 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201209, Dasabechdi = d.DASABECHDI_201209, State = d.STATE, CONTINUE_DATE = d.CONTINUE_DATE, Company = d.Company, STOP_DATE = d.STOP_DATE, ADD_DATE = d.ADD_DATE }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201209, Dasabechdi = d.DASABECHDI_201210, State = d.STATE_201210, CONTINUE_DATE = d.CONTINUE_DATE_201210_TMP, Company = d.Company_201210, STOP_DATE = d.STOP_DATE_201210_TMP, ADD_DATE = d.ADD_DATE_201210_TMP }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201210, Dasabechdi = d.DASABECHDI_201210, State = d.STATE_201210, CONTINUE_DATE = d.CONTINUE_DATE_201210_TMP, Company = d.Company_201210, STOP_DATE = d.STOP_DATE_201210_TMP, ADD_DATE = d.ADD_DATE_201210_TMP }))
 
                         .GroupBy(p => new { p.ID, p.Dasabechdi, p.State,p.CONTINUE_DATE,p.Company,p.STOP_DATE,p.ADD_DATE })
                         .Select(g => g.First(x => x.Periodi == g.Min(x_ => x_.Periodi)))
@@ -390,6 +392,21 @@ namespace Dazgveva.Reportebi.Controllers
             byte[] data = client.DownloadData(@"http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=" + pid);
 
             return File(data, "application/pdf", pid + ".pdf");
+        }
+
+        public ActionResult PrvelckaroebisMocvdisTarigebi()
+        {
+            using(var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
+            {
+                con.Open();
+                var list = con.Query(@"select	p.ProgramisId, p.ProgramisDasakheleba, mapDates.MaxMapDate
+from	SocialuriDazgveva.dbo.Programebi p
+join	(select Base_Type, MAX(MapDate) MaxMapDate
+		from Pirvelckaroebi.dbo.Source_Data
+		group by Base_Type) mapDates on mapDates.Base_Type = p.ProgramisId
+ORDER BY p.ProgramisId").ToList();
+                return PartialView(list);
+            }
         }
     }
 

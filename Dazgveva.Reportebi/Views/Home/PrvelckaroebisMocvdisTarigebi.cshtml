@@ -1,0 +1,7 @@
+﻿@model System.Collections.Generic.List<dynamic>
+    <h3>პირველწყაროს მონაცემების განახლების თარიღები:</h3>
+@foreach(var bt in @Model)
+{
+    
+    <div><span>@(((DateTime)bt.MaxMapDate).ToString("yyyy-MM"))</span>&nbsp;-&nbsp;<span>@bt.ProgramisId</span>&nbsp;<span>@bt.ProgramisDasakheleba</span>&nbsp;<span style="font-size: 8px">@(((DateTime)bt.MaxMapDate).ToString("yyyy-MMMM-dd"))</span></div>
+}
