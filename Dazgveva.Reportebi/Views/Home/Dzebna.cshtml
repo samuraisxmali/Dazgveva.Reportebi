@@ -26,7 +26,7 @@
 
 <p>შეიტანე ფიდი, პიდი, Unnom-ი, დაბადების თარიღი , სახელი  გვარი ან ნებისმიერი კომბინაცია</p>
 <form action="@Url.Action("Dzebna")" method="GET">
-    <input type="text" name="q"/>
+    <input type="text" name="q" value="@ViewBag.query"/>
     <input type="submit" value="ძებნა"/>
 </form>
 
