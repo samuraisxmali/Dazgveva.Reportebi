@@ -56,7 +56,6 @@ namespace Dazgveva.Reportebi.Controllers
                         return new TextToken(x);
                     }).ToList();
         }
-
         public ActionResult Dzebna(string q = "")
         {
             using (var dc = new InsuranceWDataContext())
@@ -394,17 +393,18 @@ namespace Dazgveva.Reportebi.Controllers
             return File(data, "application/pdf", pid + ".pdf");
         }
 
+        [OutputCache(Duration = 600)]
         public ActionResult PrvelckaroebisMocvdisTarigebi()
         {
             using(var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
             {
                 con.Open();
                 var list = con.Query(@"select	p.ProgramisId, p.ProgramisDasakheleba, mapDates.MaxMapDate
-from	SocialuriDazgveva.dbo.Programebi p
+from	SocialuriDazgveva.dbo.Programebi (nolock) p
 join	(select Base_Type, MAX(MapDate) MaxMapDate
-		from Pirvelckaroebi.dbo.Source_Data
+		from Pirvelckaroebi.dbo.Source_Data (nolock)
 		group by Base_Type) mapDates on mapDates.Base_Type = p.ProgramisId
-ORDER BY p.ProgramisId").ToList();
+ORDER BY p.ProgramisId",commandTimeout:120).ToList();
                 return PartialView(list);
             }
         }
