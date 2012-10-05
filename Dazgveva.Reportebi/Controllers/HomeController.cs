@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using Dazgveva.Reportebi.Models;
@@ -136,46 +137,73 @@ namespace Dazgveva.Reportebi.Controllers
                 }
             }
         }
-
+     
         public ActionResult SourceData(string q = "")
         {
-            using (var sd = new Pirvelckaroebi2DataContext())
+            var sadzieboTekstebi = q.Split  (' ', ';', ',')
+                                    .Select (x => x.Trim())
+                                    .Where  (x => x.Length > 0)
+                                    .ToList ();
+            var pidebi = sadzieboTekstebi.Where(x => x.Length == 11 && x.All(Char.IsNumber)).ToList();
+            
+            var tarigebi = sadzieboTekstebi.Select(x => {
+                                                        DateTime dt;
+                                                        return new {ParsedDate = DateTime.TryParse(x, out dt) ? dt : default(DateTime?), OrgString = x};
+                                                    }).Where(x => x.ParsedDate.HasValue).ToList();
+
+
+           var savaraudoFidebi = sadzieboTekstebi.Where(x => x.Any(Char.IsNumber) )
+               .Except(pidebi)
+               .Except(tarigebi.Select(x=>x.OrgString)).ToList();
+
+            var sakheliAnGvarebi=sadzieboTekstebi
+                .Except(pidebi)
+                .Except(tarigebi.Select(x=>x.OrgString))
+                .Except(savaraudoFidebi).ToList();
+
+            var sakheliDaGvarebi = 
+                     (from s in sakheliAnGvarebi
+                     from g in sakheliAnGvarebi
+                     where s != g
+                     select new {s, g}).ToList();
+
+            var sakheliDaDabDarigebi = (from sg in sakheliDaGvarebi
+                                       from t in tarigebi.Select(x => x.ParsedDate)
+                                       select new {sg.s, sg.g, t}).ToList();
+
+            Tuple<string, object> whereNacili;
+
+            if(pidebi.FirstOrDefault() != null)
+                whereNacili = Tuple.Create<string, object>("PID=@Pid", new { Pid = pidebi.FirstOrDefault() });
+            else if (savaraudoFidebi.FirstOrDefault() != null)
+                whereNacili = Tuple.Create<string, object>("FID=@Fid", new { Pid = savaraudoFidebi.FirstOrDefault() });
+            else if (sakheliDaDabDarigebi.Count() >1)
+                whereNacili = Tuple.Create<string, object>(string.Join(" OR ", sakheliDaDabDarigebi.Select((x, i) => string.Format("(First_Name=@s{0} AND Last_Name=@g{0} AND Birth_Date=@d{0})", i))),
+                                                           sakheliDaDabDarigebi.Aggregate(Tuple.Create(new DynamicParameters(),0), (s, v) =>
+                                                               {
+                                                                   s.Item1.Add("s" + s.Item2, v.s);
+                                                                   s.Item1.Add("g" + s.Item2, v.g);
+                                                                   s.Item1.Add("d" + s.Item2, v.t);
+                                                                   return Tuple.Create(s.Item1,s.Item2+1);
+                                                               }).Item1);
+            else if (sakheliDaGvarebi.Count() > 1)
+                whereNacili = Tuple.Create<string, object>(string.Join(" AND ", sakheliDaDabDarigebi.Select((x, i) => string.Format("(First_Name=@s{0} AND Last_Name=@g{0})", i))),
+                                                           sakheliDaDabDarigebi.Aggregate(Tuple.Create(new DynamicParameters(), 0), (s, v) =>
+                                                           {
+                                                               s.Item1.Add("s" + s.Item2, v.s);
+                                                               s.Item1.Add("g" + s.Item2, v.g);
+                                                               return Tuple.Create(s.Item1, s.Item2+1);
+                                                           }));
+            else
+                return View("SourceData", new List<SourceData>());
+ 
+
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
             {
-                var tokens = Tokenize(q);
-
-                IQueryable<Source_Data> sdata = sd.Source_Datas;
-                foreach (var t in tokens)
-                {
-                    Token t1 = t;
-                    sdata = t1.AddWhere(sdata);
-                }
-                
-                var sourcedata = sdata.Where(x => 1 <= x.Base_Type && x.Base_Type <= 30 ).Take(50).AsEnumerable()
-                                    .Select(d => new SourceData
-                                    {
-                                        Pirvelckaro = d.Pirvelckaro,
-                                        Base_Type = d.Base_Type,
-                                        Periodi = d.Periodi,
-                                        FID = d.FID,
-                                        PID = d.PID,
-                                        Unnom = d.Unnom,
-                                        FIRST_NAME = d.FIRST_NAME,
-                                        LAST_NAME = d.LAST_NAME,
-                                        BIRTH_DATE = d.BIRTH_DATE,
-                                        Sex = d.Sex,
-                                        Region_Name = d.Region_Name,
-                                        Rai_Name = d.Rai_Name,
-                                        City = d.City,
-                                        Village = d.Village,
-                                        Street = d.Street,
-                                        Full_Address = d.Full_Address,
-                                        J_ID = d.J_ID
-                                    })
-                                    .OrderBy(x => x.PID)
-                                    .OrderBy(x => x.Periodi)
-                                    .ToList();
-
-                return View("SourceData", sourcedata);
+                conn.Open();
+                var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE "+whereNacili.Item1, 
+                                                   whereNacili.Item2).ToList();
+                return View("SourceData", sd);
             }
         }
 
