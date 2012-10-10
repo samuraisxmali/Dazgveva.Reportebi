@@ -31,179 +31,132 @@ namespace Dazgveva.Reportebi.Controllers
 
     public class HomeController : Controller
     {
+        private Tuple<string, object> WhereNacili(string q, string pid, string fid, string tarigi, string sakheli, string gvari)
+        {
+            var sadzieboTekstebi = q.Split(' ', ';', ',')
+                                    .Select(x => x.Trim())
+                                    .Where(x => x.Length > 0)
+                                    .ToList();
+
+            var pidebi = sadzieboTekstebi.Where(x => x.Length == 11 && x.All(Char.IsNumber))
+                                         .ToList();
+
+            var tarigebi = sadzieboTekstebi.Select(x =>
+            {
+                DateTime dt;
+                return new { ParsedDate = DateTime.TryParse(x, CultureInfo.CreateSpecificCulture("ka-GE"), DateTimeStyles.None, out dt) ? dt : default(DateTime?), OrgString = x };
+            })
+                                           .Where(x => x.ParsedDate.HasValue)
+                                           .ToList();
+
+
+            var savaraudoFidebi = sadzieboTekstebi.Where(x => x.Any(Char.IsNumber))
+                                                  .Except(pidebi)
+                                                  .Except(tarigebi.Select(x => x.OrgString))
+                                                  .ToList();
+
+            var sakheliAnGvarebi = sadzieboTekstebi.Except(pidebi)
+                                                   .Except(tarigebi.Select(x => x.OrgString))
+                                                   .Except(savaraudoFidebi)
+                                                   .ToList();
+
+            var sakheliDaGvarebi = (from s in sakheliAnGvarebi
+                                    from g in sakheliAnGvarebi
+                                    where s != g
+                                    select new { s, g })
+                                   .ToList();
+
+            var sakheliDaDabDarigebi = (from sg in sakheliDaGvarebi
+                                        from t in tarigebi.Select(x => x.ParsedDate)
+                                        select new { sg.s, sg.g, t })
+                                       .ToList();
+
+            if (pidebi.FirstOrDefault() != null)
+                return Tuple.Create<string, object>(pid + "=@Pid", new { Pid = pidebi.FirstOrDefault() });
+            else if (savaraudoFidebi.FirstOrDefault() != null)
+                return Tuple.Create<string, object>(fid + "=@Fid", new { Fid = savaraudoFidebi.FirstOrDefault() });
+            else if (sakheliDaDabDarigebi.Count() > 1)
+                return Tuple.Create<string, object>(string.Join(" OR ", sakheliDaDabDarigebi.Select((x, i) => string.Format("( " + sakheli + "=@s{0} AND " + gvari + "=@g{0} AND " + tarigi + "=@d{0})", i))),
+                                                           sakheliDaDabDarigebi.Aggregate(Tuple.Create(new DynamicParameters(), 0), (s, v) =>
+                                                           {
+                                                               s.Item1.Add("s" + s.Item2, v.s);
+                                                               s.Item1.Add("g" + s.Item2, v.g);
+                                                               s.Item1.Add("d" + s.Item2, v.t);
+                                                               return Tuple.Create(s.Item1, s.Item2 + 1);
+                                                           }).Item1);
+            else if (sakheliDaGvarebi.Count() > 1)
+                return Tuple.Create<string, object>(string.Join(" OR ", sakheliDaGvarebi.Select((x, i) => string.Format("(" + sakheli + "=@s{0} AND " + gvari + "=@g{0})", i))),
+                                                           sakheliDaGvarebi.Aggregate(Tuple.Create(new DynamicParameters(), 0), (s, v) =>
+                                                           {
+                                                               s.Item1.Add("s" + s.Item2, v.s);
+                                                               s.Item1.Add("g" + s.Item2, v.g);
+                                                               return Tuple.Create(s.Item1, s.Item2 + 1);
+                                                           }).Item1);
+            else
+                return null;
+        }
+
         public ActionResult Index()
         {
             return RedirectToAction("Dzebna");
         }
 
-        private List<Token> Tokenize(string q = "")
-        {
-            return q.Trim()
-                    .Split(new[] { ' ', ';', ',' })
-                    .Select(x => x.Trim())
-                    .Select<string, Token>(x =>
-                    {
-                        if (x.All(char.IsNumber) && x.Length == 11)
-                            return new PidToken(x);
-                        if (x.Replace("-", "").Replace("z", "").All(char.IsNumber))
-                            return new FidToken(x);
-                        var unnom = default(int);
-                        if (int.TryParse(x, out unnom))
-                            return new UnnomToken(unnom);
-                        var date = default(DateTime);
-                        if (DateTime.TryParse(x, CultureInfo.CreateSpecificCulture("ka-GE"), DateTimeStyles.None, out date))
-                            return new DateToken(date);
-                        return new TextToken(x);
-                    }).ToList();
-        }
         public ActionResult Dzebna(string q = "")
         {
-            using (var dc = new InsuranceWDataContext())
-            {
-                var tokens = Tokenize(q);
+            var whereNacili = WhereNacili(q, "PID", "FID", "BIRTH_DATE", "FIRST_NAME", "LAST_NAME");
 
-                IQueryable<DAZGVEVA_201210> dazgveva201206S = dc.DAZGVEVA_201210s;
-                foreach (var t in tokens)
+            var status = new Dictionary<string, string>();
+
+            status.Add("-32", "გაუქმებული ხარვეზის გამო");
+            status.Add("-27", "ხარვეზიანი პოლისი");
+            status.Add("-26", "გადაზღვეულია კომპანია ვესტში");
+            status.Add("-16", "დუბლირების გამო გაუქმებული კონტრაქტი");
+            status.Add("-15", "გაუქმებული ხარვეზის გამო");
+            status.Add("-5", "გარდაცვალება");
+            status.Add("33", "დაზღვეულია");
+            status.Add("44", "დაზღვეულია");
+            status.Add("-31", "გაუქმებულია ხარვეზის გამო");
+            status.Add("-30", "გაუქმებულია ხარვეზის გამო");
+            status.Add("-25", "პოლისი გაუქმებულია ჩაუბარებლობის გამო");
+            status.Add("-20", "გაუქმებული ხარვეზის გამო");
+            status.Add("-6", "გაუქმებული ხარვეზის გამო");
+            status.Add("0", "დასრულებული კონტრაქტი");
+            status.Add("21", "დაზღვეულია");
+            status.Add("22", "დაზღვეულია");
+
+            ViewBag.status = status;
+            ViewBag.query = q;
+
+            if (whereNacili != null)
+                using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
                 {
-                    Token t1 = t;
-                    dazgveva201206S = t1.AddWhere(dazgveva201206S);
+                    conn.Open();
+                    var kontraktebi = conn.Query<Kontrakti>(@"SELECT TOP(50) * FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) Where " + whereNacili.Item1, whereNacili.Item2).ToList();
+
+                    if(kontraktebi.Count() == 0)
+                        ViewBag.kontraqtebiarmoidzebna = true;
+
+                    return View("Dzebna", kontraktebi.OrderBy(x => x.End_Date).OrderBy(x => x.FIRST_NAME).ToList());
                 }
-
-                var kontraktebi = dazgveva201206S.Take(50).AsEnumerable()
-                                    .Select(d => new Kontrakti
-                                    {
-                                        ID = d.ID,
-                                        Base_Description = d.Base_Description,
-                                        Unnom = d.Unnom,
-                                        FID = d.FID,
-                                        PID = d.PID,
-                                        FIRST_NAME = d.FIRST_NAME,
-                                        LAST_NAME = d.LAST_NAME,
-                                        BIRTH_DATE = d.BIRTH_DATE,
-                                        RAI = d.RAI,
-                                        CITY = d.CITY,
-                                        ADDRESS_FULL = d.ADDRESS_FULL,
-                                        dagv_tar = d.dagv_tar,
-                                        
-                                        STATE = d.STATE_201210,                    //d.STATE
-                                        ADD_DATE = d.ADD_DATE_201210_TMP,          //d.ADD_DATE
-                                        CONTINUE_DATE = d.CONTINUE_DATE_201210_TMP,//d.CONTINUE_DATE
-                                        STOP_DATE = d.STOP_DATE_201210_TMP,        //d.STOP_DATE
-                                        Company = d.Company_201210,                //d.Company
-
-                                        End_Date = d.End_Date,
-                                        POLISIS_NOMERI = d.POLISIS_NOMERI
-                                    }).ToList();
-
-                var status = new Dictionary<string, string>();
-
-                status.Add("-32", "გაუქმებული ხარვეზის გამო");
-                status.Add("-27", "ხარვეზიანი პოლისი");
-                status.Add("-26", "გადაზღვეულია კომპანია ვესტში");
-                status.Add("-16", "დუბლირების გამო გაუქმებული კონტრაქტი");
-                status.Add("-15", "გაუქმებული ხარვეზის გამო");
-                status.Add("-5",  "გარდაცვალება");
-                status.Add("33",  "დაზღვეულია");
-                status.Add("44",  "დაზღვეულია");
-                status.Add("-31", "გაუქმებულია ხარვეზის გამო");
-                status.Add("-30", "გაუქმებულია ხარვეზის გამო");
-                status.Add("-25", "პოლისი გაუქმებულია ჩაუბარებლობის გამო");
-                status.Add("-20", "გაუქმებული ხარვეზის გამო");
-                status.Add("-6",  "გაუქმებული ხარვეზის გამო");
-                status.Add("0",   "დასრულებული კონტრაქტი");
-                status.Add("21",  "დაზღვეულია");
-                status.Add("22",  "დაზღვეულია");
-
-                ViewBag.status = status;
-
-                ViewBag.query = q;
-                if (q == "")
-                {
-                    ViewBag.carieliq = true;
-                    return View(kontraktebi);
-                }
-                else if (kontraktebi.Count() == 0)
-                {
-                    ViewBag.kontraqtebiarmoidzebna = true;
-                    return View(kontraktebi);
-                }
-                else
-                {
-                    return View(kontraktebi
-                                        .OrderBy(x => x.End_Date)
-                                        .OrderBy(x => x.FIRST_NAME)
-                                        .ToList());
-                }
-            }
+            else
+                ViewBag.carieliq = true;
+                return View("Dzebna", new List<Kontrakti>());
         }
-     
+
         public ActionResult SourceData(string q = "")
         {
-            var sadzieboTekstebi = q.Split  (' ', ';', ',')
-                                    .Select (x => x.Trim())
-                                    .Where  (x => x.Length > 0)
-                                    .ToList ();
-            var pidebi = sadzieboTekstebi.Where(x => x.Length == 11 && x.All(Char.IsNumber)).ToList();
-            
-            var tarigebi = sadzieboTekstebi.Select(x => {
-                                                        DateTime dt;
-                                                        return new {ParsedDate = DateTime.TryParse(x, out dt) ? dt : default(DateTime?), OrgString = x};
-                                                    }).Where(x => x.ParsedDate.HasValue).ToList();
 
-
-           var savaraudoFidebi = sadzieboTekstebi.Where(x => x.Any(Char.IsNumber) )
-               .Except(pidebi)
-               .Except(tarigebi.Select(x=>x.OrgString)).ToList();
-
-            var sakheliAnGvarebi=sadzieboTekstebi
-                .Except(pidebi)
-                .Except(tarigebi.Select(x=>x.OrgString))
-                .Except(savaraudoFidebi).ToList();
-
-            var sakheliDaGvarebi = 
-                     (from s in sakheliAnGvarebi
-                     from g in sakheliAnGvarebi
-                     where s != g
-                     select new {s, g}).ToList();
-
-            var sakheliDaDabDarigebi = (from sg in sakheliDaGvarebi
-                                       from t in tarigebi.Select(x => x.ParsedDate)
-                                       select new {sg.s, sg.g, t}).ToList();
-
-            Tuple<string, object> whereNacili;
-
-            if(pidebi.FirstOrDefault() != null)
-                whereNacili = Tuple.Create<string, object>("PID=@Pid", new { Pid = pidebi.FirstOrDefault() });
-            else if (savaraudoFidebi.FirstOrDefault() != null)
-                whereNacili = Tuple.Create<string, object>("FID=@Fid", new { Pid = savaraudoFidebi.FirstOrDefault() });
-            else if (sakheliDaDabDarigebi.Count() >1)
-                whereNacili = Tuple.Create<string, object>(string.Join(" OR ", sakheliDaDabDarigebi.Select((x, i) => string.Format("(First_Name=@s{0} AND Last_Name=@g{0} AND Birth_Date=@d{0})", i))),
-                                                           sakheliDaDabDarigebi.Aggregate(Tuple.Create(new DynamicParameters(),0), (s, v) =>
-                                                               {
-                                                                   s.Item1.Add("s" + s.Item2, v.s);
-                                                                   s.Item1.Add("g" + s.Item2, v.g);
-                                                                   s.Item1.Add("d" + s.Item2, v.t);
-                                                                   return Tuple.Create(s.Item1,s.Item2+1);
-                                                               }).Item1);
-            else if (sakheliDaGvarebi.Count() > 1)
-                whereNacili = Tuple.Create<string, object>(string.Join(" AND ", sakheliDaDabDarigebi.Select((x, i) => string.Format("(First_Name=@s{0} AND Last_Name=@g{0})", i))),
-                                                           sakheliDaDabDarigebi.Aggregate(Tuple.Create(new DynamicParameters(), 0), (s, v) =>
-                                                           {
-                                                               s.Item1.Add("s" + s.Item2, v.s);
-                                                               s.Item1.Add("g" + s.Item2, v.g);
-                                                               return Tuple.Create(s.Item1, s.Item2+1);
-                                                           }));
+            var whereNacili = WhereNacili(q, "PID", "FID", "Birth_Date", "First_Name", "Last_Name");
+            if (whereNacili != null)
+                using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
+                {
+                    conn.Open();
+                    var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE " + whereNacili.Item1,
+                                                       whereNacili.Item2).ToList();
+                    return View("SourceData", sd);
+                }
             else
                 return View("SourceData", new List<SourceData>());
- 
-
-            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
-            {
-                conn.Open();
-                var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE "+whereNacili.Item1, 
-                                                   whereNacili.Item2).ToList();
-                return View("SourceData", sd);
-            }
         }
 
         public PartialViewResult Periodebi(int id)
@@ -434,89 +387,6 @@ join	(select Base_Type, MAX(MapDate) MaxMapDate
 ORDER BY p.ProgramisId",commandTimeout:120).ToList();
                 return PartialView(list);
             }
-        }
-    }
-
-    public abstract class Token
-    {
-        public abstract IQueryable<T> AddWhere<T>(IQueryable<T> d) where T:IChevicavPirovnebisRekvizitebs;
-    }
-    
-    public class TextToken : Token
-    {
-        private readonly string _text;
-
-        public TextToken(string text)
-        {
-            if (text == null) throw new ArgumentNullException("text");
-            _text = text;
-        }
-
-        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
-        {
-            return d.Where(x=>x.FIRST_NAME.StartsWith(_text) || x.LAST_NAME.StartsWith(_text) || x.PID.StartsWith(_text));
-        }
-    }
-
-    public class DateToken : Token
-    {
-        private readonly DateTime _date;
-
-        public DateToken(DateTime date)
-        {
-            _date = date;
-        }
-
-        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
-        {
-            return d.Where(x => x.BIRTH_DATE == _date);
-        }
-    }
-
-    public class UnnomToken : Token
-    {
-        private readonly int _unnom;
-
-        public UnnomToken(int unnom)
-        {
-            _unnom = unnom;
-        }
-
-        public override IQueryable<T> AddWhere<T>(IQueryable<T> d) 
-        {
-            return d.Where(x => x.Unnom == _unnom);
-        }
-    }
-
-    public class PidToken : Token
-    {
-        private readonly string _pid;
-
-        public PidToken(string pid)
-        {
-            if (pid == null) throw new ArgumentNullException("pid");
-            _pid = pid;
-        }
-
-        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
-        {
-            return d.Where(x => x.PID == _pid);
-        }
-    }
-
-    public class FidToken : Token
-    {
-        private readonly string _fid;
-
-        public FidToken(string fid)
-        {
-            if (fid == null) throw new ArgumentNullException("fid");
-            _fid = fid;
-        }
-
-        public override IQueryable<T> AddWhere<T>(IQueryable<T> d)
-        {
-            return d.Where(x => x.FID == _fid);
         }
     }
 }
