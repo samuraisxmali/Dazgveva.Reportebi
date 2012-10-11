@@ -34,7 +34,7 @@
 
 @if (ViewBag.carieliq == true)
 {
-    
+
 }
 else if (ViewBag.kontraqtebiarmoidzebna == true)
 {
@@ -116,12 +116,15 @@ else
                 @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
             </td>
             <td style="text-align: center">
+                @if (item.STATE != null)
+                {
                     <span style="font-size: 50px; color: @(statusisFeri(item.STATE.Value))">@Html.DisplayFor(modelItem => item.STATE)</span>
                     <br />
-                    @if (ViewBag.status.ContainsKey(item.STATE.ToString()))
+                    if (ViewBag.status.ContainsKey(item.STATE.ToString()))
                     {
                         @ViewBag.status[item.STATE.ToString()]
                     }
+                }
                 </td>
                 <td>
                     <table>
@@ -186,10 +189,10 @@ else
 {
     <br/>
     @Html.ActionLink("Source Data", "SourceData", new { q = ViewBag.query });
-    if (ViewBag.carieliq == true)
-    {
+                                                                            if (ViewBag.carieliq == true)
+                                                                            {
         @Html.Action("PrvelckaroebisMocvdisTarigebi")
-    }
+                                                                            }
 }
 
 <div id="NoteDialog" title="" class="Hidden">

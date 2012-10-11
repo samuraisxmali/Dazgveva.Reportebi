@@ -127,20 +127,47 @@ namespace Dazgveva.Reportebi.Controllers
             ViewBag.status = status;
             ViewBag.query = q;
 
+            if (q == "") ViewBag.carieliq = true;
+
             if (whereNacili != null)
                 using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
                 {
                     conn.Open();
-                    var kontraktebi = conn.Query<Kontrakti>(@"SELECT TOP(50) * FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) Where " + whereNacili.Item1, whereNacili.Item2).ToList();
+                    var kontraktebi = conn.Query<DAZGVEVA_201210>(@"SELECT * FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) Where " + whereNacili.Item1, whereNacili.Item2)
+                        .ToList()
+                        .Select(d => new Kontrakti
+                        {
+                            ID = d.ID,
+                            Base_Description = d.Base_Description,
+                            Unnom = d.Unnom,
+                            FID = d.FID,
+                            PID = d.PID,
+                            FIRST_NAME = d.FIRST_NAME,
+                            LAST_NAME = d.LAST_NAME,
+                            BIRTH_DATE = d.BIRTH_DATE,
+                            RAI = d.RAI,
+                            CITY = d.CITY,
+                            ADDRESS_FULL = d.ADDRESS_FULL,
+                            dagv_tar = d.dagv_tar,
+                            STATE = d.STATE_201210,                    
+                            ADD_DATE = d.ADD_DATE_201210_TMP,          
+                            CONTINUE_DATE = d.CONTINUE_DATE_201210_TMP,
+                            STOP_DATE = d.STOP_DATE_201210_TMP,        
+                            Company = d.Company_201210,                
+
+                            End_Date = d.End_Date,
+                            POLISIS_NOMERI = d.POLISIS_NOMERI
+                        })
+                        .ToList();
 
                     if(kontraktebi.Count() == 0)
                         ViewBag.kontraqtebiarmoidzebna = true;
 
                     return View("Dzebna", kontraktebi.OrderBy(x => x.End_Date).OrderBy(x => x.FIRST_NAME).ToList());
                 }
-            else
-                ViewBag.carieliq = true;
-                return View("Dzebna", new List<Kontrakti>());
+
+            ViewBag.kontraqtebiarmoidzebna = true;
+            return View("Dzebna", new List<Kontrakti>());
         }
 
         public ActionResult SourceData(string q = "")
@@ -151,8 +178,11 @@ namespace Dazgveva.Reportebi.Controllers
                 using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
                 {
                     conn.Open();
-                    var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE " + whereNacili.Item1,
-                                                       whereNacili.Item2).ToList();
+                    var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE " + whereNacili.Item1, whereNacili.Item2)
+                                 .OrderBy(x => x.PID)
+                                 .OrderBy(x => x.Periodi)
+                                 .ToList();
+
                     return View("SourceData", sd);
                 }
             else
