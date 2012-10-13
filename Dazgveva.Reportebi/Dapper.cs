@@ -1183,7 +1183,7 @@ this IDbConnection cnn, string sql, Func<TFirst, TSecond, TThird, TFourth, TRetu
 
             public override bool TryGetMember(System.Dynamic.GetMemberBinder binder, out object result)
             {
-                return data.TryGetValue(binder.Name, out result);
+                return data.TryGetValue(binder.Name.Replace("__", "-"), out result);
             }
 
             public override IEnumerable<string> GetDynamicMemberNames()

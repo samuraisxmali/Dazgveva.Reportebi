@@ -133,7 +133,7 @@ namespace Dazgveva.Reportebi.Controllers
                 using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
                 {
                     conn.Open();
-                    var kontraktebi = conn.Query<DAZGVEVA_201210>(@"SELECT * FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) Where " + whereNacili.Item1, whereNacili.Item2)
+                    var kontraktebi = conn.Query(@"SELECT d.*, m.RAI as aRAI, m.CITY as aCITY, m.ADDRESS_FULL as aADDRESS_FULL FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) d left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID Where " + whereNacili.Item1, whereNacili.Item2)
                         .ToList()
                         .Select(d => new Kontrakti
                         {
@@ -148,7 +148,11 @@ namespace Dazgveva.Reportebi.Controllers
                             RAI = d.RAI,
                             CITY = d.CITY,
                             ADDRESS_FULL = d.ADDRESS_FULL,
-                            dagv_tar = d.dagv_tar,
+                            aRAI = d.aRAI,
+                            aCITY = d.aCITY,
+                            aADDRESS_FULL = d.aADDRESS_FULL,
+                            //dagv_tar = (DateTime?)((IDictionary<string, object>)d)["dagv-tar"],
+                            dagv_tar = d.dagv__tar,
                             STATE = d.STATE_201210,                    
                             ADD_DATE = d.ADD_DATE_201210_TMP,          
                             CONTINUE_DATE = d.CONTINUE_DATE_201210_TMP,

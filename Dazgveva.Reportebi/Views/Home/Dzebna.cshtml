@@ -114,6 +114,20 @@ else
                 @Html.DisplayFor(modelItem => item.CITY)
                 <br />
                 @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
+
+                @if(item.ADDRESS_FULL != item.aADDRESS_FULL)
+                {
+                    <b>
+                        <br/>
+                        <br/>
+                        @Html.DisplayFor(modelItem => item.aRAI)
+                        <br/>
+                        @Html.DisplayFor(modelItem => item.aCITY)
+                        <br />
+                        @Html.DisplayFor(modelItem => item.aADDRESS_FULL)
+                    </b>
+                }
+
             </td>
             <td style="text-align: center">
                 @if (item.STATE != null)

@@ -17,6 +17,9 @@ namespace Dazgveva.Reportebi.Models
         public string RAI { get; set; }
         public string CITY { get; set; }
         public string ADDRESS_FULL { get; set; }
+        public string aRAI { get; set; }
+        public string aCITY { get; set; }
+        public string aADDRESS_FULL { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyy}")]
         public DateTime? ADD_DATE { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyy}")]

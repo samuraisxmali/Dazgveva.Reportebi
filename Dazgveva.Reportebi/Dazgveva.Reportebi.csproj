@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -80,6 +81,9 @@
     </Compile>
     <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\DeklaraciebisIstoriaList.cs" />
+    <Compile Include="Models\InsuranceW.cs">
+      <DependentUpon>InsuranceW.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
     <Compile Include="Models\FamiliDataPeriodi.cs" />
