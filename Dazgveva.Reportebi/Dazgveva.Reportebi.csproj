@@ -81,9 +81,6 @@
     </Compile>
     <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\DeklaraciebisIstoriaList.cs" />
-    <Compile Include="Models\InsuranceW.cs">
-      <DependentUpon>InsuranceW.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
     <Compile Include="Models\FamiliDataPeriodi.cs" />

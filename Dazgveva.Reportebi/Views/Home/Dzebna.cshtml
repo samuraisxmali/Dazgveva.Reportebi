@@ -130,14 +130,19 @@ else
 
             </td>
             <td style="text-align: center">
-                @if (item.STATE != null)
+                <span style="font-size: 50px; color: @(statusisFeri(item.STATE.Value))">@Html.DisplayFor(modelItem => item.STATE)</span>
+                <br />
+                @item.Ganmarteba
+
+                <br />
+                <br />
+                @if (item.GAUKMEBULI == null)
                 {
-                    <span style="font-size: 50px; color: @(statusisFeri(item.STATE.Value))">@Html.DisplayFor(modelItem => item.STATE)</span>
-                    <br />
-                    if (ViewBag.status.ContainsKey(item.STATE.ToString()))
-                    {
-                        @ViewBag.status[item.STATE.ToString()]
-                    }
+                    <input class="gaukmeba" type="button" data-id="@Html.DisplayFor(modelItem => item.ID)" value="გაუქმება" />
+                }
+                else
+                {
+                    <p align="center">გაუქმებულია @item.VIN_GAAUQMA-ს მიერ</p>
                 }
                 </td>
                 <td>
@@ -203,22 +208,53 @@ else
 {
     <br/>
     @Html.ActionLink("Source Data", "SourceData", new { q = ViewBag.query });
-                                                                            if (ViewBag.carieliq == true)
-                                                                            {
+    if (ViewBag.carieliq == true)
+    {
         @Html.Action("PrvelckaroebisMocvdisTarigebi")
-                                                                            }
+    }
 }
 
-<div id="NoteDialog" title="" class="Hidden">
+<div id="NoteDialog" title="" class="Hidden"></div>
+<div id="GaukmebaDialog" title="" class="Hidden">
+    <form action="@Url.Action("Gaukmeba")" method="post" id="GaukmebisForma">
+        <table align="center" class="GaukmebaDialog" border="0" style="border: none; margin-top: 20px">
+            <input type="hidden" id="kontraktisNomeri" name="kontraktisNomeri"/>
+            <tr>
+                <td align="right">წერილის ნომერი</td>
+                <td><input name="werilisNomeri" type="text" /></td>
+            </tr>
+            <tr>
+                <td align="right">პაროლი</td>
+                <td><input name="paroli" type="password" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right"><input type="submit" value="პოლისის გაუქმება" /></td>
+            </tr>
+        </table>
+    </form>
 </div>
+
 <script type="text/javascript">
 $(function () {
     $("#NoteDialog").dialog({
         autoOpen: false, width: 800, height: 630, modal: false,
+        title: 'test',
         buttons: {
             "Close": function () { $(this).dialog("close"); }
         }
     });
+
+    $("#GaukmebaDialog").dialog({
+        autoOpen: false, width: 400, height: 220, modal: false
+    });
+
+    $(".gaukmeba").click(function () {
+        var nomeri = $(this).attr('data-id');
+        $("#GaukmebisForma #kontraktisNomeri").val(nomeri);
+        $("#GaukmebaDialog").dialog("open");
+        $("#GaukmebaDialog").dialog("option", "title", "კონტრაქტის გაუქმება: " + nomeri);
+    });
+
     $(".Periodebi").click(function () {
         var id = $(this).attr("data-id");
         $("#NoteDialog").html("")

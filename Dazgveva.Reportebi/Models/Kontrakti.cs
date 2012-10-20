@@ -33,5 +33,8 @@ namespace Dazgveva.Reportebi.Models
         public string Company { get; set; }
         public int? STATE { get; set; }
         public string POLISIS_NOMERI { get; set; }
+        public int? GAUKMEBULI { get; set; }
+        public string VIN_GAAUQMA { get; set; }
+        public string Ganmarteba { get; set; }
     }
 }

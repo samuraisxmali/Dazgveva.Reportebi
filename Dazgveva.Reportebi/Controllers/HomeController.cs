@@ -105,26 +105,6 @@ namespace Dazgveva.Reportebi.Controllers
         {
             var whereNacili = WhereNacili(q, "PID", "FID", "BIRTH_DATE", "FIRST_NAME", "LAST_NAME");
 
-            var status = new Dictionary<string, string>();
-
-            status.Add("-32", "გაუქმებული ხარვეზის გამო");
-            status.Add("-27", "ხარვეზიანი პოლისი");
-            status.Add("-26", "გადაზღვეულია კომპანია ვესტში");
-            status.Add("-16", "დუბლირების გამო გაუქმებული კონტრაქტი");
-            status.Add("-15", "გაუქმებული ხარვეზის გამო");
-            status.Add("-5", "გარდაცვალება");
-            status.Add("33", "დაზღვეულია");
-            status.Add("44", "დაზღვეულია");
-            status.Add("-31", "გაუქმებულია ხარვეზის გამო");
-            status.Add("-30", "გაუქმებულია ხარვეზის გამო");
-            status.Add("-25", "პოლისი გაუქმებულია ჩაუბარებლობის გამო");
-            status.Add("-20", "გაუქმებული ხარვეზის გამო");
-            status.Add("-6", "გაუქმებული ხარვეზის გამო");
-            status.Add("0", "დასრულებული კონტრაქტი");
-            status.Add("21", "დაზღვეულია");
-            status.Add("22", "დაზღვეულია");
-
-            ViewBag.status = status;
             ViewBag.query = q;
 
             if (q == "") ViewBag.carieliq = true;
@@ -133,7 +113,20 @@ namespace Dazgveva.Reportebi.Controllers
                 using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
                 {
                     conn.Open();
-                    var kontraktebi = conn.Query(@"SELECT d.*, m.RAI as aRAI, m.CITY as aCITY, m.ADDRESS_FULL as aADDRESS_FULL FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) d left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID Where " + whereNacili.Item1, whereNacili.Item2)
+                    string sql = @"" +
+                        "SELECT d.*, " +
+                        "m.RAI as aRAI, m.CITY as aCITY, m.ADDRESS_FULL as aADDRESS_FULL, " +
+                        "p.KontraktisNomeri as GAUKMEBULI, p.Pirovneba as VIN_GAAUQMA, " +
+                        "s.Ganmarteba " +
+                        "FROM INSURANCEW.dbo.DAZGVEVA_201210 (nolock) d " +
+                        "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201210 = s.Statusi " +
+                        "left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID " +
+                        "left join INSURANCEW.dbo.KontraktisGauqmeba p on d.ID = p.KontraktisNomeri " +
+                        "WHERE ";
+
+                    var a = sql;
+                    
+                    var kontraktebi = conn.Query(sql + whereNacili.Item1, whereNacili.Item2)
                         .ToList()
                         .Select(d => new Kontrakti
                         {
@@ -160,7 +153,10 @@ namespace Dazgveva.Reportebi.Controllers
                             Company = d.Company_201210,                
 
                             End_Date = d.End_Date,
-                            POLISIS_NOMERI = d.POLISIS_NOMERI
+                            POLISIS_NOMERI = d.POLISIS_NOMERI,
+                            GAUKMEBULI = d.GAUKMEBULI,
+                            VIN_GAAUQMA = d.VIN_GAAUQMA,
+                            Ganmarteba = d.Ganmarteba
                         })
                         .ToList();
 
@@ -388,6 +384,26 @@ namespace Dazgveva.Reportebi.Controllers
 
                 return PartialView(istoria);
             }
+        }
+
+        [HttpPost]
+        public RedirectResult Gaukmeba(int kontraktisNomeri, string werilisNomeri, string paroli)
+        {
+
+            var passwords = new Dictionary<string, string>();
+            passwords.Add("Os7b6cu8JB", "ეთერ კიღურაძე");
+
+            if (passwords.ContainsKey(paroli))
+            {
+                using (var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
+                {
+                    con.Open();
+                    con.Execute(@"INSERT INTO INSURANCEW.dbo.KontraktisGauqmeba(KontraktisNomeri, Pirovneba, WerilisNomeri) VALUES(@KontraktisNomeri, @Pirovneba, @WerilisNomeri)",
+                        new { KontraktisNomeri = kontraktisNomeri, Pirovneba = passwords[paroli], WerilisNomeri = werilisNomeri });
+                }
+            }
+
+            return Redirect( Request.UrlReferrer.ToString() );
         }
 
         public string Reestri(string pid = "")
