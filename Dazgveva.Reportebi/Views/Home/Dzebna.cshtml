@@ -81,6 +81,9 @@ else
                     {
                         <button class="Reestri ButtonLink" data-id="@item.PID">რეესტრი</button>
                     }
+                    @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI)){
+                        <button class="PolisisChabarebisIstoria ButtonLink" data-id="@item.POLISIS_NOMERI">პოლ. ჩაბ. ისტ.</button>
+                    }
                 </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Base_Description)
@@ -258,32 +261,39 @@ $(function () {
     $(".Periodebi").click(function () {
         var id = $(this).attr("data-id");
         $("#NoteDialog").html("")
-            .dialog("option", "title", "Edit Note")
+            .dialog("option", "title", "პერიოდები")
             .load("./Periodebi/" + id, function () { $("#NoteDialog").dialog("open"); });
     });
     $(".Gadarickhvebi").click(function () {
         var id = $(this).attr("data-id");
         $("#NoteDialog").html("")
-            .dialog("option", "title", "Edit Note")
+            .dialog("option", "title", "გადარიცხვები")
             .load("./Gadarickhvebi/" + id, function () { $("#NoteDialog").dialog("open"); });
     });
     $(".FamiliDatas").click(function () {
         var id = $(this).attr("data-id");
         $("#NoteDialog").html("")
-            .dialog("option", "title", "Edit Note")
+            .dialog("option", "title", "ოჯახის ისტორია")
             .load("./FamiliDatas/" + id, function () { $("#NoteDialog").dialog("open"); });
     });
     $(".DeklaraciebisIstoria").click(function () {
         var id = $(this).attr("data-id");
         $("#NoteDialog").html("")
-            .dialog("option", "title", "Edit Note")
+            .dialog("option", "title", "დეკლარაციების ისტორია")
             .load("./DeklaraciebisIstoria/" + id, function () { $("#NoteDialog").dialog("open"); });
     });
     $(".Reestri").click(function () {
         var id = $(this).attr("data-id");
         $("#NoteDialog").html("")
-            .dialog("option", "title", "Edit Note")
+            .dialog("option", "title", "რეესტრი")
             .load("./Reestri?pid=" + id, function () { $("#NoteDialog").dialog("open"); });
     });
+    $(".PolisisChabarebisIstoria").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .dialog("option", "title", "პოლისის ჩაბარების ისტორია")
+            .load("./PolisisChabarebisIstoria?polisisNomeri=" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
+
 });
 </script>

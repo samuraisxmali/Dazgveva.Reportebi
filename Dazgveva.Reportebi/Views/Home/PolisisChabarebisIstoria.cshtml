@@ -1,0 +1,21 @@
+﻿@model IEnumerable<dynamic>
+
+<table>
+    <tr>
+        <th>პაკეტის ნომერი</th>
+        <th>პოლისის ნომერი</th>
+        <th>ჩაბარების თარიღი</th>
+        <th>ჩამბარებელი</th>
+        <th>სტატუსი</th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.PaketisNomeri</td>
+        <td>@item.PolisisNomeri</td>
+        <td>@item.VizitisTarigi</td>
+        <td>@item.Chambarebeli</td>
+        <td>@item.Statusi</td>
+    </tr> 
+}
+</table>

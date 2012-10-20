@@ -386,6 +386,15 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
 
+        public PartialViewResult PolisisChabarebisIstoria(string polisisNomeri = "")
+        {
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            {
+                conn.Open();
+                return PartialView(conn.Query(@"select * from SocialuriDazgveva.dbo.PolisisChabarebisIstoria where PolisisNomeri = @pol order by VizitisTarigi", new { pol = polisisNomeri }).ToList());
+            }
+        }
+
         [HttpPost]
         public RedirectResult Gaukmeba(int kontraktisNomeri, string werilisNomeri, string paroli)
         {

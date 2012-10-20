@@ -191,6 +191,7 @@
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
     <None Include="Properties\PublishProfiles\Daz.Rep.pubxml" />
     <Content Include="Views\Home\PrvelckaroebisMocvdisTarigebi.cshtml" />
+    <Content Include="Views\Home\PolisisChabarebisIstoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
