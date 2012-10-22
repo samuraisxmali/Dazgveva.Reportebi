@@ -391,7 +391,7 @@ namespace Dazgveva.Reportebi.Controllers
             using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
             {
                 conn.Open();
-                return PartialView(conn.Query(@"select * from SocialuriDazgveva.dbo.PolisisChabarebisIstoria where PolisisNomeri = @pol order by VizitisTarigi", new { pol = polisisNomeri }).ToList());
+                return PartialView(conn.Query(@"select PaketisNomeri,PolisisNomeri,VizitisTarigi,case when Chambarebeli='AdgilidanGacema' or Chambarebeli='Socagenti' or Chambarebeli='Fosta' or Chambarebeli='Banki' then Chambarebeli else N'გაიცა ადგილიდან ('+Chambarebeli+')' end Chambarebeli, Statusi from SocialuriDazgveva.dbo.PolisisChabarebisIstoria where PolisisNomeri = @pol order by VizitisTarigi", new { pol = polisisNomeri }).ToList());
             }
         }
 
