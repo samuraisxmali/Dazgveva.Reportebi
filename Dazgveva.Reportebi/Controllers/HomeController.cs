@@ -245,9 +245,15 @@ namespace Dazgveva.Reportebi.Controllers
         {
             using (var dc = new InsuranceWDataContext())
             {
+                var g165 = dc.GADARICXVA_FULL_165s.Where(x => x.ID == id).OrderBy(x => x.OP_DATE)
+                                    .AsEnumerable()
+                                    .Select(g => new Gadarickhva { ID = g.ID, OP_DATE = g.OP_DATE, TRANSFER_DATE = g.TRANSFER_DATE, Company_ID = g.Company_ID, TRANSFER = g.TRANSFER + (g.DANAMATI.HasValue ? g.DANAMATI.Value : 0m) })
+                                    ;
+
                 var gadarickhvebi = dc.GADARICXVA_FULLs.Where(x => x.ID == id).OrderBy(x => x.OP_DATE)
                                     .AsEnumerable()
                                     .Select(g => new Gadarickhva { ID = g.ID, OP_DATE = g.OP_DATE, TRANSFER_DATE = g.TRANSFER_DATE, Company_ID = g.Company_ID, TRANSFER = g.TRANSFER })
+                                    .Concat(g165)
                                     .ToList();
                 return PartialView(gadarickhvebi);
             }

@@ -33,6 +33,9 @@ namespace Dazgveva.Reportebi.Models
     partial void InsertGADARICXVA_FULL(GADARICXVA_FULL instance);
     partial void UpdateGADARICXVA_FULL(GADARICXVA_FULL instance);
     partial void DeleteGADARICXVA_FULL(GADARICXVA_FULL instance);
+    partial void InsertGADARICXVA_FULL_165(GADARICXVA_FULL_165 instance);
+    partial void UpdateGADARICXVA_FULL_165(GADARICXVA_FULL_165 instance);
+    partial void DeleteGADARICXVA_FULL_165(GADARICXVA_FULL_165 instance);
     #endregion
 		
 		public InsuranceWDataContext() : 
@@ -198,6 +201,14 @@ namespace Dazgveva.Reportebi.Models
 			get
 			{
 				return this.GetTable<DAZGVEVA_201210>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GADARICXVA_FULL_165> GADARICXVA_FULL_165s
+		{
+			get
+			{
+				return this.GetTable<GADARICXVA_FULL_165>();
 			}
 		}
 	}
@@ -19826,6 +19837,524 @@ namespace Dazgveva.Reportebi.Models
 				{
 					this._DASABECHDI_201210 = value;
 				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GADARICXVA_FULL_165")]
+	public partial class GADARICXVA_FULL_165 : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _REC_ID;
+		
+		private int _ID;
+		
+		private int _Company_ID;
+		
+		private System.DateTime _TRANSFER_DATE;
+		
+		private System.DateTime _OP_DATE;
+		
+		private System.Nullable<decimal> _TRANSFER;
+		
+		private System.Nullable<decimal> _DANAMATI;
+		
+		private System.Nullable<decimal> _AMOUNT;
+		
+		private System.Nullable<int> _DESCRIPT;
+		
+		private System.Nullable<System.DateTime> _ADD_DATE;
+		
+		private string _DESCRIPTION;
+		
+		private System.Nullable<int> _CORRECTION_ID;
+		
+		private string _CORRECTION_DESCRIPTION;
+		
+		private System.Nullable<decimal> _CORRECTION_MONEY;
+		
+		private System.Nullable<int> _Unnom;
+		
+		private int _OP_TYPE;
+		
+		private string _OP_DESCRIPTION;
+		
+		private System.Nullable<System.DateTime> _DEATH_DATE;
+		
+		private System.Nullable<System.DateTime> _APPD_DATE;
+		
+		private System.Nullable<System.DateTime> _MONTH;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnREC_IDChanging(int value);
+    partial void OnREC_IDChanged();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnCompany_IDChanging(int value);
+    partial void OnCompany_IDChanged();
+    partial void OnTRANSFER_DATEChanging(System.DateTime value);
+    partial void OnTRANSFER_DATEChanged();
+    partial void OnOP_DATEChanging(System.DateTime value);
+    partial void OnOP_DATEChanged();
+    partial void OnTRANSFERChanging(System.Nullable<decimal> value);
+    partial void OnTRANSFERChanged();
+    partial void OnDANAMATIChanging(System.Nullable<decimal> value);
+    partial void OnDANAMATIChanged();
+    partial void OnAMOUNTChanging(System.Nullable<decimal> value);
+    partial void OnAMOUNTChanged();
+    partial void OnDESCRIPTChanging(System.Nullable<int> value);
+    partial void OnDESCRIPTChanged();
+    partial void OnADD_DATEChanging(System.Nullable<System.DateTime> value);
+    partial void OnADD_DATEChanged();
+    partial void OnDESCRIPTIONChanging(string value);
+    partial void OnDESCRIPTIONChanged();
+    partial void OnCORRECTION_IDChanging(System.Nullable<int> value);
+    partial void OnCORRECTION_IDChanged();
+    partial void OnCORRECTION_DESCRIPTIONChanging(string value);
+    partial void OnCORRECTION_DESCRIPTIONChanged();
+    partial void OnCORRECTION_MONEYChanging(System.Nullable<decimal> value);
+    partial void OnCORRECTION_MONEYChanged();
+    partial void OnUnnomChanging(System.Nullable<int> value);
+    partial void OnUnnomChanged();
+    partial void OnOP_TYPEChanging(int value);
+    partial void OnOP_TYPEChanged();
+    partial void OnOP_DESCRIPTIONChanging(string value);
+    partial void OnOP_DESCRIPTIONChanged();
+    partial void OnDEATH_DATEChanging(System.Nullable<System.DateTime> value);
+    partial void OnDEATH_DATEChanged();
+    partial void OnAPPD_DATEChanging(System.Nullable<System.DateTime> value);
+    partial void OnAPPD_DATEChanged();
+    partial void OnMONTHChanging(System.Nullable<System.DateTime> value);
+    partial void OnMONTHChanged();
+    #endregion
+		
+		public GADARICXVA_FULL_165()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_REC_ID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+		public int REC_ID
+		{
+			get
+			{
+				return this._REC_ID;
+			}
+			set
+			{
+				if ((this._REC_ID != value))
+				{
+					this.OnREC_IDChanging(value);
+					this.SendPropertyChanging();
+					this._REC_ID = value;
+					this.SendPropertyChanged("REC_ID");
+					this.OnREC_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_ID", DbType="Int NOT NULL")]
+		public int Company_ID
+		{
+			get
+			{
+				return this._Company_ID;
+			}
+			set
+			{
+				if ((this._Company_ID != value))
+				{
+					this.OnCompany_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Company_ID = value;
+					this.SendPropertyChanged("Company_ID");
+					this.OnCompany_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TRANSFER_DATE", DbType="DateTime NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime TRANSFER_DATE
+		{
+			get
+			{
+				return this._TRANSFER_DATE;
+			}
+			set
+			{
+				if ((this._TRANSFER_DATE != value))
+				{
+					this.OnTRANSFER_DATEChanging(value);
+					this.SendPropertyChanging();
+					this._TRANSFER_DATE = value;
+					this.SendPropertyChanged("TRANSFER_DATE");
+					this.OnTRANSFER_DATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OP_DATE", DbType="DateTime NOT NULL")]
+		public System.DateTime OP_DATE
+		{
+			get
+			{
+				return this._OP_DATE;
+			}
+			set
+			{
+				if ((this._OP_DATE != value))
+				{
+					this.OnOP_DATEChanging(value);
+					this.SendPropertyChanging();
+					this._OP_DATE = value;
+					this.SendPropertyChanged("OP_DATE");
+					this.OnOP_DATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TRANSFER", DbType="Decimal(14,10)")]
+		public System.Nullable<decimal> TRANSFER
+		{
+			get
+			{
+				return this._TRANSFER;
+			}
+			set
+			{
+				if ((this._TRANSFER != value))
+				{
+					this.OnTRANSFERChanging(value);
+					this.SendPropertyChanging();
+					this._TRANSFER = value;
+					this.SendPropertyChanged("TRANSFER");
+					this.OnTRANSFERChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DANAMATI", DbType="Money")]
+		public System.Nullable<decimal> DANAMATI
+		{
+			get
+			{
+				return this._DANAMATI;
+			}
+			set
+			{
+				if ((this._DANAMATI != value))
+				{
+					this.OnDANAMATIChanging(value);
+					this.SendPropertyChanging();
+					this._DANAMATI = value;
+					this.SendPropertyChanged("DANAMATI");
+					this.OnDANAMATIChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AMOUNT", DbType="Money")]
+		public System.Nullable<decimal> AMOUNT
+		{
+			get
+			{
+				return this._AMOUNT;
+			}
+			set
+			{
+				if ((this._AMOUNT != value))
+				{
+					this.OnAMOUNTChanging(value);
+					this.SendPropertyChanging();
+					this._AMOUNT = value;
+					this.SendPropertyChanged("AMOUNT");
+					this.OnAMOUNTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DESCRIPT", DbType="Int")]
+		public System.Nullable<int> DESCRIPT
+		{
+			get
+			{
+				return this._DESCRIPT;
+			}
+			set
+			{
+				if ((this._DESCRIPT != value))
+				{
+					this.OnDESCRIPTChanging(value);
+					this.SendPropertyChanging();
+					this._DESCRIPT = value;
+					this.SendPropertyChanged("DESCRIPT");
+					this.OnDESCRIPTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ADD_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ADD_DATE
+		{
+			get
+			{
+				return this._ADD_DATE;
+			}
+			set
+			{
+				if ((this._ADD_DATE != value))
+				{
+					this.OnADD_DATEChanging(value);
+					this.SendPropertyChanging();
+					this._ADD_DATE = value;
+					this.SendPropertyChanged("ADD_DATE");
+					this.OnADD_DATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DESCRIPTION", DbType="NVarChar(150)")]
+		public string DESCRIPTION
+		{
+			get
+			{
+				return this._DESCRIPTION;
+			}
+			set
+			{
+				if ((this._DESCRIPTION != value))
+				{
+					this.OnDESCRIPTIONChanging(value);
+					this.SendPropertyChanging();
+					this._DESCRIPTION = value;
+					this.SendPropertyChanged("DESCRIPTION");
+					this.OnDESCRIPTIONChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CORRECTION_ID", DbType="Int")]
+		public System.Nullable<int> CORRECTION_ID
+		{
+			get
+			{
+				return this._CORRECTION_ID;
+			}
+			set
+			{
+				if ((this._CORRECTION_ID != value))
+				{
+					this.OnCORRECTION_IDChanging(value);
+					this.SendPropertyChanging();
+					this._CORRECTION_ID = value;
+					this.SendPropertyChanged("CORRECTION_ID");
+					this.OnCORRECTION_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CORRECTION_DESCRIPTION", DbType="NVarChar(150)")]
+		public string CORRECTION_DESCRIPTION
+		{
+			get
+			{
+				return this._CORRECTION_DESCRIPTION;
+			}
+			set
+			{
+				if ((this._CORRECTION_DESCRIPTION != value))
+				{
+					this.OnCORRECTION_DESCRIPTIONChanging(value);
+					this.SendPropertyChanging();
+					this._CORRECTION_DESCRIPTION = value;
+					this.SendPropertyChanged("CORRECTION_DESCRIPTION");
+					this.OnCORRECTION_DESCRIPTIONChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CORRECTION_MONEY", DbType="Money")]
+		public System.Nullable<decimal> CORRECTION_MONEY
+		{
+			get
+			{
+				return this._CORRECTION_MONEY;
+			}
+			set
+			{
+				if ((this._CORRECTION_MONEY != value))
+				{
+					this.OnCORRECTION_MONEYChanging(value);
+					this.SendPropertyChanging();
+					this._CORRECTION_MONEY = value;
+					this.SendPropertyChanged("CORRECTION_MONEY");
+					this.OnCORRECTION_MONEYChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Unnom", DbType="Int")]
+		public System.Nullable<int> Unnom
+		{
+			get
+			{
+				return this._Unnom;
+			}
+			set
+			{
+				if ((this._Unnom != value))
+				{
+					this.OnUnnomChanging(value);
+					this.SendPropertyChanging();
+					this._Unnom = value;
+					this.SendPropertyChanged("Unnom");
+					this.OnUnnomChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OP_TYPE", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int OP_TYPE
+		{
+			get
+			{
+				return this._OP_TYPE;
+			}
+			set
+			{
+				if ((this._OP_TYPE != value))
+				{
+					this.OnOP_TYPEChanging(value);
+					this.SendPropertyChanging();
+					this._OP_TYPE = value;
+					this.SendPropertyChanged("OP_TYPE");
+					this.OnOP_TYPEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OP_DESCRIPTION", DbType="NVarChar(250)")]
+		public string OP_DESCRIPTION
+		{
+			get
+			{
+				return this._OP_DESCRIPTION;
+			}
+			set
+			{
+				if ((this._OP_DESCRIPTION != value))
+				{
+					this.OnOP_DESCRIPTIONChanging(value);
+					this.SendPropertyChanging();
+					this._OP_DESCRIPTION = value;
+					this.SendPropertyChanged("OP_DESCRIPTION");
+					this.OnOP_DESCRIPTIONChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DEATH_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DEATH_DATE
+		{
+			get
+			{
+				return this._DEATH_DATE;
+			}
+			set
+			{
+				if ((this._DEATH_DATE != value))
+				{
+					this.OnDEATH_DATEChanging(value);
+					this.SendPropertyChanging();
+					this._DEATH_DATE = value;
+					this.SendPropertyChanged("DEATH_DATE");
+					this.OnDEATH_DATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_APPD_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> APPD_DATE
+		{
+			get
+			{
+				return this._APPD_DATE;
+			}
+			set
+			{
+				if ((this._APPD_DATE != value))
+				{
+					this.OnAPPD_DATEChanging(value);
+					this.SendPropertyChanging();
+					this._APPD_DATE = value;
+					this.SendPropertyChanged("APPD_DATE");
+					this.OnAPPD_DATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MONTH", DbType="DateTime")]
+		public System.Nullable<System.DateTime> MONTH
+		{
+			get
+			{
+				return this._MONTH;
+			}
+			set
+			{
+				if ((this._MONTH != value))
+				{
+					this.OnMONTHChanging(value);
+					this.SendPropertyChanging();
+					this._MONTH = value;
+					this.SendPropertyChanged("MONTH");
+					this.OnMONTHChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}

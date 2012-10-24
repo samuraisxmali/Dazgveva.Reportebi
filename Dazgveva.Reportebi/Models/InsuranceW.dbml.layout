@@ -104,5 +104,11 @@
         <elementListCompartment Id="5f14925f-a179-4c5e-918d-705e50615494" absoluteBounds="4.14, 1.335, 1.9700000000000002, 81.5928955078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="e12b4070-5805-4ded-b4e1-e41056fa741f" absoluteBounds="10.375, 3.5, 2, 4.6554182942708326">
+      <DataClassMoniker Name="/InsuranceWDataContext/GADARICXVA_FULL_165" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b05e2ef6-646b-405c-bc14-929d6b3299a6" absoluteBounds="10.39, 3.96, 1.9700000000000002, 4.095418294270833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>
