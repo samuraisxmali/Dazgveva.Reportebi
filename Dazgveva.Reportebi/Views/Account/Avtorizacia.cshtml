@@ -1,0 +1,33 @@
+﻿@model Dazgveva.Reportebi.Controllers.LoginInput
+@{
+    ViewBag.Title = "ავტორიზაცია";
+}
+
+<h2>ავტორიზაცია</h2>
+
+<form action="@Url.Action("Login")" method="post">
+    <table class="auth-table" style="border:none">
+        <tr>
+            <td>
+                სახელი:
+            </td>
+            <td>
+                @Html.EditorFor(x => x.Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                პაროლი:
+            </td>
+            <td>
+                @Html.PasswordFor(x => x.Pass)
+            </td>
+        </tr>
+        <tr>
+            <td align="right" colspan="2">
+                @Html.HiddenFor(x => x.ReturnUrl)
+                <input type="submit" value="ავტორიზაცია" />
+            </td>
+        </tr>
+    </table>
+</form>

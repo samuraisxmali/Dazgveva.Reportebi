@@ -74,6 +74,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Dapper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,6 +193,7 @@
     <None Include="Properties\PublishProfiles\Daz.Rep.pubxml" />
     <Content Include="Views\Home\PrvelckaroebisMocvdisTarigebi.cshtml" />
     <Content Include="Views\Home\PolisisChabarebisIstoria.cshtml" />
+    <Content Include="Views\Account\Avtorizacia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

@@ -12,6 +12,10 @@
     <div class="page">
         <div id="header">
             <h1>@Html.ActionLink("დაზღვევის ანგარიშები","Dzebna","Home")</h1>
+            @if (Request.IsAuthenticated == true)
+            {
+                <div class="logout">@Html.ActionLink("გამოსვლა", "Logout", "Account")</div>
+            }
         </div>
         <div id="main">
             @RenderBody()

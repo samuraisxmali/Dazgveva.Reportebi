@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Dazgveva.Reportebi.Models;
 using System.Net;
 using System.Text;
+using System.Web.Security;
 using Dapper;
 
 namespace Dazgveva.Reportebi.Controllers
@@ -29,8 +30,30 @@ namespace Dazgveva.Reportebi.Controllers
         public List<DeklaraciebisIstoriaList> istoria { get; set; }
     }
 
+    public class User
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int SadazgveosID { get; set; }
+    }
+
+    [Authorize]
     public class HomeController : Controller
     {
+        private User GetUser()
+        {
+            if (Request.IsAuthenticated == true)
+                using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+                {
+                    conn.Open();
+                    return
+                        conn.Query<User>(@"SELECT * FROM INSURANCEW.dbo.SadazgveoebisAccountebi WHERE Name = @name",
+                                         new { name = HttpContext.User.Identity.Name }).FirstOrDefault();
+                }
+            else
+                return null;
+        }
+
         private Tuple<string, object> WhereNacili(string q, string pid, string fid, string tarigi, string sakheli, string gvari)
         {
             var sadzieboTekstebi = q.Split(' ', ';', ',')
@@ -109,6 +132,8 @@ namespace Dazgveva.Reportebi.Controllers
 
             if (q == "") ViewBag.carieliq = true;
 
+            var user = GetUser();
+
             if (whereNacili != null)
                 using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
                 {
@@ -122,10 +147,10 @@ namespace Dazgveva.Reportebi.Controllers
                         "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201210 = s.Statusi " +
                         "left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID " +
                         "left join INSURANCEW.dbo.KontraktisGauqmeba p on d.ID = p.KontraktisNomeri " +
-                        "WHERE ";
+                        "WHERE d.Company_ID_201210 = @comp AND ";
 
-                    var a = sql;
-                    
+                    ((DynamicParameters)whereNacili.Item2).Add("comp", user.SadazgveosID);
+
                     var kontraktebi = conn.Query(sql + whereNacili.Item1, whereNacili.Item2)
                         .ToList()
                         .Select(d => new Kontrakti
@@ -168,25 +193,6 @@ namespace Dazgveva.Reportebi.Controllers
 
             ViewBag.kontraqtebiarmoidzebna = true;
             return View("Dzebna", new List<Kontrakti>());
-        }
-
-        public ActionResult SourceData(string q = "")
-        {
-
-            var whereNacili = WhereNacili(q, "PID", "FID", "Birth_Date", "First_Name", "Last_Name");
-            if (whereNacili != null)
-                using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
-                {
-                    conn.Open();
-                    var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE " + whereNacili.Item1, whereNacili.Item2)
-                                 .OrderBy(x => x.PID)
-                                 .OrderBy(x => x.Periodi)
-                                 .ToList();
-
-                    return View("SourceData", sd);
-                }
-            else
-                return View("SourceData", new List<SourceData>());
         }
 
         public PartialViewResult Periodebi(int id)
@@ -247,145 +253,6 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
 
-        public PartialViewResult FamiliDatas(string id = "")
-        {
-            using (var dc = new InsuranceWDataContext())
-            using (var dc2 = new Pirvelckaroebi2DataContext())
-            {
-                var ojakhuriPirvelckaro = new[] {1, 2, 10}.ToList();
-
-                var sds = (   from sd in dc2.Source_Datas
-                              from u in dc2.Pirvelckaro_01_UMCEOEBIs.Where(x=>x.SourceDataId==sd.ID).DefaultIfEmpty()
-                              where (ojakhuriPirvelckaro.Contains(sd.Base_Type) && sd.FID == id) || (!ojakhuriPirvelckaro.Contains(sd.Base_Type) && sd.PID == id)
-                              where 1 <= sd.Base_Type && sd.Base_Type <= 30
-                              select new {
-                                              sd.Base_Type, 
-                                              Periodi = sd.MapDate.Year * 100 + sd.MapDate.Month, 
-                                              FID = sd.FID, 
-                                              PID = sd.PID, 
-                                              FIRST_NAME = sd.FIRST_NAME,
-                                              LAST_NAME = sd.LAST_NAME, 
-                                              BIRTH_DATE = sd.BIRTH_DATE, 
-                                              FAMILY_SCORE = u == null ? (int?)null : u.FAMILY_SCORE,
-                                              SCORE_DATE = u == null ? (DateTime?)null : u.SCORE_DATE, 
-                                              PIROBA = sd.Piroba 
-                                          }
-                          ).ToList();
-
-                var fds = dc.FAMILY_DATA_201101s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201012, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA })
-                  .Concat(dc.FAMILY_DATA_201102s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201101, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201103s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201102, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201104s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201103, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201105s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201104, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201106s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201105, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201107s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201106, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201108s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201107, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201109s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201108, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201110s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201109, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201111s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201110, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201112s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201111, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201201s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201112, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201202s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201201, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Concat(dc.FAMILY_DATA_201203s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201202, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
-                  .Where(x => x.FAMILY_SCORE.HasValue && x.SCORE_DATE.HasValue)
-                  .AsEnumerable()
-                  .Select(x => new {Base_Type = 1, x.Periodi, x.FID, x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE, FAMILY_SCORE = x.FAMILY_SCORE, SCORE_DATE = x.SCORE_DATE, x.PIROBA })
-                  .Concat(sds.AsEnumerable().Select(x => new {x.Base_Type, x.Periodi, x.FID, x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE, x.FAMILY_SCORE, x.SCORE_DATE, x.PIROBA }))
-
-
-                  .GroupBy(x => new { x.FID, x.SCORE_DATE, x.FAMILY_SCORE, x.Periodi })
-                  .Select(g => new FamiliData
-                                   {
-                                       FID = g.Key.FID,
-                                       SCORE_DATE = g.Key.SCORE_DATE,
-                                       FAMILY_SCORE = g.Key.FAMILY_SCORE,
-                                       Periodi = g.Key.Periodi,
-                                       ShemadgenlobaHash = string.Join(";", g.Select(x => string.Format("{0}{1}{2}{3}", x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE)).OrderBy(x => x)).GetHashCode(),
-                                       Cevrebi = g.Select(x => new FamiliDataCevri { PID = x.PID, FIRST_NAME = x.FIRST_NAME, LAST_NAME = x.LAST_NAME, BIRTH_DATE = x.BIRTH_DATE, PIROBA = x.PIROBA }).OrderBy(x => x.FIRST_NAME).ToList()
-                                   })
-                  .OrderBy(x => x.Periodi)
-                  .ToList();
-
-                Func<int, int, bool> arisMomdevnoPeriodi = (p1, p2) =>
-                                                               {
-                                                                   var p1y = (p1 / 100);
-                                                                   var p1m = p1 - p1y * 100;
-
-                                                                   var p2y = (p2 / 100);
-                                                                   var p2m = p2 - p2y * 100;
-
-                                                                   var monthPlus1 = p1m + 1;
-                                                                   var ny = monthPlus1 == 13 ? p1y + 1 : p1y;
-                                                                   var nm = monthPlus1 == 13 ? 1 : monthPlus1;
-                                                                   return ny == p2y && nm == p2m;
-                                                               };
-
-                Func<FamiliData, FamiliData, bool> arisErtiDaIgiveShemadgenloba = (p1, p2) => p1.FID == p2.FID &&
-                                                                                              p1.FAMILY_SCORE == p2.FAMILY_SCORE &&
-                                                                                              p1.SCORE_DATE == p2.SCORE_DATE &&
-                                                                                              p1.ShemadgenlobaHash == p2.ShemadgenlobaHash;
-
-                var fds2 = fds.Aggregate(new List<List<FamiliData>>(), (per, fd) =>
-                                                                {
-                                                                    var familiDatas =
-                                                                        (from x in per
-                                                                         let fdl = x.Last()
-                                                                         where arisMomdevnoPeriodi(fdl.Periodi, fd.Periodi)
-                                                                         where arisErtiDaIgiveShemadgenloba(fdl, fd)
-                                                                         select x
-                                                                            ).FirstOrDefault();
-
-                                                                    if (familiDatas != null)
-                                                                        familiDatas.Add(fd);
-                                                                    else
-                                                                        per.Add(new List<FamiliData>() { fd });
-                                                                    return per;
-                                                                });
-
-                var familiDataPeriodis = fds2
-                    .Select(x => new FamiliDataPeriodi(x.Min(x_ => x_.Periodi), x.Max(x_ => x_.Periodi), x.First())).ToList();
-                return PartialView(familiDataPeriodis);
-            }
-        }
-
-        public PartialViewResult DeklaraciebisIstoria(string id ="")
-        {
-            using (var p = new Pirvelckaroebi2DataContext())
-            {
-                var form3 = p.vForm_3s.FirstOrDefault(x => x.FID == id);
-                ViewBag.form3 = form3;
-
-                var istoria = p.VDeklaraciebisIstorias
-                    .Where(x => x.FID == id)
-                    .AsEnumerable()
-                    .GroupBy(x => x.FID_VERSION)
-                    .Select(s => new DeklarirebisIstoria
-                    {
-                        FID_VERSION = s.Key,
-                        istoria = s.Select(g => new DeklaraciebisIstoriaList
-                                                    {
-                                                        MOB_PHONE = g.MOB_PHONE,
-                                                        LAST_NAME = g.LAST_NAME,
-                                                        BIRTH_DATE = g.BIRTH_DATE,
-                                                        CALC_DATE = g.CALC_DATE,
-                                                        FID = g.FID,
-                                                        FID_VERSION = g.FID_VERSION,
-                                                        FIRST_NAME = g.FIRST_NAME,
-                                                        FULL_ADDRESS = g.FULL_ADDRESS,
-                                                        HOME_PHONE = g.HOME_PHONE,
-                                                        LEGAL_SCORE_DATE = g.LEGAL_SCORE_DATE,
-                                                        ON_CONTROL = g.ON_CONTROL,
-                                                        PID = g.PID,
-                                                        ACTION_TYPE = g.ACTION_TYPE,
-                                                        RESTORE_DOC_DATE = g.RESTORE_DOC_DATE
-                                                    }).ToList()
-                    })
-                    .ToList();
-
-                return PartialView(istoria);
-            }
-        }
-
         public PartialViewResult PolisisChabarebisIstoria(string polisisNomeri = "")
         {
             using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
@@ -395,41 +262,12 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
 
-        [HttpPost]
-        public RedirectResult Gaukmeba(int kontraktisNomeri, string werilisNomeri, string paroli)
-        {
-
-            var passwords = new Dictionary<string, string>();
-            passwords.Add("Os7b6cu8JB", "ეთერ კიღურაძე");
-
-            if (passwords.ContainsKey(paroli))
-            {
-                using (var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
-                {
-                    con.Open();
-                    con.Execute(@"INSERT INTO INSURANCEW.dbo.KontraktisGauqmeba(KontraktisNomeri, Pirovneba, WerilisNomeri) VALUES(@KontraktisNomeri, @Pirovneba, @WerilisNomeri)",
-                        new { KontraktisNomeri = kontraktisNomeri, Pirovneba = passwords[paroli], WerilisNomeri = werilisNomeri });
-                }
-            }
-
-            return Redirect( Request.UrlReferrer.ToString() );
-        }
-
         public string Reestri(string pid = "")
         {
             WebClient client = new WebClient();
             client.Encoding = Encoding.UTF8;
 
             return client.DownloadString(@"http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=" + pid);
-        }
-
-        public FileResult Amonaceri(string pid = "")
-        {
-            WebClient client = new WebClient();
-
-            byte[] data = client.DownloadData(@"http://172.17.8.125/CRA_Rest/SSA/AmonaceriUmceotaBazidan?pid=" + pid);
-
-            return File(data, "application/pdf", pid + ".pdf");
         }
 
         [OutputCache(Duration = 600)]
