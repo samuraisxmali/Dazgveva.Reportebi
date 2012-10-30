@@ -67,10 +67,6 @@ else
                     <br/>
                     <button class="Gadarickhvebi ButtonLink " data-id="@item.ID">გადარიცხვები</button>
                     <br />
-                    @if (!string.IsNullOrWhiteSpace(item.PID))
-                    {
-                        <button class="Reestri ButtonLink" data-id="@item.PID">რეესტრი</button>
-                    }
                     @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI)){
                         <button class="PolisisChabarebisIstoria ButtonLink" data-id="@item.POLISIS_NOMERI">პოლ. ჩაბ. ისტ.</button>
                     }
@@ -209,12 +205,6 @@ $(function () {
         $("#NoteDialog").html("")
             .dialog("option", "title", "გადარიცხვები")
             .load("./Gadarickhvebi/" + id, function () { $("#NoteDialog").dialog("open"); });
-    });
-    $(".Reestri").click(function () {
-        var id = $(this).attr("data-id");
-        $("#NoteDialog").html("")
-            .dialog("option", "title", "რეესტრი")
-            .load("./Reestri?pid=" + id, function () { $("#NoteDialog").dialog("open"); });
     });
     $(".PolisisChabarebisIstoria").click(function () {
         var id = $(this).attr("data-id");

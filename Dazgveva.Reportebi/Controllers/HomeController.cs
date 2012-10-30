@@ -268,14 +268,6 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
 
-        public string Reestri(string pid = "")
-        {
-            WebClient client = new WebClient();
-            client.Encoding = Encoding.UTF8;
-
-            return client.DownloadString(@"http://172.17.8.125/PirovnebisZebna/Person/FragmentiPid?PiradiNomeri=" + pid);
-        }
-
         [OutputCache(Duration = 600)]
         public ActionResult PrvelckaroebisMocvdisTarigebi()
         {
