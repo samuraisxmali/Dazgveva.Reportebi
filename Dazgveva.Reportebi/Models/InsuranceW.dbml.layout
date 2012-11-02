@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 25, 83.25" name="InsuranceW">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 25, 85.75" name="InsuranceW">
   <DataContextMoniker Name="/InsuranceWDataContext" />
   <nestedChildShapes>
     <classShape Id="d19b8b29-1adb-4d21-915d-b2c9f3c06823" absoluteBounds="8.125, 3.5, 2, 4.4631168619791666">
@@ -102,6 +102,12 @@
       <DataClassMoniker Name="/InsuranceWDataContext/DAZGVEVA_201210" />
       <nestedChildShapes>
         <elementListCompartment Id="5f14925f-a179-4c5e-918d-705e50615494" absoluteBounds="4.14, 1.335, 1.9700000000000002, 81.5928955078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="81e144c9-9612-4b08-b9ee-0da4fd6f6219" absoluteBounds="6.25, 0.875, 2, 84.652814127604145">
+      <DataClassMoniker Name="/InsuranceWDataContext/DAZGVEVA_201211" />
+      <nestedChildShapes>
+        <elementListCompartment Id="64c94dbc-6f61-445d-b027-3312d2f7ce1b" absoluteBounds="6.265, 1.335, 1.9700000000000002, 84.092814127604157" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>
