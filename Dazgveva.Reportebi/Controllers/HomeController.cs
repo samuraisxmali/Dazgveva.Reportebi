@@ -238,12 +238,14 @@ namespace Dazgveva.Reportebi.Controllers
 
         public PartialViewResult Gadarickhvebi(int id)
         {
-            using (var dc = new InsuranceWDataContext())
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
             {
-                var gadarickhvebi = dc.GADARICXVA_FULLs.Where(x => x.ID == id).OrderBy(x => x.OP_DATE)
-                                    .AsEnumerable()
-                                    .Select(g => new Gadarickhva { ID = g.ID, OP_DATE = g.OP_DATE, TRANSFER_DATE = g.TRANSFER_DATE, Company_ID = g.Company_ID, TRANSFER = g.TRANSFER })
-                                    .ToList();
+                conn.Open();
+                var gadarickhvebi = conn.Query<Gadarickhva>(
+                    @"SELECT ID , OP_DATE , TRANSFER_DATE , Company_ID , [TRANSFER] FROM [INSURANCEW].[dbo].GADARICXVA_FULL where ID=@Id
+                    UNION
+                    SELECT ID , OP_DATE , TRANSFER_DATE , Company_ID , [TRANSFER]+isnull(DANAMATI,0) [TRANSFER] FROM [INSURANCEW].[dbo].GADARICXVA_FULL_165 where ID=@Id"
+                    , new {Id=id}).ToList();
                 return PartialView(gadarickhvebi);
             }
         }
