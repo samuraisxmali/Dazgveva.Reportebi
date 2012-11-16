@@ -147,9 +147,7 @@ namespace Dazgveva.Reportebi.Controllers
                         "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201211 = s.Statusi " +
                         "left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID " +
                         "left join INSURANCEW.dbo.KontraktisGauqmeba p on d.ID = p.KontraktisNomeri " +
-                        "WHERE d.Company_ID_201211 = @comp AND ";
-
-                    ((DynamicParameters)whereNacili.Item2).Add("comp", user.SadazgveosID);
+                        "WHERE d.Company_ID_201211 = " + user.SadazgveosID + " AND ";
 
                     var kontraktebi = conn.Query(sql + whereNacili.Item1, whereNacili.Item2)
                         .ToList()
