@@ -37,6 +37,8 @@ namespace Dazgveva.Reportebi.Models
         public string Xarvezi { get; set; }
         public int? J_ID { get; set; }
         public int? Piroba { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyy}")]
+        public DateTime? inv_vada { get; set; }
 
     }
 }

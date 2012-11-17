@@ -173,12 +173,16 @@ namespace Dazgveva.Reportebi.Controllers
         public ActionResult SourceData(string q = "")
         {
 
-            var whereNacili = WhereNacili(q, "PID", "FID", "Birth_Date", "First_Name", "Last_Name");
+            var whereNacili = WhereNacili(q, "sd.PID", "sd.FID", "sd.Birth_Date", "sd.First_Name", "sd.Last_Name");
             if (whereNacili != null)
                 using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
                 {
                     conn.Open();
-                    var sd = conn.Query<SourceData>(@"SELECT * FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd WHERE " + whereNacili.Item1, whereNacili.Item2)
+                    var sd = conn.Query<SourceData>(@"
+                        SELECT sd.*, ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd                        LEFT JOIN (                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_24_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'                            UNION                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'                        ) AS ib
+                        ON sd.ID = ib.SourceDataId
+                        WHERE 
+                        " + whereNacili.Item1, whereNacili.Item2)
                                  .OrderBy(x => x.PID)
                                  .OrderBy(x => x.Periodi)
                                  .ToList();
