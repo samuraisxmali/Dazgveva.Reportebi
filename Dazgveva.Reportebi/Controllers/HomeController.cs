@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -35,6 +36,15 @@ namespace Dazgveva.Reportebi.Controllers
         public int ID { get; set; }
         public string Name { get; set; }
         public int SadazgveosID { get; set; }
+    }
+
+    public class Links
+    {
+        public int ID { get; set; }
+        public string FailisMisamarti { get; set; }
+        public string Shinaarsi { get; set; }
+        public DateTime? ShekmnisTarigi { get; set; }
+        public string Kompania { get; set; }
     }
 
     [Authorize]
@@ -124,6 +134,52 @@ namespace Dazgveva.Reportebi.Controllers
             return RedirectToAction("Dzebna");
         }
 
+        private static IEnumerable<string> DirSearch(string sDir)
+        {
+            foreach (string d in Directory.GetDirectories(sDir))
+            {
+                foreach (string f in Directory.GetFiles(d, "*.accdb"))
+                    yield return f;
+                foreach (var f in DirSearch(d))
+                    yield return f;
+            }
+        }
+
+        private static List<Links> GetFileListi(string user)
+        {
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            {
+                conn.Open();
+
+                var mzgDic =
+                    conn.Query(@"select * from SocialuriDazgveva.dbo.MzgveveliKompaniebi (nolock)").ToDictionary(
+                        mk => mk.MzgveveliKompaniisKodi);
+
+                var dict = DirSearch(@"\\db\i$\სადაზღვევოებს")
+                    .Select(x => new { x, Substring17 = x.Substring(22) })
+                    .Select(
+                        x =>
+                        new Links
+                        {
+                            ID = 0,
+                            FailisMisamarti = x.x,
+                            Shinaarsi = x.Substring17.Substring(0, x.Substring17.IndexOf("\\")),
+                            ShekmnisTarigi = System.IO.File.GetCreationTimeUtc(x.x),
+                            Kompania = mzgDic.Keys.First(k => x.x.Contains(k))
+                        })
+                    .GroupBy(x => x.Kompania)
+                    .ToDictionary(x => x.Key, x => x.OrderByDescending(x_ => x_.ShekmnisTarigi).ToList());
+
+                var forUser = dict[user];
+
+
+                int c = 1;
+                foreach (var k in forUser) k.ID = c++;
+
+                return forUser;
+            }
+        }
+
         public ActionResult Dzebna(string q = "")
         {
             var whereNacili = WhereNacili(q, "PID", "FID", "BIRTH_DATE", "FIRST_NAME", "LAST_NAME");
@@ -169,11 +225,11 @@ namespace Dazgveva.Reportebi.Controllers
                             aADDRESS_FULL = d.aADDRESS_FULL,
                             //dagv_tar = (DateTime?)((IDictionary<string, object>)d)["dagv-tar"],
                             dagv_tar = d.dagv__tar,
-                            STATE = d.STATE_201211,                    
-                            ADD_DATE = d.ADD_DATE_201211_TMP,          
+                            STATE = d.STATE_201211,
+                            ADD_DATE = d.ADD_DATE_201211_TMP,
                             CONTINUE_DATE = d.CONTINUE_DATE_201211_TMP,
-                            STOP_DATE = d.STOP_DATE_201211_TMP,        
-                            Company = d.Company_201211,                
+                            STOP_DATE = d.STOP_DATE_201211_TMP,
+                            Company = d.Company_201211,
 
                             End_Date = d.End_Date,
                             POLISIS_NOMERI = d.POLISIS_NOMERI,
@@ -183,11 +239,13 @@ namespace Dazgveva.Reportebi.Controllers
                         })
                         .ToList();
 
-                    if(kontraktebi.Count() == 0)
+                    if (kontraktebi.Count() == 0)
                         ViewBag.kontraqtebiarmoidzebna = true;
 
                     return View("Dzebna", kontraktebi.OrderBy(x => x.End_Date).OrderBy(x => x.FIRST_NAME).ToList());
                 }
+
+            ViewBag.Links = GetFileListi(user.Name);
 
             ViewBag.kontraqtebiarmoidzebna = true;
             return View("Dzebna", new List<Kontrakti>());
@@ -220,8 +278,8 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201112, Dasabechdi = d.DASABECHDI_201112, State = d.STATE_201112, CONTINUE_DATE = d.CONTINUE_DATE_201112, Company = d.Company_201112, STOP_DATE = d.STOP_DATE_201112, ADD_DATE = d.ADD_DATE_201112 }))
 
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201201, Dasabechdi = d.DASABECHDI_201201, State = d.STATE_201201, CONTINUE_DATE = d.CONTINUE_DATE_201201, Company = d.Company_201201, STOP_DATE = d.STOP_DATE_201201, ADD_DATE = d.ADD_DATE_201201 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201202, Dasabechdi = d.DASABECHDI_201202, State = d.STATE_201202, CONTINUE_DATE = d.CONTINUE_DATE_201202, Company = d.Company_201202, STOP_DATE = d.STOP_DATE_201202, ADD_DATE = d.ADD_DATE_201202}))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201203, Dasabechdi = d.DASABECHDI_201203, State = d.STATE_201203, CONTINUE_DATE = d.CONTINUE_DATE_201203, Company = d.Company_201203, STOP_DATE = d.STOP_DATE_201203, ADD_DATE = d.ADD_DATE_201203}))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201202, Dasabechdi = d.DASABECHDI_201202, State = d.STATE_201202, CONTINUE_DATE = d.CONTINUE_DATE_201202, Company = d.Company_201202, STOP_DATE = d.STOP_DATE_201202, ADD_DATE = d.ADD_DATE_201202 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201203, Dasabechdi = d.DASABECHDI_201203, State = d.STATE_201203, CONTINUE_DATE = d.CONTINUE_DATE_201203, Company = d.Company_201203, STOP_DATE = d.STOP_DATE_201203, ADD_DATE = d.ADD_DATE_201203 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201204, Dasabechdi = d.DASABECHDI_201204, State = d.STATE_201204, CONTINUE_DATE = d.CONTINUE_DATE_201204, Company = d.Company_201204, STOP_DATE = d.STOP_DATE_201204, ADD_DATE = d.ADD_DATE_201204 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201205, Dasabechdi = d.DASABECHDI_201205, State = d.STATE_201205, CONTINUE_DATE = d.CONTINUE_DATE_201205, Company = d.Company_201205, STOP_DATE = d.STOP_DATE_201205, ADD_DATE = d.ADD_DATE_201205 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201206, Dasabechdi = d.DASABECHDI_201206, State = d.STATE_201206, CONTINUE_DATE = d.CONTINUE_DATE_201206, Company = d.Company_201206, STOP_DATE = d.STOP_DATE_201206, ADD_DATE = d.ADD_DATE_201206 }))
@@ -231,7 +289,7 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201210, Dasabechdi = d.DASABECHDI_201210, State = d.STATE, CONTINUE_DATE = d.CONTINUE_DATE, Company = d.Company, STOP_DATE = d.STOP_DATE, ADD_DATE = d.ADD_DATE }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201211, Dasabechdi = d.DASABECHDI_201211, State = d.STATE_201211, CONTINUE_DATE = d.CONTINUE_DATE_201211_TMP, Company = d.Company_201211, STOP_DATE = d.STOP_DATE_201211_TMP, ADD_DATE = d.ADD_DATE_201211_TMP }))
 
-                        .GroupBy(p => new { p.ID, p.Dasabechdi, p.State,p.CONTINUE_DATE,p.Company,p.STOP_DATE,p.ADD_DATE })
+                        .GroupBy(p => new { p.ID, p.Dasabechdi, p.State, p.CONTINUE_DATE, p.Company, p.STOP_DATE, p.ADD_DATE })
                         .Select(g => g.First(x => x.Periodi == g.Min(x_ => x_.Periodi)))
                         .OrderBy(x => x.Periodi)
                         .ToList();
@@ -266,7 +324,7 @@ namespace Dazgveva.Reportebi.Controllers
         [OutputCache(Duration = 600)]
         public ActionResult PrvelckaroebisMocvdisTarigebi()
         {
-            using(var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
+            using (var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
             {
                 con.Open();
                 var list = con.Query(@"select	p.ProgramisId, p.ProgramisDasakheleba, mapDates.MaxMapDate
@@ -274,9 +332,21 @@ from	SocialuriDazgveva.dbo.Programebi (nolock) p
 join	(select Base_Type, MAX(MapDate) MaxMapDate
 		from Pirvelckaroebi.dbo.Source_Data (nolock)
 		group by Base_Type) mapDates on mapDates.Base_Type = p.ProgramisId
-ORDER BY p.ProgramisId",commandTimeout:120).ToList();
+ORDER BY p.ProgramisId", commandTimeout: 120).ToList();
                 return PartialView(list);
             }
+        }
+
+        public FileContentResult Gadmowera(int file)
+        {
+            var user = GetUser();
+
+            var dict = GetFileListi(user.Name);
+            var result = dict.Where(x => x.ID == file).ToList().First();
+
+            var f = System.IO.File.ReadAllBytes(result.FailisMisamarti);
+
+            return File(f, "application/octet-stream", result.FailisMisamarti.Split('\\').Last());
         }
     }
 }

@@ -34,6 +34,31 @@
 
 @if (ViewBag.carieliq == true)
 {
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    შინაარსი
+                </th>
+                <th>
+                    შექმნის თარიღი
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(dynamic e in ViewBag.Links)
+        {   
+            <tr>
+                <td>
+                    @Html.ActionLink((string)@e.Shinaarsi, "Gadmowera", new { file = (int)e.ID })
+                </td>
+                <td>
+                    @e.ShekmnisTarigi
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 
 }
 else if (ViewBag.kontraqtebiarmoidzebna == true)
