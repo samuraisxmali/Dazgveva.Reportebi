@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Dazgveva.Reportebi.Models.Kontrakti>
+﻿@using System.Globalization
+@using Dazgveva.Reportebi.Controllers
+@model IEnumerable<Dazgveva.Reportebi.Models.Kontrakti>
 @{
     ViewBag.Title = "ძებნა";
     Func<int, string> statusisFeri = s =>
@@ -34,31 +36,36 @@
 
 @if (ViewBag.carieliq == true)
 {
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    შინაარსი
-                </th>
-                <th>
-                    შექმნის თარიღი
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach(dynamic e in ViewBag.Links)
-        {   
-            <tr>
-                <td>
-                    @Html.ActionLink((string)@e.Shinaarsi, "Gadmowera", new { file = (int)e.ID })
-                </td>
-                <td>
-                    @e.ShekmnisTarigi
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    foreach (IGrouping<string, Links> g in ViewBag.Links)
+    {
+        <h1>@g.Key</h1>
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        შინაარსი
+                    </th>
+                    <th>
+                        შექმნის თარიღი
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Links e in g)
+                {
+                    <tr>
+                        <td width="400">
+                            @Html.ActionLink((string) @e.Shinaarsi, "Gadmowera", new {hash = e.FailisHash})
+                        </td>
+                        <td width="200">
+                            @(((DateTime)e.ShekmnisTarigi).ToString(new CultureInfo("ka-GE")).Replace(".", "/"))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 
 }
 else if (ViewBag.kontraqtebiarmoidzebna == true)
@@ -92,7 +99,8 @@ else
                     <br/>
                     <button class="Gadarickhvebi ButtonLink " data-id="@item.ID">გადარიცხვები</button>
                     <br />
-                    @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI)){
+                    @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI))
+                    {
                         <button class="PolisisChabarebisIstoria ButtonLink" data-id="@item.POLISIS_NOMERI">პოლ. ჩაბ. ისტ.</button>
                     }
                 </td>
@@ -129,7 +137,7 @@ else
                 <br />
                 @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
 
-                @if(item.ADDRESS_FULL != item.aADDRESS_FULL)
+                @if (item.ADDRESS_FULL != item.aADDRESS_FULL)
                 {
                     <b>
                         <br/>

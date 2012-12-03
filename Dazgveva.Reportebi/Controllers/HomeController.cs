@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Dazgveva.Reportebi.Models;
 using System.Net;
 using System.Text;
-using System.Web.Security;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Xml;
+using Dazgveva.Reportebi.Models;
 using Dapper;
 
 namespace Dazgveva.Reportebi.Controllers
 {
-
     public class FamiliData
     {
         public string FID { get; set; }
@@ -40,11 +40,12 @@ namespace Dazgveva.Reportebi.Controllers
 
     public class Links
     {
-        public int ID { get; set; }
-        public string FailisMisamarti { get; set; }
+        public string FailisHash { get; set; }
         public string Shinaarsi { get; set; }
+        public string DownloadLink { get; set; }
         public DateTime? ShekmnisTarigi { get; set; }
         public string Kompania { get; set; }
+        public string FailisSaxeli { get; set; }
     }
 
     [Authorize]
@@ -147,37 +148,8 @@ namespace Dazgveva.Reportebi.Controllers
 
         private static List<Links> GetFileListi(string user)
         {
-            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
-            {
-                conn.Open();
-
-                var mzgDic =
-                    conn.Query(@"select * from SocialuriDazgveva.dbo.MzgveveliKompaniebi (nolock)").ToDictionary(
-                        mk => mk.MzgveveliKompaniisKodi);
-
-                var dict = DirSearch(@"\\db\i$\სადაზღვევოებს")
-                    .Select(x => new { x, Substring17 = x.Substring(22) })
-                    .Select(
-                        x =>
-                        new Links
-                        {
-                            ID = 0,
-                            FailisMisamarti = x.x,
-                            Shinaarsi = x.Substring17.Substring(0, x.Substring17.IndexOf("\\")),
-                            ShekmnisTarigi = System.IO.File.GetCreationTimeUtc(x.x),
-                            Kompania = mzgDic.Keys.First(k => x.x.Contains(k))
-                        })
-                    .GroupBy(x => x.Kompania)
-                    .ToDictionary(x => x.Key, x => x.OrderByDescending(x_ => x_.ShekmnisTarigi).ToList());
-
-                var forUser = dict[user];
-
-
-                int c = 1;
-                foreach (var k in forUser) k.ID = c++;
-
-                return forUser;
-            }
+            var data = DeserializeJson(@"http://172.17.7.40/sadazgveoebi_rest/api/List?name=" + user);
+            return data;
         }
 
         public ActionResult Dzebna(string q = "")
@@ -245,7 +217,14 @@ namespace Dazgveva.Reportebi.Controllers
                     return View("Dzebna", kontraktebi.OrderBy(x => x.End_Date).OrderBy(x => x.FIRST_NAME).ToList());
                 }
 
-            ViewBag.Links = GetFileListi(user.Name);
+            ViewBag.Links = GetFileListi(user.Name).GroupBy(
+                x =>
+                string.Format("{0}/{1}/{2}",
+                              ((DateTime) x.ShekmnisTarigi).Day,
+                              ((DateTime) x.ShekmnisTarigi).Month,
+                              ((DateTime) x.ShekmnisTarigi).Year
+                    )
+                );
 
             ViewBag.kontraqtebiarmoidzebna = true;
             return View("Dzebna", new List<Kontrakti>());
@@ -337,16 +316,31 @@ ORDER BY p.ProgramisId", commandTimeout: 120).ToList();
             }
         }
 
-        public FileContentResult Gadmowera(int file)
+        public FileContentResult Gadmowera(string hash)
         {
             var user = GetUser();
 
             var dict = GetFileListi(user.Name);
-            var result = dict.Where(x => x.ID == file).ToList().First();
 
-            var f = System.IO.File.ReadAllBytes(result.FailisMisamarti);
+            var result = dict.Where(x => x.FailisHash == hash).ToList().First();
 
-            return File(f, "application/octet-stream", result.FailisMisamarti.Split('\\').Last());
+            WebClient client = new WebClient();
+            byte[] data = client.DownloadData(result.DownloadLink);
+
+            return File(data, "application/msaccess", result.FailisSaxeli);
+        }
+
+        private static List<Links> DeserializeJson(string requestUrl)
+        {
+            using (var client = new WebClient())
+            {
+                client.Encoding = Encoding.UTF8;
+                string result = client.DownloadString(requestUrl);
+
+                var js = new JavaScriptSerializer();
+
+                return js.Deserialize<List<Links>>(result);
+            }
         }
     }
 }
