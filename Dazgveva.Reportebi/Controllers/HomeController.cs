@@ -171,11 +171,11 @@ namespace Dazgveva.Reportebi.Controllers
                         "m.RAI as aRAI, m.CITY as aCITY, m.ADDRESS_FULL as aADDRESS_FULL, " +
                         "p.KontraktisNomeri as GAUKMEBULI, p.Pirovneba as VIN_GAAUQMA, " +
                         "s.Ganmarteba " +
-                        "FROM INSURANCEW.dbo.DAZGVEVA_201211 (nolock) d " +
-                        "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201211 = s.Statusi " +
+                        "FROM INSURANCEW.dbo.DAZGVEVA_201212 (nolock) d " +
+                        "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201212 = s.Statusi " +
                         "left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID " +
                         "left join INSURANCEW.dbo.KontraktisGauqmeba p on d.ID = p.KontraktisNomeri " +
-                        "WHERE d.Company_ID_201211 = " + user.SadazgveosID + " AND ";
+                        "WHERE d.Company_ID_201212 = " + user.SadazgveosID + " AND ";
 
                     var kontraktebi = conn.Query(sql + whereNacili.Item1, whereNacili.Item2)
                         .ToList()
@@ -197,11 +197,11 @@ namespace Dazgveva.Reportebi.Controllers
                             aADDRESS_FULL = d.aADDRESS_FULL,
                             //dagv_tar = (DateTime?)((IDictionary<string, object>)d)["dagv-tar"],
                             dagv_tar = d.dagv__tar,
-                            STATE = d.STATE_201211,
-                            ADD_DATE = d.ADD_DATE_201211_TMP,
-                            CONTINUE_DATE = d.CONTINUE_DATE_201211_TMP,
-                            STOP_DATE = d.STOP_DATE_201211_TMP,
-                            Company = d.Company_201211,
+                            STATE = d.STATE_201212,
+                            ADD_DATE = d.ADD_DATE_201212_TMP,
+                            CONTINUE_DATE = d.CONTINUE_DATE_201212_TMP,
+                            STOP_DATE = d.STOP_DATE_201212_TMP,
+                            Company = d.Company_201212,
 
                             End_Date = d.End_Date,
                             POLISIS_NOMERI = d.POLISIS_NOMERI,
@@ -234,7 +234,7 @@ namespace Dazgveva.Reportebi.Controllers
         {
             using (var dc = new InsuranceWDataContext())
             {
-                var kontraktebi = dc.DAZGVEVA_201211s.Where(x => x.ID == id).ToList();
+                var kontraktebi = dc.DAZGVEVA_201212s.Where(x => x.ID == id).ToList();
                 var periodebi = kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201006, Dasabechdi = (int?)null, State = d.STATE_06, CONTINUE_DATE = d.CONTINUE_DATE_06, Company = d.Company_06, STOP_DATE = d.STOP_DATE_06, ADD_DATE = d.ADD_DATE_06 })
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201007, Dasabechdi = (int?)null, State = d.STATE_07, CONTINUE_DATE = d.CONTINUE_DATE_07, Company = d.Company_07, STOP_DATE = d.STOP_DATE_07, ADD_DATE = d.ADD_DATE_07 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201008, Dasabechdi = (int?)null, State = d.STATE_08, CONTINUE_DATE = d.CONTINUE_DATE_08, Company = d.Company_08, STOP_DATE = d.STOP_DATE_08, ADD_DATE = d.ADD_DATE_08 }))
@@ -265,8 +265,9 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201207, Dasabechdi = d.DASABECHDI_201207, State = d.STATE_201207, CONTINUE_DATE = d.CONTINUE_DATE_201207, Company = d.Company_201207, STOP_DATE = d.STOP_DATE_201207, ADD_DATE = d.ADD_DATE_201207 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201208, Dasabechdi = d.DASABECHDI_201208, State = d.STATE_201208, CONTINUE_DATE = d.CONTINUE_DATE_201208, Company = d.Company_201208, STOP_DATE = d.STOP_DATE_201208, ADD_DATE = d.ADD_DATE_201208 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201209, Dasabechdi = d.DASABECHDI_201209, State = d.STATE_201209, CONTINUE_DATE = d.CONTINUE_DATE_201209, Company = d.Company_201209, STOP_DATE = d.STOP_DATE_201209, ADD_DATE = d.ADD_DATE_201209 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201210, Dasabechdi = d.DASABECHDI_201210, State = d.STATE, CONTINUE_DATE = d.CONTINUE_DATE, Company = d.Company, STOP_DATE = d.STOP_DATE, ADD_DATE = d.ADD_DATE }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201211, Dasabechdi = d.DASABECHDI_201211, State = d.STATE_201211, CONTINUE_DATE = d.CONTINUE_DATE_201211_TMP, Company = d.Company_201211, STOP_DATE = d.STOP_DATE_201211_TMP, ADD_DATE = d.ADD_DATE_201211_TMP }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201210, Dasabechdi = d.DASABECHDI_201210, State = d.STATE_201210, CONTINUE_DATE = d.CONTINUE_DATE_201210, Company = d.Company_201210, STOP_DATE = d.STOP_DATE_201210, ADD_DATE = d.ADD_DATE_201210 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201211, Dasabechdi = d.DASABECHDI_201211, State = d.STATE, CONTINUE_DATE = d.CONTINUE_DATE, Company = d.Company, STOP_DATE = d.STOP_DATE, ADD_DATE = d.ADD_DATE }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201212, Dasabechdi = d.DASABECHDI_201212, State = d.STATE_201212, CONTINUE_DATE = d.CONTINUE_DATE_201212_TMP, Company = d.Company_201212, STOP_DATE = d.STOP_DATE_201212_TMP, ADD_DATE = d.ADD_DATE_201212_TMP }))
 
                         .GroupBy(p => new { p.ID, p.Dasabechdi, p.State, p.CONTINUE_DATE, p.Company, p.STOP_DATE, p.ADD_DATE })
                         .Select(g => g.First(x => x.Periodi == g.Min(x_ => x_.Periodi)))
