@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,7 +8,6 @@ using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using System.Xml;
 using Dazgveva.Reportebi.Models;
 using Dapper;
 
@@ -65,7 +63,7 @@ namespace Dazgveva.Reportebi.Controllers
                 return null;
         }
 
-        private Tuple<string, object> WhereNacili(string q, string pid, string fid, string tarigi, string sakheli, string gvari)
+        private Tuple<string, object> WhereNacili(string q, string pid, string fid, string tarigi, string sakheli, string gvari, string unnom)
         {
             var sadzieboTekstebi = q.Split(' ', ';', ',')
                                     .Select(x => x.Trim())
@@ -89,6 +87,15 @@ namespace Dazgveva.Reportebi.Controllers
                                                   .Except(tarigebi.Select(x => x.OrgString))
                                                   .ToList();
 
+            var savaraudoUnnomebi = sadzieboTekstebi.Where(x =>
+                                                               {
+                                                                   var u = default(int);
+                                                                   if(Int32.TryParse(x, out u)) return true;
+                                                                   return false;
+                                                               })
+                                                    .Except(pidebi)
+                                                    .ToList();
+
             var sakheliAnGvarebi = sadzieboTekstebi.Except(pidebi)
                                                    .Except(tarigebi.Select(x => x.OrgString))
                                                    .Except(savaraudoFidebi)
@@ -107,6 +114,8 @@ namespace Dazgveva.Reportebi.Controllers
 
             if (pidebi.FirstOrDefault() != null)
                 return Tuple.Create<string, object>(pid + "=@Pid", new { Pid = pidebi.FirstOrDefault() });
+            else if (savaraudoFidebi.FirstOrDefault() != null && savaraudoUnnomebi.FirstOrDefault() != null)
+                return Tuple.Create<string, object>(fid + "=@Fid OR " + unnom + "=@Unnom", new { Fid = savaraudoFidebi.FirstOrDefault(), Unnom = savaraudoUnnomebi.FirstOrDefault() });
             else if (savaraudoFidebi.FirstOrDefault() != null)
                 return Tuple.Create<string, object>(fid + "=@Fid", new { Fid = savaraudoFidebi.FirstOrDefault() });
             else if (sakheliDaDabDarigebi.Count() > 1)
@@ -154,7 +163,7 @@ namespace Dazgveva.Reportebi.Controllers
 
         public ActionResult Dzebna(string q = "")
         {
-            var whereNacili = WhereNacili(q, "PID", "FID", "BIRTH_DATE", "FIRST_NAME", "LAST_NAME");
+            var whereNacili = WhereNacili(q, "PID", "FID", "BIRTH_DATE", "FIRST_NAME", "LAST_NAME", "Unnom");
 
             ViewBag.query = q;
 
