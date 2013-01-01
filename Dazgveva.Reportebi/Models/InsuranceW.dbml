@@ -715,8 +715,8 @@
       <Column Name="Brdzanebis_ID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.DAZGVEVA_201212" Member="DAZGVEVA_201212s">
-    <Type Name="DAZGVEVA_201212">
+  <Table Name="dbo.DAZGVEVA_201301" Member="DAZGVEVA_201301s">
+    <Type Name="DAZGVEVA_201301">
       <Column Name="Base_type" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Base_Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
@@ -1140,33 +1140,47 @@
       <Column Name="M_201210" Type="System.Decimal" DbType="Money" CanBeNull="true" />
       <Column Name="AERR_201210" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="DASABECHDI_201210" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="STATE" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Company_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Company" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="STATE_201211" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Company_ID_201211" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Company_201211" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="[201211]" Member="_201211" Type="System.Decimal" DbType="Decimal(18,10)" CanBeNull="true" />
-      <Column Name="STOP_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ADD_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CONTINUE_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Comment" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="STOP_DATE_201211" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ADD_DATE_201211" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CONTINUE_DATE_201211" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Comment_201211" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
       <Column Name="PIROBA_201211" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="J_ID_201211" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="M_201211" Type="System.Decimal" DbType="Money" CanBeNull="true" />
       <Column Name="AERR_201211" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="DASABECHDI_201211" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="OldUnnom" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="STATE_201212" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Company_ID_201212" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Company_201212" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="STATE" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Company_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Company" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="[201212]" Member="_201212" Type="System.Decimal" DbType="Decimal(18,10)" CanBeNull="true" />
-      <Column Name="STOP_DATE_201212_TMP" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ADD_DATE_201212_TMP" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CONTINUE_DATE_201212_TMP" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Comment_201212_TMP" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="STOP_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ADD_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CONTINUE_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Comment" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
       <Column Name="PIROBA_201212" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="J_ID_201212" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="M_201212" Type="System.Decimal" DbType="Money" CanBeNull="true" />
       <Column Name="AERR_201212" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="DASABECHDI_201212" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AkhaliUnnomi" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="STATE_201301" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Company_ID_201301" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Company_201301" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="[201301]" Member="_201301" Type="System.Decimal" DbType="Decimal(18,10)" CanBeNull="true" />
+      <Column Name="STOP_DATE_201301_TMP" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ADD_DATE_201301_TMP" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CONTINUE_DATE_201301_TMP" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Comment_201301_TMP" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PIROBA_201301" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="J_ID_201301" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="M_201301" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="AERR_201301" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DASABECHDI_201301" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
 </Database>
