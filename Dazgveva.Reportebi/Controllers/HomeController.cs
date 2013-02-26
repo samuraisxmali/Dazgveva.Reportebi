@@ -180,7 +180,12 @@ namespace Dazgveva.Reportebi.Controllers
                 {
                     conn.Open();
                     var sd = conn.Query<SourceData>(@"
-                        SELECT sd.*, ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd                        LEFT JOIN (                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_24_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'                            UNION                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'                        ) AS ib
+                        SELECT sd.*, ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd
+                        LEFT JOIN (
+                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_24_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
+                            UNION
+                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
+                        ) AS ib
                         ON sd.ID = ib.SourceDataId
                         WHERE 
                         " + whereNacili.Item1, whereNacili.Item2)
@@ -404,7 +409,47 @@ namespace Dazgveva.Reportebi.Controllers
             using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
             {
                 conn.Open();
-                return PartialView(conn.Query(@"select PaketisNomeri,PolisisNomeri,VizitisTarigi,case when Chambarebeli='AdgilidanGacema' or Chambarebeli='Socagenti' or Chambarebeli='Fosta' or Chambarebeli='Banki' then Chambarebeli else N'გაიცა ადგილიდან ('+Chambarebeli+')' end Chambarebeli, Statusi from SocialuriDazgveva.dbo.PolisisChabarebisIstoria where PolisisNomeri = @pol order by VizitisTarigi", new { pol = polisisNomeri }).ToList());
+
+                string sql = "select PiradiNomeri,p.PolisisNomeri,Damrigebeli from ( select PolisisNomeri,'Fosta' as Damrigebeli from SocialuriDazgveva.dbo.GadaecaFostas union all select PolisisNomeri, 'Raioni' as Damrigebeli from SocialuriDazgveva.dbo.GadaecaRaions union all select PolisisNomeri,'Banki' as Damrigebeli from SocialuriDazgveva.dbo.BankzeGadasacemiPaketisPolisebi_all ) pol join (select distinct PiradiNomeri, PolisisNomeri from SocialuriDazgveva.dbo.Polisebi) p on pol.PolisisNomeri = p.PolisisNomeri where p.PolisisNomeri = @polisisNomeri";
+                ViewBag.damrigebeli = conn.Query(sql, new { polisisNomeri = polisisNomeri });
+
+                return PartialView(conn.Query(@"
+                    select   i.PaketisNomeri
+                            ,i.PolisisNomeri
+                            ,i.VizitisTarigi
+                            ,case when i.Chambarebeli='AdgilidanGacema' or i.Chambarebeli='Socagenti' or i.Chambarebeli='Fosta' or i.Chambarebeli='Banki' then i.Chambarebeli else N'გაიცა ადგილიდან ('+i.Chambarebeli+')' end Chambarebeli
+                            , i.Statusi 
+                            , c.Dro ChvenzeMocvdisDro
+                    from SocialuriDazgveva.dbo.PolisisChabarebisIstoria i
+                    join SocialuriDazgveva.dbo.MovlenaChabarebebi c on c.PaketisNomeri=i.PaketisNomeri and c.PolisisNomeri=i.PolisisNomeri
+                    where i.PolisisNomeri = @pol 
+                    order by i.VizitisTarigi
+                ", new { pol = polisisNomeri }).ToList());
+            }
+        }
+        // @done
+        public PartialViewResult PirovnebisPeriodebi(string pid = "")
+        {
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            {
+                conn.Open();
+                var sql = @"
+                     SELECT * FROM (
+                        SELECT [PID] ,[Mnishvneloba] ,[Dan] ,[Mde] ,'Mokalakeoba' Tipi
+                        FROM [UketesiReestri].[dbo].[PirovnebisMokalakeobisCvlilebebisPeriodebi]
+                        union all
+                        SELECT [PID], [Mnishvneloba], [Dan], [Mde], 'Statusi'
+                        FROM [UketesiReestri].[dbo].[PirovnebisStatusisCvlilebebisPeriodebi]
+                        union all
+                        SELECT [PID], [Mnishvneloba], [Dan], [Mde], 'NeitMocmoba'
+                        FROM [UketesiReestri].[dbo].[PirovnebisNeitraluriMocmobisCvlilebebisPeriodebi]
+                    ) t
+                    WHERE t.PID = @pid
+                ";
+
+                ViewBag.periodebi = conn.Query(sql, new {pid = pid});
+
+                return PartialView();
             }
         }
         [HttpPost]
@@ -458,6 +503,30 @@ join	(select Base_Type, MAX(MapDate) MaxMapDate
 		group by Base_Type) mapDates on mapDates.Base_Type = p.ProgramisId
 ORDER BY p.ProgramisId",commandTimeout:120).ToList();
                 return PartialView(list);
+            }
+        }
+        // განცხადებები
+        public PartialViewResult Gancxadebebi(string q = "")
+        {
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            {
+                conn.Open();
+
+                var sql = @"
+		            SELECT g.*, s.ProgramisDasakheleba
+		            FROM [DazgvevaGanckhadebebi].[dbo].[Ganckhadebebi] g
+                    JOIN [SocialuriDazgveva].[dbo].[Programebi] s on g.Base_Type = s.ProgramisId
+		            WHERE g.Pid = @pid
+                    AND not exists (select null                         from [DazgvevaGanckhadebebi].[dbo].[GaukmebuliGanckhadebebi]                         where GaukmebuliGanckhId=g.Id
+                    )
+		            ORDER BY
+			            g.DadasturebisTarigi DESC,
+			            g.StatusisMopovebisTarigi ASC
+                ";
+
+                var result = conn.Query(sql, new {pid = q});
+
+                return PartialView(result);
             }
         }
     }

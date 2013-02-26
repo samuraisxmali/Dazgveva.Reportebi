@@ -192,6 +192,8 @@
     <None Include="Properties\PublishProfiles\Daz.Rep.pubxml" />
     <Content Include="Views\Home\PrvelckaroebisMocvdisTarigebi.cshtml" />
     <Content Include="Views\Home\PolisisChabarebisIstoria.cshtml" />
+    <Content Include="Views\Home\PirovnebisPeriodebi.cshtml" />
+    <Content Include="Views\Home\Gancxadebebi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

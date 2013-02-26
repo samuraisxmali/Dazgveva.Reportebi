@@ -3,6 +3,8 @@
 <table>
     <tr>
         <th>
+        </th>
+        <th>
             Pirvelckaro
         </th>
         <th>
@@ -60,6 +62,9 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            <button class="Gancxadebebi ButtonLink" data-id="@item.PID">განცხადებები</button>
+        </td>
         <td>
             @item.Pirvelckaro
         </td>
@@ -119,3 +124,25 @@
 
 </table>
 
+<div id="NoteDialog" title="" class="Hidden"></div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#NoteDialog").dialog({
+            autoOpen: false,
+            width: 800,
+            height: 630,
+            modal: false,
+            title: 'test',
+            buttons: {
+                "Close": function() { $(this).dialog("close"); }
+            }
+        });
+
+        $(".Gancxadebebi").click(function () {
+            var id = $(this).attr("data-id");
+            $("#NoteDialog").html("")
+                .load("./Gancxadebebi?q=" + id, function() { $("#NoteDialog").dialog("open"); });
+        });
+    });
+</script>

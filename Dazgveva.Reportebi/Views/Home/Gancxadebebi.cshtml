@@ -1,0 +1,66 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewBag.Title = "განცხადებები";
+}
+
+<h2>განცხადებები</h2>
+
+<table>
+    <tr>
+        <th>პირველწყარო</th>
+        <th>სტატუსის მოპოვება</th>
+        <th>მიღება</th>
+        <th>დადასტურება</th>
+        <th>შექმნა</th>
+        
+        @{ /*
+            <th>Unnom</th>
+            <th>Fid</th>
+            <th>Pid</th>
+            <th>სახელი</th>
+            <th>გვარი</th>
+            <th>დაბადების თარიღი</th>
+            <th>რაიონი</th>
+            <th>რაიონის სახელი</th>
+            <th>ქალაქი</th>
+            <th>სოფელი</th>
+            <th>მისამართი</th>
+            <th>სრული მისამართი</th>
+            <th>წარმომავლობა</th>
+            <th>მისამართის წარმომავლობა</th>
+            <th>პირველწყაროს ჩანანაწერის ID</th>
+            <th>დაწესებულება</th>
+        */ }
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@item.ProgramisDasakheleba</td>
+        <td>@item.StatusisMopovebisTarigi</td>
+        <td>@item.RegistraciisTarigi</td>
+        <td>@item.DadasturebisTarigi</td>
+        <td>@item.ShekmnisTarigi</td>
+        
+        @{ /*
+            <td>@item.Unnom</td>
+            <td>@item.FID</td>
+            <td>@item.PID</td>
+            <td>@item.First_Name</td>
+            <td>@item.Last_Name</td>
+            <td>@item.Birth_Date</td>
+            <td>@item.Rai</td>
+            <td>@item.Rai_Name</td>
+            <td>@item.City</td>
+            <td>@item.Village</td>
+            <td>@item.Street</td>
+            <td>@item.Full_Address</td>
+            <td>@item.Carmomavloba</td>
+            <td>@item.MisamartisCarmomavloba</td>
+            <td>@item.PirvelckarosChanacerisId</td>
+            <td>@item.Dacesebuleba</td>
+        */ }
+    </tr>
+}
+
+</table>

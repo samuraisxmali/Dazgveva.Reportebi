@@ -1,0 +1,40 @@
+﻿<table>
+    <tr>
+        <th>
+            პირადი ნომერი
+        </th>
+        <th>
+            ტიპი
+        </th>
+        <th>
+            მნიშვნელობა
+        </th>
+        <th>
+            საიდან
+        </th>
+        <th>
+            სადამდე
+        </th>
+    </tr>
+
+@foreach (dynamic item in ViewBag.periodebi) {
+    <tr>
+        <td>
+            @item.PID
+        </td>
+        <td>
+            @item.Tipi
+        </td>
+        <td>
+            @item.Mnishvneloba
+        </td>
+        <td>
+            @item.Dan
+        </td>
+        <td>
+            @item.Mde
+        </td>
+    </tr>
+}
+
+</table>

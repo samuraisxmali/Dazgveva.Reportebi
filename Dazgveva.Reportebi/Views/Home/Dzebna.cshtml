@@ -80,6 +80,9 @@ else
                     @if (!string.IsNullOrWhiteSpace(item.PID))
                     {
                         <button class="Reestri ButtonLink" data-id="@item.PID">რეესტრი</button>
+                        <br />
+                        <button class="statist ButtonLink" data-id="@item.PID">სტატუსების ისტ.</button>
+                        <br />
                     }
                     @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI)){
                         <button class="PolisisChabarebisIstoria ButtonLink" data-id="@item.POLISIS_NOMERI">პოლ. ჩაბ. ისტ.</button>
@@ -294,6 +297,10 @@ $(function () {
             .dialog("option", "title", "პოლისის ჩაბარების ისტორია")
             .load("./PolisisChabarebisIstoria?polisisNomeri=" + id, function () { $("#NoteDialog").dialog("open"); });
     });
-
+    $(".statist").click(function () {
+        var id = $(this).attr("data-id");
+        $("#NoteDialog").html("")
+            .load("./PirovnebisPeriodebi?pid=" + id, function () { $("#NoteDialog").dialog("open"); });
+    });
 });
 </script>

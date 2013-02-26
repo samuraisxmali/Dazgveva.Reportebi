@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<dynamic>
 
+ჩააბარა
 <table>
     <tr>
         <th>პაკეტის ნომერი</th>
@@ -7,15 +8,36 @@
         <th>ჩაბარების თარიღი</th>
         <th>ჩამბარებელი</th>
         <th>სტატუსი</th>
+        <th>ჩვენზე მოწვდის დრო</th>
     </tr>
-@foreach (var item in Model)
-{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.PaketisNomeri</td>
+            <td>@item.PolisisNomeri</td>
+            <td>@item.VizitisTarigi</td>
+            <td>@item.Chambarebeli</td>
+            <td>@item.Statusi</td>
+            <td>@item.ChvenzeMocvdisDro</td>
+        </tr> 
+    }
+</table>
+
+<br />
+
+გადაეცა
+<table>
     <tr>
-        <td>@item.PaketisNomeri</td>
-        <td>@item.PolisisNomeri</td>
-        <td>@item.VizitisTarigi</td>
-        <td>@item.Chambarebeli</td>
-        <td>@item.Statusi</td>
-    </tr> 
-}
+        <th>პოლისის ნომერი</th>
+        <th>პირადი ნომერი</th>
+        <th>დამრიგებელი</th>
+    </tr>
+    @foreach (dynamic i in ViewBag.damrigebeli)
+    {
+        <tr>
+            <td>@i.PolisisNomeri</td>
+            <td>@i.PiradiNomeri</td>
+            <td>@i.Damrigebeli</td>
+        </tr> 
+    }
 </table>
