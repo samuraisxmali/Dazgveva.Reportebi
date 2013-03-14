@@ -180,7 +180,44 @@ namespace Dazgveva.Reportebi.Controllers
                 {
                     conn.Open();
                     var sd = conn.Query<SourceData>(@"
-                        SELECT sd.*, ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd
+                        select 
+                            sd.ID      ,
+                            sd.Pirvelckaro    ,
+                            sd.Base_Type    ,
+                            sd.Source_Rec_Id   ,
+                            sd.Periodi     ,
+                            sd.MapDate     ,
+                            sd.FID      ,
+                            sd.Unnom     ,
+                            sd.UnnomisKhariskhi  ,
+                            sd.PID      ,
+                            sd.First_Name    ,
+                            sd.Last_Name    ,
+                            sd.Birth_Date    ,
+                            sd.Sex      ,
+                            sd.IdentPID    ,
+                            sd.J_ID     ,
+                            sd.Piroba     ,
+                            sd.Rai ,
+                            case when Base_Type in (3,7,11,12,9,6)  then Dac_Region_Name else Region_Name  end as Region_Name,
+                            case when Base_Type in (3,7,11,12,9,6)  then Dac_Rai_Name else Rai_Name  end as Rai_Name,
+                            case when Base_Type in (3,7,11,12,9,6)  then Dac_City else City  end as City,
+                            case when Base_Type in (3,7,11,12,9,6)  then Dac_Village else Village  end as Village,
+                            sd.Street     ,
+                            case when Base_Type in (3,7,11,12,9,6)  then Dac_Full_Address else Full_Address  end as Full_Address,
+                            sd.Full_Address   ,
+                            sd.Dacesebuleba   ,
+                            sd.Dac_Region_Name   ,
+                            sd.Dac_Rai_Name   ,
+                            sd.Dac_City    ,
+                            sd.Dac_Village    ,
+                            sd.Dac_Full_Address  ,
+                            sd.CONDITION_DESCRIPTION ,
+                            sd.CONDITION_ID   ,
+                            sd.GaukmebuliPid   ,
+                            sd.MimdinareTve   ,
+                            sd.Tve,
+                        ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd
                         LEFT JOIN (
                             SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_24_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
                             UNION
