@@ -9,6 +9,8 @@ using Dazgveva.Reportebi.Models;
 using System.Net;
 using System.Text;
 using Dapper;
+using MvcApplication2.Models;
+using Newtonsoft.Json;
 
 namespace Dazgveva.Reportebi.Controllers
 {
@@ -28,6 +30,9 @@ namespace Dazgveva.Reportebi.Controllers
         public int FID_VERSION { get; set; }
         public List<DeklaraciebisIstoriaList> istoria { get; set; }
     }
+
+
+
 
     public class HomeController : Controller
     {
@@ -96,11 +101,15 @@ namespace Dazgveva.Reportebi.Controllers
             else
                 return null;
         }
+
+
         // @done
         public ActionResult Index()
         {
             return RedirectToAction("Dzebna");
         }
+
+
         // @done
         public ActionResult Dzebna(string q = "")
         {
@@ -171,33 +180,36 @@ namespace Dazgveva.Reportebi.Controllers
             return View("Dzebna", new List<Kontrakti>());
         }
         // @not needed
-        public ActionResult SourceData(string q = "")
-        {
+            public ActionResult SourceData(string q = "")
+            {
 
-            var whereNacili = WhereNacili(q, "sd.PID", "sd.FID", "sd.Birth_Date", "sd.First_Name", "sd.Last_Name");
-            if (whereNacili != null)
-                using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
-                {
-                    conn.Open();
-                    var sd = conn.Query<SourceData>(@"
-                        SELECT sd.*, ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd
-                        LEFT JOIN (
-                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_24_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
-                            UNION
-                            SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
-                        ) AS ib
-                        ON sd.ID = ib.SourceDataId
-                        WHERE 
-                        " + whereNacili.Item1, whereNacili.Item2)
-                                 .OrderBy(x => x.PID)
-                                 .OrderBy(x => x.Periodi)
-                                 .ToList();
+                var whereNacili = WhereNacili(q, "sd.PID", "sd.FID", "sd.Birth_Date", "sd.First_Name", "sd.Last_Name");
+                if (whereNacili != null)
+                    using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
+                    {
+                        conn.Open();
+                        var sd = conn.Query<SourceData>(@"
+                            SELECT sd.*, ib.inv_vada FROM Pirvelckaroebi.dbo.Source_Data (nolock) sd
+                            LEFT JOIN (
+                                SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_24_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
+                                UNION
+                                SELECT SourceDataId ID,inv_vada, SourceDataId FROM Pirvelckaroebi.dbo.Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI WHERE RecDate > '20121001'
+                            ) AS ib
+                            ON sd.ID = ib.SourceDataId
+                            WHERE 
+                            " + whereNacili.Item1, whereNacili.Item2)
+                                     .OrderBy(x => x.PID)
+                                     .OrderBy(x => x.Periodi)
+                                     .ToList();
 
-                    return View("SourceData", sd);
-                }
-            else
-                return View("SourceData", new List<SourceData>());
-        }
+                        return View("SourceData", sd);
+
+                        if (q.Length == 11 && q.All(Char.IsNumber))
+                            conn.Execute("exec TempO.dbo.SheinaxeModzebniliPidi q");
+                    }
+                else
+                    return View("SourceData", new List<SourceData>());
+            }
         // ++++++++++++ fmiyc
         public PartialViewResult Periodebi(int id)
         {
@@ -518,7 +530,9 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
 		            FROM [DazgvevaGanckhadebebi].[dbo].[Ganckhadebebi] g
                     JOIN [SocialuriDazgveva].[dbo].[Programebi] s on g.Base_Type = s.ProgramisId
 		            WHERE g.Pid = @pid
-                    AND not exists (select null                         from [DazgvevaGanckhadebebi].[dbo].[GaukmebuliGanckhadebebi]                         where GaukmebuliGanckhId=g.Id
+                    AND not exists (select null 
+                        from [DazgvevaGanckhadebebi].[dbo].[GaukmebuliGanckhadebebi] 
+                        where GaukmebuliGanckhId=g.Id
                     )
 		            ORDER BY
 			            g.DadasturebisTarigi DESC,
@@ -530,5 +544,117 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
                 return PartialView(result);
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public PartialViewResult Koreqtireba(int ID)
+        {
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            
+            {
+                conn.Open();
+                var sql = @"         
+      select         isnull(d.ID		    ,'')  as ID	
+                    ,isnull(d.Base_Description,'')as Base_Description
+	                ,isnull(d.Base_type,'')       as Base_type
+				    ,isnull(d.Unnom		    ,'')  as Unnom		
+				    ,isnull(d.PID		    ,'')  as PID		
+				    ,isnull(d.FID		    ,'')  as FID		
+				    ,isnull(d.FIRST_NAME    ,'')  as FIRST_NAME
+				    ,isnull(d.LAST_NAME	    ,'')  as LAST_NAME	
+				    ,isnull(d.BIRTH_DATE    ,'')  as BIRTH_DATE
+				    ,isnull(d.REGION_ID	    ,'')  as REGION_ID	
+				    ,isnull(d.RAI		    ,'')  as RAI		
+				    ,isnull(d.RAI_NAME	    ,'')  as RAI_NAME	
+				    ,isnull(d.CITY		    ,'')  as CITY		
+				    ,isnull(d.VILLAGE	    ,'')  as VILLAGE	
+				    ,isnull(d.ADDRESS_FULL  ,'')  as ADDRESS_FULL
+				    FROM INSURANCEW.dbo.DAZGVEVA_201303 d where ID =" + ID;
+                    var dasakoreqtirebeliKontraqti = conn.Query<Kontrakti>(sql).ToList();
+
+                return PartialView(dasakoreqtirebeliKontraqti);
+            }
+
+        }
+
+        public class RaiC
+        {
+            public string Rai_Name;
+            public string Rai;
+        }
+
+        public JsonResult MomeRaionebi(string val)
+        {
+
+ 
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+        
+            {
+
+                con.Open();
+                var reqResult = con.Query<RaiC>("select Rai_Name,Rai from Pirvelckaroebi.dbo.RRC").ToList();
+                var json = JsonConvert.SerializeObject(reqResult);
+                return Json(json, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public void Save(int ID,string tags, string cityInput, string villageInput, string AddressInput)
+        {
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            {
+                con.Open();
+                Damkoreqtirebeli larisa = new Damkoreqtirebeli();
+                larisa.DaakoreqtireMisamarti(ID, tags, cityInput, villageInput, AddressInput, con);
+
+              
+            }
+        }
+
+
+
+        public JsonResult ReestridanDatreva(string PID)
+        {
+            
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            
+            {
+                con.Open();
+                Damkoreqtirebeli larisa = new Damkoreqtirebeli();
+                var reestrisInfo = larisa.CamoigeReestridan(PID);
+                var json = JsonConvert.SerializeObject(reestrisInfo);
+                return Json(json, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public JsonResult ReestridanDatrevaP(string PID,int ID)
+        {
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            {
+                con.Open();
+                Damkoreqtirebeli larisa = new Damkoreqtirebeli();
+                var reestrisInfo = larisa.CamoigeReestridan(PID);
+                var json = JsonConvert.SerializeObject(reestrisInfo);
+                larisa.DaakoreqtirePiradiMonacemebi(ID,reestrisInfo.PID,reestrisInfo.FIRST_NAME,reestrisInfo.LAST_NAME,reestrisInfo.BIRTH_DATE,con);
+                return Json(json, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
     }
 }

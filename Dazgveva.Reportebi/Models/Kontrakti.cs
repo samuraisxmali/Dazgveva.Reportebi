@@ -36,5 +36,8 @@ namespace Dazgveva.Reportebi.Models
         public int? GAUKMEBULI { get; set; }
         public string VIN_GAAUQMA { get; set; }
         public string Ganmarteba { get; set; }
+        public int Base_type { get; set; }
+        public string RAI_NAME { get; set; }
+        public string VILLAGE { get; set; }
     }
 }

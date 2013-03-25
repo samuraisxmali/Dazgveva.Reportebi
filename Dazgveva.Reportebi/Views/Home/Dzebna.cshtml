@@ -58,155 +58,159 @@ else
             </th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <button class="Periodebi ButtonLink " data-id="@item.ID">პერიოდები</button>
-                    <br/>
-                    <button class="Gadarickhvebi ButtonLink " data-id="@item.ID">გადარიცხვები</button>
-                    <br />
-                    @if (!string.IsNullOrWhiteSpace(item.FID))
-                    {
-                        <button class="FamiliDatas ButtonLink " data-id="@item.FID">ისტორია</button>
+        <tbody>
+            
+            
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <button class="Periodebi ButtonLink " data-id="@item.ID">პერიოდები</button>
+                        <br/>
+                        <button class="Gadarickhvebi ButtonLink " data-id="@item.ID">გადარიცხვები</button>
                         <br />
-                        <a class="ButtonLink" href="@Url.Content("~/Home/Amonaceri?pid=" + @item.FID)" target="blank"><button>ამონაწერი</button></a>
-                        <br />
-                        <a class="DeklaraciebisIstoria ButtonLink" target="blank" data-id="@item.FID"><button>დეკლარაციები</button></a>
-                        <br />
+                        @if (!string.IsNullOrWhiteSpace(item.FID))
+                        {
+                            <button class="FamiliDatas ButtonLink " data-id="@item.FID">ისტორია</button>
+                            <br />
+                            <a class="ButtonLink" href="@Url.Content("~/Home/Amonaceri?pid=" + @item.FID)" target="blank"><button>ამონაწერი</button></a>
+                            <br />
+                            <a class="DeklaraciebisIstoria ButtonLink" target="blank" data-id="@item.FID"><button>დეკლარაციები</button></a>
+                            <br />
                 
-                    }
-                    @if (!string.IsNullOrWhiteSpace(item.PID))
-                    {
-                        <button class="Reestri ButtonLink" data-id="@item.PID">რეესტრი</button>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(item.PID))
+                        {
+                            <button class="Reestri ButtonLink" data-id="@item.PID">რეესტრი</button>
+                            <br />
+                            <button class="statist ButtonLink" data-id="@item.PID">სტატუსების ისტ.</button>
+                            <br />
+                            <button class="koreqtireba" class="koreqtireba ButtonLink" data-id="@item.ID ">კორექტირება</button>                       
+                        }
+                        @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI)){
+                            <button class="PolisisChabarebisIstoria ButtonLink" data-id="@item.POLISIS_NOMERI">პოლ. ჩაბ. ისტ.</button>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Base_Description)
                         <br />
-                        <button class="statist ButtonLink" data-id="@item.PID">სტატუსების ისტ.</button>
+                        Unnom: @Html.DisplayFor(modelItem => item.Unnom)
                         <br />
-                    }
-                    @if (!string.IsNullOrEmpty(item.POLISIS_NOMERI)){
-                        <button class="PolisisChabarebisIstoria ButtonLink" data-id="@item.POLISIS_NOMERI">პოლ. ჩაბ. ისტ.</button>
-                    }
-                </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Base_Description)
-                <br />
-                Unnom: @Html.DisplayFor(modelItem => item.Unnom)
-                <br />
-                @Html.DisplayFor(modelItem => item.FIRST_NAME)
-                @Html.DisplayFor(modelItem => item.LAST_NAME)                    
-                <br />
+                        @Html.DisplayFor(modelItem => item.FIRST_NAME)
+                        @Html.DisplayFor(modelItem => item.LAST_NAME)                    
+                        <br />
                     
-                @if (!string.IsNullOrWhiteSpace(item.FID))
-                {
-                    <span>Fid: @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })</span>
-                    <br />
-                }
+                        @if (!string.IsNullOrWhiteSpace(item.FID))
+                        {
+                            <span>Fid: @Html.ActionLink(item.FID, "Dzebna", new { q = item.FID })</span>
+                            <br />
+                        }
 
-                @if (!string.IsNullOrWhiteSpace(item.PID))
-                {
-                    <span>Pid: @Html.ActionLink(item.PID, "Dzebna", new { q = item.PID })</span>
-                    <br/>
-                }
+                        @if (!string.IsNullOrWhiteSpace(item.PID))
+                        {
+                            <span>Pid: @Html.ActionLink(item.PID, "Dzebna", new { q = item.PID })</span>
+                            <br/>
+                        }
 
-                @Html.DisplayFor(modelItem => item.BIRTH_DATE)
-                @if (item.BIRTH_DATE.HasValue)
-                {
-                    <b>@helpers.weli(item.BIRTH_DATE.Value)</b>
-                }
-                <br/>
-                @Html.DisplayFor(modelItem => item.RAI)
-                <br/>
-                @Html.DisplayFor(modelItem => item.CITY)
-                <br />
-                @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
-
-                @if(item.ADDRESS_FULL != item.aADDRESS_FULL)
-                {
-                    <b>
+                        @Html.DisplayFor(modelItem => item.BIRTH_DATE)
+                        @if (item.BIRTH_DATE.HasValue)
+                        {
+                            <b>@helpers.weli(item.BIRTH_DATE.Value)</b>
+                        }
                         <br/>
+                        @Html.DisplayFor(modelItem => item.RAI)
                         <br/>
-                        @Html.DisplayFor(modelItem => item.aRAI)
-                        <br/>
-                        @Html.DisplayFor(modelItem => item.aCITY)
+                        @Html.DisplayFor(modelItem => item.CITY)
                         <br />
-                        @Html.DisplayFor(modelItem => item.aADDRESS_FULL)
-                    </b>
-                }
+                        @Html.DisplayFor(modelItem => item.ADDRESS_FULL)
 
-            </td>
-            <td style="text-align: center">
-                <span style="font-size: 50px; color: @(statusisFeri(item.STATE.Value))">@Html.DisplayFor(modelItem => item.STATE)</span>
-                <br />
-                @item.Ganmarteba
+                        @if(item.ADDRESS_FULL != item.aADDRESS_FULL)
+                        {
+                            <b>
+                                <br/>
+                                <br/>
+                                @Html.DisplayFor(modelItem => item.aRAI)
+                                <br/>
+                                @Html.DisplayFor(modelItem => item.aCITY)
+                                <br />
+                                @Html.DisplayFor(modelItem => item.aADDRESS_FULL)
+                            </b>
+                        }
 
-                <br />
-                <br />
-                @if (item.GAUKMEBULI == null)
-                {
-                    <input class="gaukmeba" type="button" data-id="@Html.DisplayFor(modelItem => item.ID)" value="x" />
-                }
-                else
-                {
-                    <p align="center">გაუქმებულია @item.VIN_GAAUQMA-ს მიერ</p>
-                }
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <th>
-                                დამატების
-                            </th>
-                            <th>
-                                დაზღვევის
-                            </th>
-                            <th>
-                                გაგრძელების
-                            </th>
-                            <th>
-                                დასრულების
-                            </th>
-                            <th>
-                                გაჩერების
-                            </th>
-                            <th>
-                                კომპანია
-                            </th>
-                            <th>
-                                პოლისი
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ADD_DATE)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.dagv_tar)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CONTINUE_DATE)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.End_Date)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.STOP_DATE)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Company)
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrWhiteSpace(item.POLISIS_NOMERI))
-                                {
-                                    @Html.DisplayFor(modelItem => item.POLISIS_NOMERI)
-                                }
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        }
-    </tbody>
+                    </td>
+                    <td style="text-align: center">
+                        <span style="font-size: 50px; color: @(statusisFeri(item.STATE.Value))">@Html.DisplayFor(modelItem => item.STATE)</span>
+                        <br />
+                        @item.Ganmarteba
+
+                        <br />
+                        <br />
+                        @if (item.GAUKMEBULI == null)
+                        {
+                            <input class="gaukmeba" type="button" data-id="@Html.DisplayFor(modelItem => item.ID)" value="x" />
+                        }
+                        else
+                        {
+                            <p align="center">გაუქმებულია @item.VIN_GAAUQMA-ს მიერ</p>
+                        }
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>
+                                    დამატების
+                                </th>
+                                <th>
+                                    დაზღვევის
+                                </th>
+                                <th>
+                                    გაგრძელების
+                                </th>
+                                <th>
+                                    დასრულების
+                                </th>
+                                <th>
+                                    გაჩერების
+                                </th>
+                                <th>
+                                    კომპანია
+                                </th>
+                                <th>
+                                    პოლისი
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ADD_DATE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dagv_tar)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CONTINUE_DATE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.End_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.STOP_DATE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Company)
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(item.POLISIS_NOMERI))
+                                    {
+                                        @Html.DisplayFor(modelItem => item.POLISIS_NOMERI)
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
 </table>
 }
 
@@ -302,5 +306,30 @@ $(function () {
         $("#NoteDialog").html("")
             .load("./PirovnebisPeriodebi?pid=" + id, function () { $("#NoteDialog").dialog("open"); });
     });
+    
+    //$(".koreqtireba").click(function () {
+    //    var id = $(this).attr("data-id");
+    //    alert('alert')
+    //    $("#NoteDialog").html("").dialog("option", "title", "კოტრქტირება")
+    //        .load("./Koreqtireba?ID=" + id, function () { $("#NoteDialog").dialog("open"); });
+    //});
+
+
+
+
+    $(".koreqtireba").click(function () {
+        var id = $(this).attr("data-id");
+        $.get("./Koreqtireba?ID=" + id, function (data) {
+            $("#NoteDialog").html(data).dialog("open");
+ });
+    //        //$("#NoteDialog").html("")
+    //   
+    //    $("#NoteDialog").html("")
+    //       // .text("adsasdasdasd").dialog("open");
+    //    .load("./Koreqtireba?ID=" + id, function (data) {
+    //        var html = $("#NoteDialog").text()
+    //             $("#NoteDialog").dialog("open");
+    //    });
+   });
 });
 </script>

@@ -1,0 +1,238 @@
+﻿@using Dazgveva.Reportebi.Models
+<div>
+    @{
+       
+    var kon = Model as List<Kontrakti>;
+    foreach (var VARIABLE in kon)
+    {
+        <form id="submit">
+            <table id="addressTable">
+                <tr>
+                    <td>პროგრამა:</td>
+                    <td id="baseType">@VARIABLE.Base_Description /@VARIABLE.Base_type</td>
+                </tr>
+                    
+                 <tr>
+                 
+                    <td>PID:</td>
+                    <td id="pid">@VARIABLE.PID
+                       
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        სახელი:
+
+                    </td>
+    
+                    <td id="FirstName">
+                        @VARIABLE.FIRST_NAME
+                    </td>
+                    <td  hidden="rawspan">
+                        <input id="hiddenforId" type="text" name="ID" value="@VARIABLE.ID"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        გვარი:
+                    </td>
+    
+                    <td id="LastName">
+                        @VARIABLE.LAST_NAME
+                    </td>
+                </tr>
+                <tr>
+                    <td >
+                        დაბ. თარიღი:
+                    </td>
+                    <td id="Birth_Date">
+                        @VARIABLE.BIRTH_DATE
+                     
+                    </td>
+                </tr>
+                <tr>
+   
+                <tr>
+                    <td>რაიონი:</td>
+                    <td class="addressVal"id="rai_NameVal">@VARIABLE.RAI_NAME </td> 
+                    <td class="addressInput">
+                        <input id="tags" name="tags" />
+                    </td> 
+
+                </tr>   
+                <tr>
+                    <td>ქალაქი:</td>
+
+                    <td class="addressVal "id="cityVal">@VARIABLE.CITY </td>
+                    <td class="addressInput">
+                        <input id="cityInput" name="cityInput" />
+                    </td> 
+                </tr>
+                <tr>
+                    <td>სოფელი:</td>
+                    <td class="addressVal" id="villageVal">
+                        @VARIABLE.VILLAGE
+                    </td> 
+                    <td class="addressInput"> 
+                        <input id="villageInput" name="villageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>მისამართი:</td>
+                    <td class="addressVal" id="addressVal">@VARIABLE.ADDRESS_FULL</td> 
+                    <td class="addressInput">
+                        <input id="AddressInput" name="AddressInput" />
+                    </td> 
+
+                </tr>
+            </table>
+        </form>
+             <button id="sub" style="margin-left: 3px">შენახვა</button>
+        <input id="cancel" value="გაუქმება"type="button" />
+        <input type="button" id="reestri" value="რეესტრიდან აღება"/>
+ 
+        <br/>
+        <input type="button" id="pInfoUpdate" value="მისამართის კორექტირება"/>
+        <br/>
+        <input type="button" id="reestriPiradi" value="პირადი მონაცემების განახლება"/>
+    }
+}      
+    <script>
+        
+        (function () {
+            $('#pInfoUpdate').attr("disabled", "disabled");
+            var misamartiReestrisaa = false;
+            var Raionebi = [];
+       
+            var reestrisRaioni;
+            //raionebis listingi
+            $('#tags').on('click', function () {
+                if (Raionebi.length == 0) {
+                    var URL = "/home/MomeRaionebi";
+
+                    $.getJSON(URL, function (data) {
+                        var parsed = $.parseJSON(data);
+                        $.each(parsed, function (key, val) {
+                            Raionebi.push(val.Rai_Name);
+                        });
+
+                    });
+                    $('#tags').autocomplete({
+                        source: Raionebi
+                    });
+                } else {
+                    $('#tags').autocomplete({
+                        source: Raionebi 
+                });
+                }
+            });
+            
+            var split = $('#baseType').text().split('/');
+            var base_type =  parseInt(split[1]);
+
+         
+            if (base_type < 20) {
+                $('#reestri').attr("disabled", "disabled");
+            };
+          
+          
+
+            $('.addressInput, #cancel, #sub, #reestri , #reestri ').hide();
+        
+            $('#pInfoUpdate').on('click', function() {
+                changeForm();
+            });
+       
+            $('#cancel').on('click', function() {
+           
+                changeForm();
+                $('.addressInput input').val('');
+                misamartiReestrisaa = false;
+
+
+            });
+        
+            $('#sub').on('click', function () {
+               
+                var $tags = $('#tags');
+                if ( $tags.val().length < 1  ||  ($tags.val() !== reestrisRaioni && misamartiReestrisaa === true)  ||  ($.inArray($tags.val(),Raionebi) === -1 && misamartiReestrisaa === false )  )
+                {
+                            if ($tags.val().length < 1) {
+                                alert('გთხოვთ შეავსოთ რაიონის ველი');
+                            } else {
+                                alert("მითითებული რაიონი არ ფიქსირდება მონაცემთა ბაზაში");
+                            }
+                } else {
+                     $('#submit').submit(); }
+            });
+        
+            $('#submit').submit(function (e) {
+                e.preventDefault();
+                var pack = $('#submit').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/Save",
+                    data: pack,
+                    dataType: "json",
+                    success: onsuc()
+                });
+          
+            });
+        
+            function insertValues() {
+                $('#rai_NameVal').text($('#tags').val());
+                $('#cityVal').text($('#cityInput').val());
+                $('#villageVal').text($('#villageInput').val());
+                $('#addressVal').text($('#AddressInput').val());
+            }
+
+            function changeForm() {
+                if (!$('.addressInput').is(":visible")) {
+                    $('.addressVal').hide();
+                    $('.addressInput, #cancel, #sub, #reestri' ).fadeIn(300);
+                    $('#pInfoUpdate').attr("disabled", "disabled");
+                    $('#reestriPiradi').attr("disabled", "disabled");
+
+                }else {
+                    if ($('.addressInput').is(":visible")) {
+                        $('.addressInput, #cancel, #sub, #reestri' ).hide();
+                        $('.addressVal').fadeIn(300);
+                        $('#pInfoUpdate').removeAttr("disabled");
+                        $('#reestriPiradi').removeAttr("disabled");
+                    }
+                }
+                  
+            }
+
+            function onsuc() {
+                insertValues();
+                changeForm();
+            };
+
+            $('#reestri').on('click', function () {
+                var URL = "/Home/ReestridanDatreva?PID=" + $('#pid').text();
+                $.getJSON(URL, function (data) {
+                    var parsed = $.parseJSON(data);
+                    $('#tags').val(parsed.RAI_NAME);
+                    $('#cityInput').val('');
+                    $('#villageInput').val('');
+                    $('#AddressInput').val(parsed.ADDRESS_FULL);
+                    reestrisRaioni = parsed.RAI_NAME;
+                    misamartiReestrisaa = true;
+                });
+               
+            });
+
+            $('#reestriPiradi').on('click', function() {
+                var URL = "/Home/ReestridanDatrevaP?PID=" + $('#pid').text()+"&ID="+$('#hiddenforId').val();
+                $.getJSON(URL, function (data) {
+                    var parsed = $.parseJSON(data);
+                    $('#FirstName').text(parsed.FIRST_NAME);
+                    $('#LastName').text(parsed.LAST_NAME);
+                    $('#Birth_Date').text(parsed.BIRTH_DATE);
+                });
+            });
+        })();
+
+    </script>
+</div>
