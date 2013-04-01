@@ -593,32 +593,15 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
 
 
 
-
+//just returns partial view
         public PartialViewResult Koreqtireba(int ID)
         {
-            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            var damkoreqtirebeli = new Damkoreqtirebeli();
+            using (var conn = damkoreqtirebeli.GaxseniKavshiri())
             
-            {
-                conn.Open();
-                var sql = @"         
-      select         isnull(d.ID		    ,'')  as ID	
-                    ,isnull(d.Base_Description,'')as Base_Description
-	                ,isnull(d.Base_type,'')       as Base_type
-				    ,isnull(d.Unnom		    ,'')  as Unnom		
-				    ,isnull(d.PID		    ,'')  as PID		
-				    ,isnull(d.FID		    ,'')  as FID		
-				    ,isnull(d.FIRST_NAME    ,'')  as FIRST_NAME
-				    ,isnull(d.LAST_NAME	    ,'')  as LAST_NAME	
-				    ,isnull(d.BIRTH_DATE    ,'')  as BIRTH_DATE
-				    ,isnull(d.REGION_ID	    ,'')  as REGION_ID	
-				    ,isnull(d.RAI		    ,'')  as RAI		
-				    ,isnull(d.RAI_NAME	    ,'')  as RAI_NAME	
-				    ,isnull(d.CITY		    ,'')  as CITY		
-				    ,isnull(d.VILLAGE	    ,'')  as VILLAGE	
-				    ,isnull(d.ADDRESS_FULL  ,'')  as ADDRESS_FULL
-				    FROM INSURANCEW.dbo.DAZGVEVA_201303 d where ID =" + ID;
-                    var dasakoreqtirebeliKontraqti = conn.Query<Kontrakti>(sql).ToList();
+            { 
 
+               var dasakoreqtirebeliKontraqti =  damkoreqtirebeli.CamoigeDasakoreqtirebeliKontraqti(ID, conn);
                 return PartialView(dasakoreqtirebeliKontraqti);
             }
 
@@ -649,10 +632,11 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
         [HttpPost]
         public void Save(int ID,string tags, string cityInput, string villageInput, string AddressInput)
         {
-            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
+            Damkoreqtirebeli larisa = new Damkoreqtirebeli();
+            using (var con = larisa.GaxseniKavshiri())
             {
                 con.Open();
-                Damkoreqtirebeli larisa = new Damkoreqtirebeli();
+                
                 larisa.DaakoreqtireMisamarti(ID, tags, cityInput, villageInput, AddressInput, con);
 
               
@@ -684,7 +668,8 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
                 Damkoreqtirebeli larisa = new Damkoreqtirebeli();
                 var reestrisInfo = larisa.CamoigeReestridan(PID);
                 var json = JsonConvert.SerializeObject(reestrisInfo);
-                larisa.DaakoreqtirePiradiMonacemebi(ID,reestrisInfo.PID,reestrisInfo.FIRST_NAME,reestrisInfo.LAST_NAME,reestrisInfo.BIRTH_DATE,con);
+                string birthDate = reestrisInfo.BIRTH_DATE.HasValue ? reestrisInfo.BIRTH_DATE.Value.ToString("yyyyMMdd") : null;
+                larisa.DaakoreqtirePiradiMonacemebi(ID,reestrisInfo.PID,reestrisInfo.FIRST_NAME,reestrisInfo.LAST_NAME,birthDate, con);
                 return Json(json, JsonRequestBehavior.AllowGet);
             }
         }

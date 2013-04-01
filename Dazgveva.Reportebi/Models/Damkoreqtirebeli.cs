@@ -30,13 +30,40 @@ namespace MvcApplication2.Models
         }
     
 
-        private SqlConnection GaxseniKavshiri()
+        //usefull
+        public SqlConnection GaxseniKavshiri()
         {
-            SqlConnection con = new SqlConnection("Data Source=172.17.250.10;Initial Catalog=TempO;Persist Security Info=True;User ID=sa;Password=ssa$20");
-            con.Open();
-            return con;
+            var conn =
+                new SqlConnection(
+                    System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"]
+                        .ConnectionString);
+            conn.Open();
+            return conn;
         }
-
+        //usefull
+        public List<Kontrakti> CamoigeDasakoreqtirebeliKontraqti(int ID, SqlConnection conn)
+        {
+            var sql = @"select
+                     isnull(d.ID		    ,'')  as ID	
+                    ,isnull(d.Base_Description,'')as Base_Description
+	                ,isnull(d.Base_type,'')       as Base_type
+				    ,isnull(d.Unnom		    ,'')  as Unnom		
+				    ,isnull(d.PID		    ,'')  as PID		
+				    ,isnull(d.FID		    ,'')  as FID		
+				    ,isnull(d.FIRST_NAME    ,'')  as FIRST_NAME
+				    ,isnull(d.LAST_NAME	    ,'')  as LAST_NAME	
+				    ,isnull(d.BIRTH_DATE    ,'')  as BIRTH_DATE
+				    ,isnull(d.REGION_ID	    ,'')  as REGION_ID	
+				    ,isnull(d.RAI		    ,'')  as RAI		
+				    ,isnull(d.RAI_NAME	    ,'')  as RAI_NAME	
+				    ,isnull(d.CITY		    ,'')  as CITY		
+				    ,isnull(d.VILLAGE	    ,'')  as VILLAGE	
+				    ,isnull(d.ADDRESS_FULL  ,'')  as ADDRESS_FULL
+				    FROM INSURANCEW.dbo.DAZGVEVA_201303 d where ID =" + ID;
+            var dasakoreqtirebeliKontraqti = conn.Query<Kontrakti>(sql).ToList();
+            return dasakoreqtirebeliKontraqti;
+        }
+        //usefull
         private string URL(string PID)
         {
             var j =
@@ -44,7 +71,7 @@ namespace MvcApplication2.Models
                     @"http://172.17.8.125/CRA_Rest/PersonInfo/JSONPersonInfoPid?piradiNomeri={0}&ckaro=Cra&userName=zurabbat", PID);
             return j;
         }
-
+        
         public Kontrakti CamoigeReestridan(string PID)
         {
             var url = URL(PID);
@@ -57,7 +84,7 @@ namespace MvcApplication2.Models
             Model.PID = o.PersonInformacia.PrivateNumber;
             Model.LAST_NAME = o.PersonInformacia.LastName;
             Model.FIRST_NAME = o.PersonInformacia.FirstName;
-            Model.BIRTH_DATE = o.PersonInformacia.BirthDate;
+            Model.BIRTH_DATE = o.PersonInformacia.BirthDate.Value.AddHours(4);
             Model.RAI_NAME = o.PersonInformacia.RegionStr;
             Model.ADDRESS_FULL = o.PersonInformacia.LivingPlace;
             return Model;
@@ -77,7 +104,7 @@ namespace MvcApplication2.Models
             con.Execute(query);     
         }
 
-        public void DaakoreqtirePiradiMonacemebi(int ID,string PID, string FirstName, string LastName, DateTime? BirthDate, SqlConnection con)
+        public void DaakoreqtirePiradiMonacemebi(int ID,string PID, string FirstName, string LastName, string BirthDate, SqlConnection con)
         {
             
              var query = string.Format("exec TempO.dbo.PiradiMonacemebisKoreqtireba '{0}',N'{1}',N'{2}',N'{3}'"

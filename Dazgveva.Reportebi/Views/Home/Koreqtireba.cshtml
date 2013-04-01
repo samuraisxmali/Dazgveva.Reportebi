@@ -7,12 +7,19 @@
     {
         <form id="submit">
             <table id="addressTable">
+                 <tr>
+                    <td>
+                        ID:
+                    </td>
+                    <td id="id" >@VARIABLE.ID</td>
+                </tr>
                 <tr>
                     <td>პროგრამა:</td>
                     <td id="baseType">@VARIABLE.Base_Description /@VARIABLE.Base_type</td>
                 </tr>
+               
                     
-                 <tr>
+                <tr>
                  
                     <td>PID:</td>
                     <td id="pid">@VARIABLE.PID
@@ -28,10 +35,9 @@
                     <td id="FirstName">
                         @VARIABLE.FIRST_NAME
                     </td>
-                    <td  hidden="rawspan">
-                        <input id="hiddenforId" type="text" name="ID" value="@VARIABLE.ID"/>
-                    </td>
+                  
                 </tr>
+                
                 <tr>
                     <td>
                         გვარი:
@@ -100,7 +106,7 @@
     <script>
         
         (function () {
-            $('#pInfoUpdate').attr("disabled", "disabled");
+           $('#pInfoUpdate').attr("disabled", "disabled");
             var misamartiReestrisaa = false;
             var Raionebi = [];
        
@@ -223,13 +229,15 @@
                
             });
 
-            $('#reestriPiradi').on('click', function() {
-                var URL = "/Home/ReestridanDatrevaP?PID=" + $('#pid').text()+"&ID="+$('#hiddenforId').val();
+            $('#reestriPiradi').on('click', function () {
+                var prf = '@Url.Action("ReestridanDatrevaP","Home")';
+                
+                var URL = prf+"?PID=" + $('#pid').text()+"&ID="+$('#id').text();
                 $.getJSON(URL, function (data) {
                     var parsed = $.parseJSON(data);
                     $('#FirstName').text(parsed.FIRST_NAME);
                     $('#LastName').text(parsed.LAST_NAME);
-                    $('#Birth_Date').text(parsed.BIRTH_DATE);
+                    $('#Birth_Date').text(parsed.BIRTH_DATE + 1);
                 });
             });
         })();
