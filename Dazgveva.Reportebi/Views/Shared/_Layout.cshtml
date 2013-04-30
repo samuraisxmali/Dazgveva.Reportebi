@@ -12,6 +12,7 @@
     <div class="page">
         <div id="header">
             <h1>@Html.ActionLink("დაზღვევის ანგარიშები","Dzebna","Home")</h1>
+            <div>@Html.Action("CurrentUser", "Account")</div>
         </div>
         <div id="main">
             @RenderBody()

@@ -33,7 +33,7 @@ namespace Dazgveva.Reportebi.Controllers
 
 
 
-
+    [Authorize]
     public class HomeController : Controller
     {
         // @done

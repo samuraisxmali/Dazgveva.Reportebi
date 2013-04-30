@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SocialuriDazgveva" Class="UsersDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=insuranceapp,1433;Initial Catalog=SocialuriDazgveva;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="SocialuriDazgvevaConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="RAI_NAME" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="USER_NAME" Type="System.String" DbType="Char(8) NOT NULL" CanBeNull="false" />
+      <Column Name="USER_FULL_NAME" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="PSWHASH" Type="System.String" DbType="Char(32) NOT NULL" CanBeNull="false" />
+      <Column Name="REGION_ID" Type="System.String" DbType="NVarChar(4)" CanBeNull="true" />
+      <Column Name="REGION_ID_Orig" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ROLE_NAME" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

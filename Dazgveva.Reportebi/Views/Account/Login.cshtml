@@ -1,0 +1,39 @@
+﻿@model Dazgveva.Reportebi.Models.LoginInput
+@{
+    ViewBag.Title = "ავტორიზაცია";
+}
+<link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+<div>
+    <center>
+        <h2>ავტორიზაცია</h2>
+        <p>სისტემაში ავტორიზაციის გასავლელად გამოიყენეთ ჰიბრიდული პროგრამის მომხმარებლის სახელი და პაროლი.</p>
+        <form action="@Url.Action("Login")" method="post">
+        <table cellpadding="5" style="border: 1px solid #e5e5e5; background: #f5f5f5; font-size: 14pt;
+            border-radius: 5px; text-align: right;">
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.Email)
+                </td>
+                <td>
+                    @Html.EditorFor(x => x.Email)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.Password)
+                </td>
+                <td style="border: 0px; border-color: Black; border-style: solid;" align="left">
+                    @Html.EditorFor(x => x.Password)
+                </td>
+            </tr>
+            <tr>
+                <td align="right" colspan="2">
+                    <input type="submit" value="Login" />
+                    <span style="visibility: hidden">@Html.EditorFor(x => x.ReturnUrl)</span>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </center>
+    <br />
+</div>
