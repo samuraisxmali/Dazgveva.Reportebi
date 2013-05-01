@@ -193,11 +193,11 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<DAZGVEVA_201304> DAZGVEVA_201304s
+		public System.Data.Linq.Table<DAZGVEVA_201305> DAZGVEVA_201305s
 		{
 			get
 			{
-				return this.GetTable<DAZGVEVA_201304>();
+				return this.GetTable<DAZGVEVA_201305>();
 			}
 		}
 	}
@@ -12207,8 +12207,8 @@ namespace Dazgveva.Reportebi.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DAZGVEVA_201304")]
-	public partial class DAZGVEVA_201304
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DAZGVEVA_201305")]
+	public partial class DAZGVEVA_201305
 	{
 		
 		private System.Nullable<int> _Base_type;
@@ -13165,21 +13165,21 @@ namespace Dazgveva.Reportebi.Models
 		
 		private System.Nullable<int> _DASABECHDI_201302;
 		
-		private System.Nullable<int> _STATE;
+		private System.Nullable<int> _STATE_201303;
 		
-		private System.Nullable<int> _Company_ID;
+		private System.Nullable<int> _Company_ID_201303;
 		
-		private string _Company;
+		private string _Company_201303;
 		
 		private System.Nullable<decimal> @__201303;
 		
-		private System.Nullable<System.DateTime> _STOP_DATE;
+		private System.Nullable<System.DateTime> _STOP_DATE_201303;
 		
-		private System.Nullable<System.DateTime> _ADD_DATE;
+		private System.Nullable<System.DateTime> _ADD_DATE_201303;
 		
-		private System.Nullable<System.DateTime> _CONTINUE_DATE;
+		private System.Nullable<System.DateTime> _CONTINUE_DATE_201303;
 		
-		private string _Comment;
+		private string _Comment_201303;
 		
 		private System.Nullable<int> _PIROBA_201303;
 		
@@ -13191,21 +13191,21 @@ namespace Dazgveva.Reportebi.Models
 		
 		private System.Nullable<int> _DASABECHDI_201303;
 		
-		private System.Nullable<int> _STATE_201304;
+		private System.Nullable<int> _STATE;
 		
-		private System.Nullable<int> _Company_ID_201304;
+		private System.Nullable<int> _Company_ID;
 		
-		private string _Company_201304;
+		private string _Company;
 		
 		private System.Nullable<decimal> @__201304;
 		
-		private System.Nullable<System.DateTime> _STOP_DATE_201304_TMP;
+		private System.Nullable<System.DateTime> _STOP_DATE;
 		
-		private System.Nullable<System.DateTime> _ADD_DATE_201304_TMP;
+		private System.Nullable<System.DateTime> _ADD_DATE;
 		
-		private System.Nullable<System.DateTime> _CONTINUE_DATE_201304_TMP;
+		private System.Nullable<System.DateTime> _CONTINUE_DATE;
 		
-		private string _Comment_201304_TMP;
+		private string _Comment;
 		
 		private System.Nullable<int> _PIROBA_201304;
 		
@@ -13217,7 +13217,33 @@ namespace Dazgveva.Reportebi.Models
 		
 		private System.Nullable<int> _DASABECHDI_201304;
 		
-		public DAZGVEVA_201304()
+		private System.Nullable<int> _STATE_201305;
+		
+		private System.Nullable<int> _Company_ID_201305;
+		
+		private string _Company_201305;
+		
+		private System.Nullable<decimal> @__201305;
+		
+		private System.Nullable<System.DateTime> _STOP_DATE_201305_TMP;
+		
+		private System.Nullable<System.DateTime> _ADD_DATE_201305_TMP;
+		
+		private System.Nullable<System.DateTime> _CONTINUE_DATE_201305_TMP;
+		
+		private string _Comment_201305_TMP;
+		
+		private System.Nullable<int> _PIROBA_201305;
+		
+		private System.Nullable<int> _J_ID_201305;
+		
+		private System.Nullable<decimal> _M_201305;
+		
+		private System.Nullable<int> _AERR_201305;
+		
+		private System.Nullable<int> _DASABECHDI_201305;
+		
+		public DAZGVEVA_201305()
 		{
 		}
 		
@@ -20853,50 +20879,50 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STATE", DbType="Int")]
-		public System.Nullable<int> STATE
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STATE_201303", DbType="Int")]
+		public System.Nullable<int> STATE_201303
 		{
 			get
 			{
-				return this._STATE;
+				return this._STATE_201303;
 			}
 			set
 			{
-				if ((this._STATE != value))
+				if ((this._STATE_201303 != value))
 				{
-					this._STATE = value;
+					this._STATE_201303 = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_ID", DbType="Int")]
-		public System.Nullable<int> Company_ID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_ID_201303", DbType="Int")]
+		public System.Nullable<int> Company_ID_201303
 		{
 			get
 			{
-				return this._Company_ID;
+				return this._Company_ID_201303;
 			}
 			set
 			{
-				if ((this._Company_ID != value))
+				if ((this._Company_ID_201303 != value))
 				{
-					this._Company_ID = value;
+					this._Company_ID_201303 = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company", DbType="NVarChar(50)")]
-		public string Company
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_201303", DbType="NVarChar(50)")]
+		public string Company_201303
 		{
 			get
 			{
-				return this._Company;
+				return this._Company_201303;
 			}
 			set
 			{
-				if ((this._Company != value))
+				if ((this._Company_201303 != value))
 				{
-					this._Company = value;
+					this._Company_201303 = value;
 				}
 			}
 		}
@@ -20917,66 +20943,66 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STOP_DATE", DbType="DateTime")]
-		public System.Nullable<System.DateTime> STOP_DATE
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STOP_DATE_201303", DbType="DateTime")]
+		public System.Nullable<System.DateTime> STOP_DATE_201303
 		{
 			get
 			{
-				return this._STOP_DATE;
+				return this._STOP_DATE_201303;
 			}
 			set
 			{
-				if ((this._STOP_DATE != value))
+				if ((this._STOP_DATE_201303 != value))
 				{
-					this._STOP_DATE = value;
+					this._STOP_DATE_201303 = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ADD_DATE", DbType="DateTime")]
-		public System.Nullable<System.DateTime> ADD_DATE
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ADD_DATE_201303", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ADD_DATE_201303
 		{
 			get
 			{
-				return this._ADD_DATE;
+				return this._ADD_DATE_201303;
 			}
 			set
 			{
-				if ((this._ADD_DATE != value))
+				if ((this._ADD_DATE_201303 != value))
 				{
-					this._ADD_DATE = value;
+					this._ADD_DATE_201303 = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CONTINUE_DATE", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CONTINUE_DATE
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CONTINUE_DATE_201303", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CONTINUE_DATE_201303
 		{
 			get
 			{
-				return this._CONTINUE_DATE;
+				return this._CONTINUE_DATE_201303;
 			}
 			set
 			{
-				if ((this._CONTINUE_DATE != value))
+				if ((this._CONTINUE_DATE_201303 != value))
 				{
-					this._CONTINUE_DATE = value;
+					this._CONTINUE_DATE_201303 = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment", DbType="NVarChar(250)")]
-		public string Comment
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment_201303", DbType="NVarChar(250)")]
+		public string Comment_201303
 		{
 			get
 			{
-				return this._Comment;
+				return this._Comment_201303;
 			}
 			set
 			{
-				if ((this._Comment != value))
+				if ((this._Comment_201303 != value))
 				{
-					this._Comment = value;
+					this._Comment_201303 = value;
 				}
 			}
 		}
@@ -21061,50 +21087,50 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STATE_201304", DbType="Int")]
-		public System.Nullable<int> STATE_201304
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STATE", DbType="Int")]
+		public System.Nullable<int> STATE
 		{
 			get
 			{
-				return this._STATE_201304;
+				return this._STATE;
 			}
 			set
 			{
-				if ((this._STATE_201304 != value))
+				if ((this._STATE != value))
 				{
-					this._STATE_201304 = value;
+					this._STATE = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_ID_201304", DbType="Int")]
-		public System.Nullable<int> Company_ID_201304
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_ID", DbType="Int")]
+		public System.Nullable<int> Company_ID
 		{
 			get
 			{
-				return this._Company_ID_201304;
+				return this._Company_ID;
 			}
 			set
 			{
-				if ((this._Company_ID_201304 != value))
+				if ((this._Company_ID != value))
 				{
-					this._Company_ID_201304 = value;
+					this._Company_ID = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_201304", DbType="NVarChar(50)")]
-		public string Company_201304
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company", DbType="NVarChar(50)")]
+		public string Company
 		{
 			get
 			{
-				return this._Company_201304;
+				return this._Company;
 			}
 			set
 			{
-				if ((this._Company_201304 != value))
+				if ((this._Company != value))
 				{
-					this._Company_201304 = value;
+					this._Company = value;
 				}
 			}
 		}
@@ -21125,66 +21151,66 @@ namespace Dazgveva.Reportebi.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STOP_DATE_201304_TMP", DbType="DateTime")]
-		public System.Nullable<System.DateTime> STOP_DATE_201304_TMP
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STOP_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> STOP_DATE
 		{
 			get
 			{
-				return this._STOP_DATE_201304_TMP;
+				return this._STOP_DATE;
 			}
 			set
 			{
-				if ((this._STOP_DATE_201304_TMP != value))
+				if ((this._STOP_DATE != value))
 				{
-					this._STOP_DATE_201304_TMP = value;
+					this._STOP_DATE = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ADD_DATE_201304_TMP", DbType="DateTime")]
-		public System.Nullable<System.DateTime> ADD_DATE_201304_TMP
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ADD_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ADD_DATE
 		{
 			get
 			{
-				return this._ADD_DATE_201304_TMP;
+				return this._ADD_DATE;
 			}
 			set
 			{
-				if ((this._ADD_DATE_201304_TMP != value))
+				if ((this._ADD_DATE != value))
 				{
-					this._ADD_DATE_201304_TMP = value;
+					this._ADD_DATE = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CONTINUE_DATE_201304_TMP", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CONTINUE_DATE_201304_TMP
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CONTINUE_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CONTINUE_DATE
 		{
 			get
 			{
-				return this._CONTINUE_DATE_201304_TMP;
+				return this._CONTINUE_DATE;
 			}
 			set
 			{
-				if ((this._CONTINUE_DATE_201304_TMP != value))
+				if ((this._CONTINUE_DATE != value))
 				{
-					this._CONTINUE_DATE_201304_TMP = value;
+					this._CONTINUE_DATE = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment_201304_TMP", DbType="NVarChar(250)")]
-		public string Comment_201304_TMP
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment", DbType="NVarChar(250)")]
+		public string Comment
 		{
 			get
 			{
-				return this._Comment_201304_TMP;
+				return this._Comment;
 			}
 			set
 			{
-				if ((this._Comment_201304_TMP != value))
+				if ((this._Comment != value))
 				{
-					this._Comment_201304_TMP = value;
+					this._Comment = value;
 				}
 			}
 		}
@@ -21265,6 +21291,214 @@ namespace Dazgveva.Reportebi.Models
 				if ((this._DASABECHDI_201304 != value))
 				{
 					this._DASABECHDI_201304 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STATE_201305", DbType="Int")]
+		public System.Nullable<int> STATE_201305
+		{
+			get
+			{
+				return this._STATE_201305;
+			}
+			set
+			{
+				if ((this._STATE_201305 != value))
+				{
+					this._STATE_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_ID_201305", DbType="Int")]
+		public System.Nullable<int> Company_ID_201305
+		{
+			get
+			{
+				return this._Company_ID_201305;
+			}
+			set
+			{
+				if ((this._Company_ID_201305 != value))
+				{
+					this._Company_ID_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_201305", DbType="NVarChar(50)")]
+		public string Company_201305
+		{
+			get
+			{
+				return this._Company_201305;
+			}
+			set
+			{
+				if ((this._Company_201305 != value))
+				{
+					this._Company_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[201305]", Storage="__201305", DbType="Decimal(18,10)")]
+		public System.Nullable<decimal> _201305
+		{
+			get
+			{
+				return this.@__201305;
+			}
+			set
+			{
+				if ((this.@__201305 != value))
+				{
+					this.@__201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STOP_DATE_201305_TMP", DbType="DateTime")]
+		public System.Nullable<System.DateTime> STOP_DATE_201305_TMP
+		{
+			get
+			{
+				return this._STOP_DATE_201305_TMP;
+			}
+			set
+			{
+				if ((this._STOP_DATE_201305_TMP != value))
+				{
+					this._STOP_DATE_201305_TMP = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ADD_DATE_201305_TMP", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ADD_DATE_201305_TMP
+		{
+			get
+			{
+				return this._ADD_DATE_201305_TMP;
+			}
+			set
+			{
+				if ((this._ADD_DATE_201305_TMP != value))
+				{
+					this._ADD_DATE_201305_TMP = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CONTINUE_DATE_201305_TMP", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CONTINUE_DATE_201305_TMP
+		{
+			get
+			{
+				return this._CONTINUE_DATE_201305_TMP;
+			}
+			set
+			{
+				if ((this._CONTINUE_DATE_201305_TMP != value))
+				{
+					this._CONTINUE_DATE_201305_TMP = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comment_201305_TMP", DbType="NVarChar(250)")]
+		public string Comment_201305_TMP
+		{
+			get
+			{
+				return this._Comment_201305_TMP;
+			}
+			set
+			{
+				if ((this._Comment_201305_TMP != value))
+				{
+					this._Comment_201305_TMP = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PIROBA_201305", DbType="Int")]
+		public System.Nullable<int> PIROBA_201305
+		{
+			get
+			{
+				return this._PIROBA_201305;
+			}
+			set
+			{
+				if ((this._PIROBA_201305 != value))
+				{
+					this._PIROBA_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_J_ID_201305", DbType="Int")]
+		public System.Nullable<int> J_ID_201305
+		{
+			get
+			{
+				return this._J_ID_201305;
+			}
+			set
+			{
+				if ((this._J_ID_201305 != value))
+				{
+					this._J_ID_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_M_201305", DbType="Money")]
+		public System.Nullable<decimal> M_201305
+		{
+			get
+			{
+				return this._M_201305;
+			}
+			set
+			{
+				if ((this._M_201305 != value))
+				{
+					this._M_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AERR_201305", DbType="Int")]
+		public System.Nullable<int> AERR_201305
+		{
+			get
+			{
+				return this._AERR_201305;
+			}
+			set
+			{
+				if ((this._AERR_201305 != value))
+				{
+					this._AERR_201305 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DASABECHDI_201305", DbType="Int")]
+		public System.Nullable<int> DASABECHDI_201305
+		{
+			get
+			{
+				return this._DASABECHDI_201305;
+			}
+			set
+			{
+				if ((this._DASABECHDI_201305 != value))
+				{
+					this._DASABECHDI_201305 = value;
 				}
 			}
 		}
