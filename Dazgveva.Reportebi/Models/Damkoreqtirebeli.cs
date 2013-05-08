@@ -59,7 +59,7 @@ namespace MvcApplication2.Models
 				    ,isnull(d.CITY		    ,'')  as CITY		
 				    ,isnull(d.VILLAGE	    ,'')  as VILLAGE	
 				    ,isnull(d.ADDRESS_FULL  ,'')  as ADDRESS_FULL
-				    FROM INSURANCEW.dbo.DAZGVEVA_201304 d where ID =" + ID;
+				    FROM INSURANCEW.dbo.DAZGVEVA_201305 d where ID =" + ID;
             var dasakoreqtirebeliKontraqti = conn.Query<Kontrakti>(sql).ToList();
             return dasakoreqtirebeliKontraqti;
         }
