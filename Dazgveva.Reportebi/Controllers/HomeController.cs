@@ -125,12 +125,13 @@ namespace Dazgveva.Reportebi.Controllers
                     conn.Open();
                     string sql = @"" +
                         "SELECT d.*, " +
-                        "m.RAI as aRAI, m.CITY as aCITY, m.ADDRESS_FULL as aADDRESS_FULL, " +
+                        "m.RAI as aRAI, m.CITY as aCITY, m.ADDRESS_FULL as aADDRESS_FULL, mk.DRO as GanakhlebisTarigi," +
                         "p.KontraktisNomeri as GAUKMEBULI, p.Pirovneba as VIN_GAAUQMA, " +
                         "s.Ganmarteba " +
                         "FROM INSURANCEW.dbo.DAZGVEVA_201305 (nolock) d " +
                         "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201305 = s.Statusi " +
                         "left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID " +
+                        "left join INSURANCEW.dbo.aMisamartisKorektirebisIstoria mk on d.ID = mk.DazgvevisID " +
                         "left join INSURANCEW.dbo.KontraktisGauqmeba p on d.ID = p.KontraktisNomeri " +
                         "WHERE ";
 
@@ -154,6 +155,7 @@ namespace Dazgveva.Reportebi.Controllers
                             aRAI = d.aRAI,
                             aCITY = d.aCITY,
                             aADDRESS_FULL = d.aADDRESS_FULL,
+                            GanakhlebisTarigi = d.GanakhlebisTarigi,
                             //dagv_tar = (DateTime?)((IDictionary<string, object>)d)["dagv-tar"],
                             dagv_tar = d.dagv__tar,
                             STATE = d.STATE_201305,                    

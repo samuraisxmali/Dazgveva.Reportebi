@@ -21,6 +21,8 @@ namespace Dazgveva.Reportebi.Models
         public string aCITY { get; set; }
         public string aADDRESS_FULL { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyy}")]
+        public DateTime? GanakhlebisTarigi { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyy}")]
         public DateTime? ADD_DATE { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyy}")]
         public DateTime? dagv_tar { get; set; }
