@@ -131,7 +131,7 @@ namespace Dazgveva.Reportebi.Controllers
                         "FROM INSURANCEW.dbo.DAZGVEVA_201305 (nolock) d " +
                         "left join INSURANCEW.dbo.StatusebisGanmarteba s ON d.STATE_201305 = s.Statusi " +
                         "left join INSURANCEW.dbo.aMisamartebi m ON d.ID = m.ID " +
-                        "left join INSURANCEW.dbo.aMisamartisKorektirebisIstoria mk on d.ID = mk.DazgvevisID " +
+                        "left join (select DazgvevisID,Max(DRO) as DRO from INSURANCEW.dbo.aMisamartisKorektirebisIstoria group by DazgvevisID) mk on d.ID = mk.DazgvevisID " +
                         "left join INSURANCEW.dbo.KontraktisGauqmeba p on d.ID = p.KontraktisNomeri " +
                         "WHERE ";
 
