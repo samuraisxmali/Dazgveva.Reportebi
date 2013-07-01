@@ -76,6 +76,10 @@ namespace Dazgveva.Reportebi.Controllers
         {
             Console.WriteLine(GetPasswordHash("bimqu", "1973"));
             Console.WriteLine(GetPasswordHash("BIMQU", "1973"));
+            Console.WriteLine(GetPasswordHash("mediacia", "med1@cia"));
+
+            Console.WriteLine(GetPasswordHash("t.kotishadze@evillage.gov.ge", "123"));
+
         }
     }
 }
