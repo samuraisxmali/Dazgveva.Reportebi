@@ -1,0 +1,10 @@
+﻿@model dynamic
+<div class="pirovneba @(Model.IdentPID == null ? "Araidentificirebuli" : "")">
+  <span class="unnom">@Model.Unnom</span>
+  <span class="pid">@Html.ActionLink((string)@Model.PID, "Dzebna", new { q = @Model.PID })</span>
+  <span class="firstName">@Model.First_Name</span>
+  <span class="lastName">@Model.Last_Name</span>
+  <span class="birthDate">@Model.Birth_Date.ToString("yyyy-MM-dd")</span>
+  <span class="araidentificirebuli">@(Model.IdentPID == null ? "Araidentificirebuli" : "")</span>
+  <span class="sex">@Model.Sex</span>
+</div>

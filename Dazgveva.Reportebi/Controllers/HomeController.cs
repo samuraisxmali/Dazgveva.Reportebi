@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,7 @@ using System.Text;
 using Dapper;
 using MvcApplication2.Models;
 using Newtonsoft.Json;
+using Dazgveva.Reportebi.Models.Ganckhadebebi;
 
 namespace Dazgveva.Reportebi.Controllers
 {
@@ -136,7 +138,7 @@ namespace Dazgveva.Reportebi.Controllers
                         "WHERE ";
 
                     var a = sql;
-                    
+
                     var kontraktebi = conn.Query(sql + whereNacili.Item1, whereNacili.Item2)
                         .ToList()
                         .Select(d => new Kontrakti
@@ -158,11 +160,11 @@ namespace Dazgveva.Reportebi.Controllers
                             GanakhlebisTarigi = d.GanakhlebisTarigi,
                             //dagv_tar = (DateTime?)((IDictionary<string, object>)d)["dagv-tar"],
                             dagv_tar = d.dagv__tar,
-                            STATE = d.STATE_201307,                    
-                            ADD_DATE = d.ADD_DATE_201307_TMP,          
+                            STATE = d.STATE_201307,
+                            ADD_DATE = d.ADD_DATE_201307_TMP,
                             CONTINUE_DATE = d.CONTINUE_DATE_201307_TMP,
-                            STOP_DATE = d.STOP_DATE_201307_TMP,        
-                            Company = d.Company_201307,                
+                            STOP_DATE = d.STOP_DATE_201307_TMP,
+                            Company = d.Company_201307,
 
                             End_Date = d.End_Date,
                             POLISIS_NOMERI = d.POLISIS_NOMERI,
@@ -172,7 +174,7 @@ namespace Dazgveva.Reportebi.Controllers
                         })
                         .ToList();
 
-                    if(kontraktebi.Count() == 0)
+                    if (kontraktebi.Count() == 0)
                         ViewBag.kontraqtebiarmoidzebna = true;
 
                     return View("Dzebna", kontraktebi.OrderBy(x => x.End_Date).OrderBy(x => x.FIRST_NAME).ToList());
@@ -193,14 +195,75 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
 
-        // @not needed
-            public ActionResult SourceData(string q = "")
+        public ActionResult Ganckhadebebi(string q = "")
+        {
+            var currentUser = CurrentUser;
+            if (currentUser == null || currentUser.ROLE_NAME == "მესამე პირი")
             {
-                var currentUser = CurrentUser;
-                if (currentUser == null || currentUser.ROLE_NAME == "მესამე პირი")
-                {
-                    return RedirectToAction("Dzebna");
-                }
+                return RedirectToAction("Dzebna");
+            }
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
+            {
+                conn.Open();
+                
+                var rez = conn.Ganckhadebebi(q)
+                   .GroupBy(x => x.Unnom)
+                   .Select(g =>
+                   {
+                       dynamic o = new ExpandoObject();
+                       o.Pirovneba = conn.BoloKargiChanaceri((int)g.Key);
+                       o.PirovnebisRekvizitebisIstoria = conn.PirovnebisRekvizitebisIstoria((int)g.Key);
+                       o.ReestrisStatusebisIstoria = conn.ReestrisStatusebisIstoria((string) o.Pirovneba.IdentPID);
+                       o.Ganckhadebebi = g.ToList();
+                       return o;
+                   })
+                   .ToList();
+
+                //                    ViewBag.Misamartebi = conn.Query(@"SELECT 
+                //                  mi.GackhadebisId
+                //                , mi.nRai Rai
+                //                , mi.nRai_Name Rai_Name
+                //                , mi.nCity City
+                //                , mi.nVillage Village
+                //                , mi.nStreet Street
+                //                , mi.nFull_Address Full_Address
+                //                , mi.nMisamartisCarmomavloba MisamartisCarmomavloba
+                //        FROM (  SELECT max(Id) id
+                //                FROM [DazgvevaGanckhadebebi].[dbo].MisamatebisCvlilebisLogi
+                //                WHERE GackhadebisId in (" + string.Join(", ", rez.Select(x => (int) x.Id)) + @")
+                //                GROUP BY GackhadebisId,	Dro
+                //        ) mid OUTER APPLY (
+                //                SELECT * 
+                //                FROM [DazgvevaGanckhadebebi].[dbo].MisamatebisCvlilebisLogi mcl 
+                //                WHERE mcl.Id = mid.id
+                //        ) mi  order by mi.Dro")
+                //                                              .GroupBy(x => (int) x.GackhadebisId)
+                //                                              .ToDictionary(g => g.Key, x => x.ToList());
+
+                return View("ShemosuliGancxadebebi", rez);
+            }
+        }
+
+        public ActionResult PirvelckarosChanacerebi(int basetype, int unnom)
+        {
+            using (var conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PirvelckaroebiConnectionString1"].ConnectionString))
+            {
+                conn.Open();
+                var rez = conn.PirvelckarosChanacerebi(basetype, unnom).ToList();
+                ViewBag.PirvelckarosCkhrili = basetype;
+                return View("PirvelckarosChanacerebi", rez);
+            }
+        }
+
+
+        // @not needed
+        public ActionResult SourceData(string q = "")
+        {
+            var currentUser = CurrentUser;
+            if (currentUser == null || currentUser.ROLE_NAME == "მესამე პირი")
+            {
+                return RedirectToAction("Dzebna");
+            }
 
             var whereNacili = WhereNacili(q, "sd.PID", "sd.FID", "sd.Birth_Date", "sd.First_Name", "sd.Last_Name");
             if (whereNacili != null)
@@ -278,23 +341,23 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201011, Dasabechdi = (int?)null, State = d.STATE_11, CONTINUE_DATE = d.CONTINUE_DATE_11, Company = d.Company_11, STOP_DATE = d.STOP_DATE_11, ADD_DATE = d.ADD_DATE_11 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201012, Dasabechdi = (int?)null, State = d.STATE_12, CONTINUE_DATE = d.CONTINUE_DATE_12, Company = d.Company_12, STOP_DATE = d.STOP_DATE_12, ADD_DATE = d.ADD_DATE_12 }))
 
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201101, Dasabechdi = (int?)null,          State = d.STATE_201101, CONTINUE_DATE = d.CONTINUE_DATE_201101, Company = d.Company_201101, STOP_DATE = d.STOP_DATE_201101, ADD_DATE = d.ADD_DATE_201101 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201102, Dasabechdi = (int?)null,          State = d.STATE_201102, CONTINUE_DATE = d.CONTINUE_DATE_201102, Company = d.Company_201102, STOP_DATE = d.STOP_DATE_201102, ADD_DATE = d.ADD_DATE_201102 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201103, Dasabechdi = (int?)null,          State = d.STATE_201103, CONTINUE_DATE = d.CONTINUE_DATE_201103, Company = d.Company_201103, STOP_DATE = d.STOP_DATE_201103, ADD_DATE = d.ADD_DATE_201103 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201104, Dasabechdi = (int?)null,          State = d.STATE_201104, CONTINUE_DATE = d.CONTINUE_DATE_201104, Company = d.Company_201104, STOP_DATE = d.STOP_DATE_201104, ADD_DATE = d.ADD_DATE_201104 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201105, Dasabechdi = (int?)null,          State = d.STATE_201105, CONTINUE_DATE = d.CONTINUE_DATE_201105, Company = d.Company_201105, STOP_DATE = d.STOP_DATE_201105, ADD_DATE = d.ADD_DATE_201105 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201106, Dasabechdi = (int?)null,          State = d.STATE_201106, CONTINUE_DATE = d.CONTINUE_DATE_201106, Company = d.Company_201106, STOP_DATE = d.STOP_DATE_201106, ADD_DATE = d.ADD_DATE_201106 }))
-                        
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201101, Dasabechdi = (int?)null, State = d.STATE_201101, CONTINUE_DATE = d.CONTINUE_DATE_201101, Company = d.Company_201101, STOP_DATE = d.STOP_DATE_201101, ADD_DATE = d.ADD_DATE_201101 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201102, Dasabechdi = (int?)null, State = d.STATE_201102, CONTINUE_DATE = d.CONTINUE_DATE_201102, Company = d.Company_201102, STOP_DATE = d.STOP_DATE_201102, ADD_DATE = d.ADD_DATE_201102 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201103, Dasabechdi = (int?)null, State = d.STATE_201103, CONTINUE_DATE = d.CONTINUE_DATE_201103, Company = d.Company_201103, STOP_DATE = d.STOP_DATE_201103, ADD_DATE = d.ADD_DATE_201103 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201104, Dasabechdi = (int?)null, State = d.STATE_201104, CONTINUE_DATE = d.CONTINUE_DATE_201104, Company = d.Company_201104, STOP_DATE = d.STOP_DATE_201104, ADD_DATE = d.ADD_DATE_201104 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201105, Dasabechdi = (int?)null, State = d.STATE_201105, CONTINUE_DATE = d.CONTINUE_DATE_201105, Company = d.Company_201105, STOP_DATE = d.STOP_DATE_201105, ADD_DATE = d.ADD_DATE_201105 }))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201106, Dasabechdi = (int?)null, State = d.STATE_201106, CONTINUE_DATE = d.CONTINUE_DATE_201106, Company = d.Company_201106, STOP_DATE = d.STOP_DATE_201106, ADD_DATE = d.ADD_DATE_201106 }))
+
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201107, Dasabechdi = d.DASABECHDI_201107, State = d.STATE_201107, CONTINUE_DATE = d.CONTINUE_DATE_201107, Company = d.Company_201107, STOP_DATE = d.STOP_DATE_201107, ADD_DATE = d.ADD_DATE_201107 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201108, Dasabechdi = d.DASABECHDI_201108, State = d.STATE_201108, CONTINUE_DATE = d.CONTINUE_DATE_201108, Company = d.Company_201108, STOP_DATE = d.STOP_DATE_201108, ADD_DATE = d.ADD_DATE_201108 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201109, Dasabechdi = d.DASABECHDI_201109, State = d.STATE_201109, CONTINUE_DATE = d.CONTINUE_DATE_201109, Company = d.Company_201109, STOP_DATE = d.STOP_DATE_201109, ADD_DATE = d.ADD_DATE_201109 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201110, Dasabechdi = d.DASABECHDI_201110, State = d.STATE_201110, CONTINUE_DATE = d.CONTINUE_DATE_201110, Company = d.Company_201110, STOP_DATE = d.STOP_DATE_201110, ADD_DATE = d.ADD_DATE_201110 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201111, Dasabechdi = d.DASABECHDI_201111, State = d.STATE_201111, CONTINUE_DATE = d.CONTINUE_DATE_201111, Company = d.Company_201111, STOP_DATE = d.STOP_DATE_201111, ADD_DATE = d.ADD_DATE_201111 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201112, Dasabechdi = d.DASABECHDI_201112, State = d.STATE_201112, CONTINUE_DATE = d.CONTINUE_DATE_201112, Company = d.Company_201112, STOP_DATE = d.STOP_DATE_201112, ADD_DATE = d.ADD_DATE_201112 }))
-                        
+
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201201, Dasabechdi = d.DASABECHDI_201201, State = d.STATE_201201, CONTINUE_DATE = d.CONTINUE_DATE_201201, Company = d.Company_201201, STOP_DATE = d.STOP_DATE_201201, ADD_DATE = d.ADD_DATE_201201 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201202, Dasabechdi = d.DASABECHDI_201202, State = d.STATE_201202, CONTINUE_DATE = d.CONTINUE_DATE_201202, Company = d.Company_201202, STOP_DATE = d.STOP_DATE_201202, ADD_DATE = d.ADD_DATE_201202 }))
-                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201203, Dasabechdi = d.DASABECHDI_201203, State = d.STATE_201203, CONTINUE_DATE = d.CONTINUE_DATE_201203, Company = d.Company_201203, STOP_DATE = d.STOP_DATE_201203, ADD_DATE = d.ADD_DATE_201203}))
+                        .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201203, Dasabechdi = d.DASABECHDI_201203, State = d.STATE_201203, CONTINUE_DATE = d.CONTINUE_DATE_201203, Company = d.Company_201203, STOP_DATE = d.STOP_DATE_201203, ADD_DATE = d.ADD_DATE_201203 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201204, Dasabechdi = d.DASABECHDI_201204, State = d.STATE_201204, CONTINUE_DATE = d.CONTINUE_DATE_201204, Company = d.Company_201204, STOP_DATE = d.STOP_DATE_201204, ADD_DATE = d.ADD_DATE_201204 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201205, Dasabechdi = d.DASABECHDI_201205, State = d.STATE_201205, CONTINUE_DATE = d.CONTINUE_DATE_201205, Company = d.Company_201205, STOP_DATE = d.STOP_DATE_201205, ADD_DATE = d.ADD_DATE_201205 }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201206, Dasabechdi = d.DASABECHDI_201206, State = d.STATE_201206, CONTINUE_DATE = d.CONTINUE_DATE_201206, Company = d.Company_201206, STOP_DATE = d.STOP_DATE_201206, ADD_DATE = d.ADD_DATE_201206 }))
@@ -313,7 +376,7 @@ namespace Dazgveva.Reportebi.Controllers
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201306, Dasabechdi = d.DASABECHDI_201306, State = d.STATE, CONTINUE_DATE = d.CONTINUE_DATE, Company = d.Company, STOP_DATE = d.STOP_DATE, ADD_DATE = d.ADD_DATE }))
                         .Concat(kontraktebi.Select(d => new KontraktisPeriodi { ID = d.ID, Periodi = 201307, Dasabechdi = d.DASABECHDI_201307, State = d.STATE_201307, CONTINUE_DATE = d.CONTINUE_DATE_201307_TMP, Company = d.Company_201307, STOP_DATE = d.STOP_DATE_201307_TMP, ADD_DATE = d.ADD_DATE_201307_TMP }))
 
-                        .GroupBy(p => new { p.ID, p.Dasabechdi, p.State,p.CONTINUE_DATE,p.Company,p.STOP_DATE,p.ADD_DATE })
+                        .GroupBy(p => new { p.ID, p.Dasabechdi, p.State, p.CONTINUE_DATE, p.Company, p.STOP_DATE, p.ADD_DATE })
                         .Select(g => g.First(x => x.Periodi == g.Min(x_ => x_.Periodi)))
                         .OrderBy(x => x.Periodi)
                         .ToList();
@@ -331,7 +394,7 @@ namespace Dazgveva.Reportebi.Controllers
                     @"SELECT ID , OP_DATE , TRANSFER_DATE , Company_ID , [TRANSFER] FROM [INSURANCEW].[dbo].GADARICXVA_FULL where ID=@Id
                     UNION
                     SELECT ID , OP_DATE , TRANSFER_DATE , Company_ID , [TRANSFER]+isnull(DANAMATI,0) [TRANSFER] FROM [INSURANCEW].[dbo].GADARICXVA_FULL_165 where ID=@Id"
-                    , new {Id=id}).ToList();
+                    , new { Id = id }).ToList();
                 return PartialView(gadarickhvebi);
             }
         }
@@ -341,24 +404,25 @@ namespace Dazgveva.Reportebi.Controllers
             using (var dc = new InsuranceWDataContext())
             using (var dc2 = new Pirvelckaroebi2DataContext())
             {
-                var ojakhuriPirvelckaro = new[] {1, 2, 10}.ToList();
+                var ojakhuriPirvelckaro = new[] { 1, 2, 10 }.ToList();
 
-                var sds = (   from sd in dc2.Source_Datas
-                              from u in dc2.Pirvelckaro_01_UMCEOEBIs.Where(x=>x.SourceDataId==sd.ID).DefaultIfEmpty()
-                              where (ojakhuriPirvelckaro.Contains(sd.Base_Type) && sd.FID == id) || (!ojakhuriPirvelckaro.Contains(sd.Base_Type) && sd.PID == id)
-                              where 1 <= sd.Base_Type && sd.Base_Type <= 30
-                              select new {
-                                              sd.Base_Type, 
-                                              Periodi = sd.MapDate.Year * 100 + sd.MapDate.Month, 
-                                              FID = sd.FID, 
-                                              PID = sd.PID, 
-                                              FIRST_NAME = sd.FIRST_NAME,
-                                              LAST_NAME = sd.LAST_NAME, 
-                                              BIRTH_DATE = sd.BIRTH_DATE, 
-                                              FAMILY_SCORE = u == null ? (int?)null : u.FAMILY_SCORE,
-                                              SCORE_DATE = u == null ? (DateTime?)null : u.SCORE_DATE, 
-                                              PIROBA = sd.Piroba 
-                                          }
+                var sds = (from sd in dc2.Source_Datas
+                           from u in dc2.Pirvelckaro_01_UMCEOEBIs.Where(x => x.SourceDataId == sd.ID).DefaultIfEmpty()
+                           where (ojakhuriPirvelckaro.Contains(sd.Base_Type) && sd.FID == id) || (!ojakhuriPirvelckaro.Contains(sd.Base_Type) && sd.PID == id)
+                           where 1 <= sd.Base_Type && sd.Base_Type <= 30
+                           select new
+                           {
+                               sd.Base_Type,
+                               Periodi = sd.MapDate.Year * 100 + sd.MapDate.Month,
+                               FID = sd.FID,
+                               PID = sd.PID,
+                               FIRST_NAME = sd.FIRST_NAME,
+                               LAST_NAME = sd.LAST_NAME,
+                               BIRTH_DATE = sd.BIRTH_DATE,
+                               FAMILY_SCORE = u == null ? (int?)null : u.FAMILY_SCORE,
+                               SCORE_DATE = u == null ? (DateTime?)null : u.SCORE_DATE,
+                               PIROBA = sd.Piroba
+                           }
                           ).ToList();
 
                 var fds = dc.FAMILY_DATA_201101s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201012, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA })
@@ -378,8 +442,8 @@ namespace Dazgveva.Reportebi.Controllers
                   .Concat(dc.FAMILY_DATA_201203s.Where(x => x.ACTION_TYPE == 100 || x.ACTION_TYPE == null).Where(x => x.FID == id).Select(f => new { Periodi = 201202, f.FID, f.PID, f.FIRST_NAME, f.LAST_NAME, f.BIRTH_DATE, f.FAMILY_SCORE, SCORE_DATE = f.VISIT_DATE, f.PIROBA }))
                   .Where(x => x.FAMILY_SCORE.HasValue && x.SCORE_DATE.HasValue)
                   .AsEnumerable()
-                  .Select(x => new {Base_Type = 1, x.Periodi, x.FID, x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE, FAMILY_SCORE = x.FAMILY_SCORE, SCORE_DATE = x.SCORE_DATE, x.PIROBA })
-                  .Concat(sds.AsEnumerable().Select(x => new {x.Base_Type, x.Periodi, x.FID, x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE, x.FAMILY_SCORE, x.SCORE_DATE, x.PIROBA }))
+                  .Select(x => new { Base_Type = 1, x.Periodi, x.FID, x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE, FAMILY_SCORE = x.FAMILY_SCORE, SCORE_DATE = x.SCORE_DATE, x.PIROBA })
+                  .Concat(sds.AsEnumerable().Select(x => new { x.Base_Type, x.Periodi, x.FID, x.PID, x.FIRST_NAME, x.LAST_NAME, x.BIRTH_DATE, x.FAMILY_SCORE, x.SCORE_DATE, x.PIROBA }))
 
 
                   .GroupBy(x => new { x.FID, x.SCORE_DATE, x.FAMILY_SCORE, x.Periodi })
@@ -437,7 +501,7 @@ namespace Dazgveva.Reportebi.Controllers
             }
         }
         // @done
-        public PartialViewResult DeklaraciebisIstoria(string id ="")
+        public PartialViewResult DeklaraciebisIstoria(string id = "")
         {
             using (var p = new Pirvelckaroebi2DataContext())
             {
@@ -518,7 +582,7 @@ namespace Dazgveva.Reportebi.Controllers
                     WHERE t.PID = @pid
                 ";
 
-                ViewBag.periodebi = conn.Query(sql, new {pid = pid});
+                ViewBag.periodebi = conn.Query(sql, new { pid = pid });
 
                 return PartialView();
             }
@@ -541,7 +605,7 @@ namespace Dazgveva.Reportebi.Controllers
                 }
             }
 
-            return Redirect( Request.UrlReferrer.ToString() );
+            return Redirect(Request.UrlReferrer.ToString());
         }
         // @done
         public string Reestri(string pid = "")
@@ -569,15 +633,35 @@ namespace Dazgveva.Reportebi.Controllers
         [OutputCache(Duration = 600)]
         public ActionResult PrvelckaroebisMocvdisTarigebi()
         {
-            using(var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
+            using (var con = new SqlConnection(@"Data Source=triton;Initial Catalog=Pirvelckaroebi;User ID=sa;Password=ssa$20"))
             {
                 con.Open();
-                var list = con.Query(@"select	p.ProgramisId, p.ProgramisDasakheleba, mapDates.MaxMapDate
-from	SocialuriDazgveva.dbo.Programebi (nolock) p
-join	(select Base_Type, MAX(MapDate) MaxMapDate
-		from Pirvelckaroebi.dbo.Source_Data (nolock)
-		group by Base_Type) mapDates on mapDates.Base_Type = p.ProgramisId
-ORDER BY p.ProgramisId",commandTimeout:120).ToList();
+                var list = con.Query(@"SELECT p.ProgramisId, p.ProgramisDasakheleba, mapDates.MaxMapDate 
+FROM (        SELECT max(RecDate) MaxMapDate, 1 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_01_UMCEOEBI]
+    UNION ALL SELECT max(RecDate), 2 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_02_DEVNILEBI]
+    UNION ALL SELECT max(RecDate), 3 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_03_BAVSHVEBI]
+    UNION ALL SELECT max(RecDate), 4 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_04_REINTEGRACIA]
+    UNION ALL SELECT max(RecDate), 5 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_05_KULTURA]
+    UNION ALL SELECT max(RecDate), 6 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_06_XANDAZMULEBI]
+    UNION ALL SELECT max(RecDate), 7 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_07_SKOLA_PANSIONEBI]
+    UNION ALL SELECT max(RecDate), 8 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_08_TEACHERS]
+    UNION ALL SELECT max(RecDate), 9 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_09_UFROSI_AGMZRDELEBI]
+    UNION ALL SELECT max(RecDate), 10 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_10_APKHAZETIS_OJAKHEBI]
+    UNION ALL SELECT max(RecDate), 100 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_100_DevniltaMisamartebi_201210]
+    UNION ALL SELECT max(RecDate), 11 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_11_SATEMO]
+    UNION ALL SELECT max(RecDate), 12 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_12_MCIRE_SAOJAXO]
+    UNION ALL SELECT max(RecDate), 13 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_13_TEACHERS_AFX]
+    UNION ALL SELECT max(RecDate), 14 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_14_RESURSCENTRIS_TANAMSHROMLEBI]
+    UNION ALL SELECT max(RecDate), 21 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_21_SAPENSIO_ASAKIS_MOSAXLEOBA]
+    UNION ALL SELECT max(RecDate), 22 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_22_STUDENTEBI]
+    UNION ALL SELECT max(RecDate), 23 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_23_BAVSHVEBI(165)]
+    UNION ALL SELECT max(RecDate), 24 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_24_INVALIDI_BAVSHVEBI]
+    UNION ALL SELECT max(RecDate), 25 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI]
+    UNION ALL SELECT max(RecDate), 26 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_26_ARASAQARTVELOS_MOQALAQE_PENSIONREBI]
+    UNION ALL SELECT max(RecDate), 27 Base_Type FROM Pirvelckaroebi..[Pirvelckaro_27_AXALSHOBILEBI(165)]
+    ) mapDates
+join SocialuriDazgveva.dbo.Programebi  p on mapDates.Base_Type = p.ProgramisId
+ORDER BY p.ProgramisId", commandTimeout: 120).ToList();
                 return PartialView(list);
             }
         }
@@ -602,7 +686,7 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
 			            g.StatusisMopovebisTarigi ASC
                 ";
 
-                var result = conn.Query(sql, new {pid = q});
+                var result = conn.Query(sql, new { pid = q });
 
                 return PartialView(result);
             }
@@ -621,15 +705,14 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
 
 
 
-//just returns partial view
+        //just returns partial view
         public PartialViewResult Koreqtireba(int ID)
         {
             var damkoreqtirebeli = new Damkoreqtirebeli();
             using (var conn = damkoreqtirebeli.GaxseniKavshiri())
-            
-            { 
+            {
 
-               var dasakoreqtirebeliKontraqti =  damkoreqtirebeli.CamoigeDasakoreqtirebeliKontraqti(ID, conn);
+                var dasakoreqtirebeliKontraqti = damkoreqtirebeli.CamoigeDasakoreqtirebeliKontraqti(ID, conn);
                 return PartialView(dasakoreqtirebeliKontraqti);
             }
 
@@ -644,9 +727,8 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
         public JsonResult MomeRaionebi(string val)
         {
 
- 
+
             using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
-        
             {
 
                 con.Open();
@@ -658,16 +740,16 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
 
 
         [HttpPost]
-        public void Save(int ID,string tags, string cityInput, string villageInput, string AddressInput)
+        public void Save(int ID, string tags, string cityInput, string villageInput, string AddressInput)
         {
             Damkoreqtirebeli larisa = new Damkoreqtirebeli();
             using (var con = larisa.GaxseniKavshiri())
             {
                 con.Open();
-                
+
                 larisa.DaakoreqtireMisamarti(ID, tags, cityInput, villageInput, AddressInput, con);
 
-              
+
             }
         }
 
@@ -675,9 +757,8 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
 
         public JsonResult ReestridanDatreva(string PID)
         {
-            
+
             using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
-            
             {
                 con.Open();
                 Damkoreqtirebeli larisa = new Damkoreqtirebeli();
@@ -688,7 +769,7 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
         }
 
 
-        public JsonResult ReestridanDatrevaP(string PID,int ID)
+        public JsonResult ReestridanDatrevaP(string PID, int ID)
         {
             using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"].ConnectionString))
             {
@@ -697,7 +778,7 @@ ORDER BY p.ProgramisId",commandTimeout:120).ToList();
                 var reestrisInfo = larisa.CamoigeReestridan(PID);
                 var json = JsonConvert.SerializeObject(reestrisInfo);
                 string birthDate = reestrisInfo.BIRTH_DATE.HasValue ? reestrisInfo.BIRTH_DATE.Value.ToString("yyyyMMdd") : null;
-                larisa.DaakoreqtirePiradiMonacemebi(ID,reestrisInfo.PID,reestrisInfo.FIRST_NAME,reestrisInfo.LAST_NAME,birthDate, con);
+                larisa.DaakoreqtirePiradiMonacemebi(ID, reestrisInfo.PID, reestrisInfo.FIRST_NAME, reestrisInfo.LAST_NAME, birthDate, con);
                 return Json(json, JsonRequestBehavior.AllowGet);
             }
         }

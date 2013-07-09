@@ -1,0 +1,27 @@
+﻿@model System.Collections.Generic.List<dynamic>
+<div><table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Base_Type</th>
+      <th>FID</th>
+      <th>Misamarti</th>
+      <th>Statusis Periodi</th>
+      <th>Shenishvna</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>@item.Id</td>
+        <td>@Html.ActionLink((string)item.ProgramisDasakheleba, "PirvelckarosChanacerebi", new { unnom = item.Unnom, baseType = item.Base_Type, ganckhId = item.Id })</td>
+        <td>@(!string.IsNullOrWhiteSpace(item.FID) ? @Html.ActionLink((string)item.FID, "Dzebna", new { q = item.FID }):null)</td>
+        <td>@item.Rai @item.Rai_Name @item.City @item.Village @item.Street @item.Full_Address @item.Dacesebuleba - (@item.MisamartisCarmomavloba) </td>
+        <td><span>დან:@item.StatusisMopovebisTarigi.ToString("yyyy.MM") მდე:@item.DadasturebisTarigi.ToString("yyyy.MM")</span></td>
+        <td>პირველად_მოგვაწოდეს:@item.RegistraciisTarigi.ToString("yyyy.MM.dd") მომზადდა_დასაზღვევად:@item.ShekmnisTarigi.ToString("yyyy.MM.dd") წარმომავლობა:(@item.Carmomavloba)</td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>

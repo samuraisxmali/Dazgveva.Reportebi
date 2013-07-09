@@ -1,0 +1,22 @@
+﻿@model System.Collections.Generic.List<dynamic>
+<div><table class="table">
+  <thead>
+    <tr>
+      <th>Atributi</th>
+      <th>Mnishvneloba</th>
+      <th>Dan</th>
+      <th>Mde</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>@item.Atributi</td>
+        <td>@item.Mnishvneloba</td>
+        <td>@item.Dan</td>
+        <td>@item.Mde</td>
+      </tr>
+    }
+  </tbody>
+</table></div>

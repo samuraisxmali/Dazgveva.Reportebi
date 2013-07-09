@@ -87,6 +87,7 @@
     <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\Damkoreqtirebeli.cs" />
     <Compile Include="Models\DeklaraciebisIstoriaList.cs" />
+    <Compile Include="Models\Ganckhadebebi\Angarishebi.cs" />
     <Compile Include="Models\LoginInput.cs" />
     <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
@@ -224,6 +225,12 @@
     </Content>
     <Content Include="Views\Account\CurrentUser.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Home\ShemosuliGancxadebebi.cshtml" />
+    <Content Include="Views\Home\PirvelckarosChanacerebi.cshtml" />
+    <Content Include="Views\Home\Ganckhadebebi\Ganckhadebebi.cshtml" />
+    <Content Include="Views\Home\Ganckhadebebi\PirovnebisRekvizitebisIstoria.cshtml" />
+    <Content Include="Views\Home\Ganckhadebebi\Pirovneba.cshtml" />
+    <Content Include="Views\Home\Ganckhadebebi\ReestrisStatusebisIstoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

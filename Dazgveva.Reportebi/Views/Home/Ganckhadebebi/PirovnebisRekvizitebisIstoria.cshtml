@@ -1,0 +1,26 @@
+﻿@model System.Collections.Generic.List<dynamic>
+<div><table class="table">
+  <thead>
+    <tr>
+      <th>IdentPID</th>
+      <th>PID</th>
+      <th>First_Name</th>
+      <th>Last_Name</th>
+      <th>Birth_Date</th>
+      <th>Tarigi</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>@item.IdentPID</td>
+        <td>@Html.ActionLink((string)@item.PID, "Dzebna", new { q = @item.PID })</td>
+        <td>@item.First_Name</td>
+        <td>@item.Last_Name</td>
+        <td>@item.Birth_Date</td>
+        <td>@item.Tarigi</td>
+      </tr>
+    }
+  </tbody>
+</table></div>

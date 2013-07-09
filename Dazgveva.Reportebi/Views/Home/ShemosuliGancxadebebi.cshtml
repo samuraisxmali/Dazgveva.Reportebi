@@ -1,0 +1,21 @@
+﻿@model System.Collections.Generic.List<dynamic>
+<ul>
+  @foreach (var u in Model)
+  {
+    <li>
+      @Html.Partial("Ganckhadebebi\\Pirovneba", (object)u.Pirovneba)
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <div>
+                @Html.Partial("Ganckhadebebi\\PirovnebisRekvizitebisIstoria", (object)u.PirovnebisRekvizitebisIstoria)
+                @Html.Partial("Ganckhadebebi\\ReestrisStatusebisIstoria", (object)u.ReestrisStatusebisIstoria)
+              </div>
+            </td>
+            <td>@Html.Partial("Ganckhadebebi\\Ganckhadebebi", (object)u.Ganckhadebebi)</td>
+        </tbody>
+      </table>
+    </li>
+  }
+</ul>

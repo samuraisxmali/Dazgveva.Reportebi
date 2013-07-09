@@ -1,0 +1,29 @@
+﻿@model System.Collections.Generic.List<IDictionary<string, object>>
+<h1>@ViewBag.PirvelckarosCkhrili</h1>
+@{
+  var first = Model.FirstOrDefault();
+}
+@if (first != null)
+{
+  <table class="table">
+    <thead>
+      <tr>
+        @foreach (var key in first.Keys)
+        {
+          <th>@key</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          @foreach (var key in first.Keys)
+          {
+            <td>@item[key]</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+}
