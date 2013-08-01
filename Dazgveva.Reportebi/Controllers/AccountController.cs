@@ -83,6 +83,7 @@ namespace Dazgveva.Reportebi.Controllers
             Console.WriteLine(GetPasswordHash("o.kalachian@evillage.gov.ge", "32001020606"));
             Console.WriteLine(GetPasswordHash("i.khukhunaishvili@evillage.gov.ge", "26001003068"));
             Console.WriteLine(GetPasswordHash("s.gogeshvili@evillage.gov.ge", "26001004036"));
+            Console.WriteLine(GetPasswordHash("calenjikha", "c1234"));
 
 
         }

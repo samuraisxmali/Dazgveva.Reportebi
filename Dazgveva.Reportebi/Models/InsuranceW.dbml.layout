@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 25, 108.375" name="InsuranceW">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 25, 111" name="InsuranceW">
   <DataContextMoniker Name="/InsuranceWDataContext" />
   <nestedChildShapes>
     <classShape Id="d19b8b29-1adb-4d21-915d-b2c9f3c06823" absoluteBounds="8.125, 3.5, 2, 4.4631168619791666">
@@ -98,10 +98,10 @@
         <elementListCompartment Id="4088f4f0-60d0-47c9-877f-779d44bd7d27" absoluteBounds="22.765, 1.21, 1.9700000000000002, 8.7106526692708321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="d8e3289c-5dc2-4bd9-94ba-3f0b7f88aa96" absoluteBounds="5.875, 3.125, 2, 105.03676595052082">
-      <DataClassMoniker Name="/InsuranceWDataContext/DAZGVEVA_201307" />
+    <classShape Id="36f46546-98df-4229-99f8-83a358fc04aa" absoluteBounds="3.75, 3.25, 2, 107.53668457031249">
+      <DataClassMoniker Name="/InsuranceWDataContext/DAZGVEVA_201308" />
       <nestedChildShapes>
-        <elementListCompartment Id="1ffe928a-6f10-4948-a09e-5c5238f8b864" absoluteBounds="5.89, 3.585, 1.9700000000000002, 104.47676595052083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="db8fc285-728b-448c-b325-5593684f8ce8" absoluteBounds="3.765, 3.71, 1.9700000000000002, 106.9766845703125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

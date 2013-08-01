@@ -22,6 +22,7 @@ where not exists (
     select null from [DazgvevaGanckhadebebi].[dbo].GaukmebuliGanckhadebebi gg 
     where gg.GaukmebuliGanckhId = g.Id
     )
+AND g.StatusisMopovebisTarigi <= g.DadasturebisTarigi
 AND " + whereNacili.Item1 + @" order by RegistraciisTarigi", whereNacili.Item2).ToList();
 
         }
@@ -32,10 +33,13 @@ AND " + whereNacili.Item1 + @" order by RegistraciisTarigi", whereNacili.Item2).
                     "select TABLE_NAME from Pirvelckaroebi.INFORMATION_SCHEMA.TABLES where TABLE_NAME like 'Pirvelckaro_%_%'")
                     .Where(x => x.Split('_').Length > 2)
                     .ToDictionary(x => int.Parse(x.Split('_')[1]));
-
+            var dublebi = conn.Query(
+                "select * from UketesiReestri..UnnomisConventori where OldUnnom=@unnom or NewUnnom=@unnom",
+                new { unnom = unnom }).ToList();
+            var unnomebi = dublebi.Select(x => (int)x.OldUnnom).Concat(dublebi.Select(x => (int)x.NewUnnom)).Concat(new[]{unnom}).Distinct();
             return conn.Query(@"SELECT *
 FROM [Pirvelckaroebi].[dbo].[" + pirvelckarosCkhrilebi[basetype] + @"] (nolock) g 
-where Unnom=@unnom order by RecId", new { unnom = unnom })
+where Unnom in (" + string.Join(",", unnomebi) + @") order by RecId")
                                               .Cast<IDictionary<string, object>>()
                                               .ToList();
 

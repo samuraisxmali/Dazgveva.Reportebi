@@ -15,7 +15,7 @@
     {
       <tr>
         <td>@item.IdentPID</td>
-        <td>@Html.ActionLink((string)@item.PID, "Dzebna", new { q = @item.PID })</td>
+        <td>@(string.IsNullOrWhiteSpace(item.PID)? null:Html.ActionLink((string)item.PID, "Dzebna", new { q = item.PID }))</td>
         <td>@item.First_Name</td>
         <td>@item.Last_Name</td>
         <td>@item.Birth_Date</td>
