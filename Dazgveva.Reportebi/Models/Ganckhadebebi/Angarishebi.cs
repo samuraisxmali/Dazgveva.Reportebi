@@ -26,30 +26,57 @@ AND g.StatusisMopovebisTarigi <= g.DadasturebisTarigi
 AND " + whereNacili.Item1 + @" order by RegistraciisTarigi", whereNacili.Item2).ToList();
 
         }
-
+        static Dictionary<int,string> pirvelckaroebi = new Dictionary<int, string>()
+            {
+                {1,"select * from [Pirvelckaro_01_UMCEOEBI] (nolock)"},
+{2,"select * from [Pirvelckaro_02_DEVNILEBI] (nolock)"},
+{3,"select * from [Pirvelckaro_03_BAVSHVEBI] (nolock)"},
+{4,"select * from [Pirvelckaro_04_REINTEGRACIA] (nolock)"},
+{5,"select * from [Pirvelckaro_05_KULTURA] (nolock)"},
+{6,"select * from [Pirvelckaro_06_XANDAZMULEBI] (nolock)"},
+{7,"select * from [Pirvelckaro_07_SKOLA_PANSIONEBI] (nolock)"},
+{8,"select * from [Pirvelckaro_08_TEACHERS] (nolock)"},
+{9,"select * from [Pirvelckaro_09_UFROSI_AGMZRDELEBI] (nolock)"},
+{10,"select * from [Pirvelckaro_10_APKHAZETIS_OJAKHEBI] (nolock)"},
+{100,"select * from [Pirvelckaro_100_DevniltaMisamartebi_201210] (nolock)"},
+{11,"select * from [Pirvelckaro_11_SATEMO] (nolock)"},
+{12,"select * from [Pirvelckaro_12_MCIRE_SAOJAXO] (nolock)"},
+{13,"select * from [Pirvelckaro_13_TEACHERS_AFX] (nolock)"},
+{14,"select * from [Pirvelckaro_14_RESURSCENTRIS_TANAMSHROMLEBI] (nolock)"},
+{21,"select * from [Pirvelckaro_21_SAPENSIO_ASAKIS_MOSAXLEOBA] (nolock)"},
+{22,"select * from [Pirvelckaro_22_STUDENTEBI] (nolock)"},
+{23,@"select [RecId],[RecDate],[Base_Type],[SourceDataId],[FIRST],[LAST],[GENDER],[PRIVATE_NUMBER],[BIRTH_DATE],[SUB_TYPE],[Region],[Raion],[City],[Village],[RP_Address],[FACT_ADDRESS],[MotherLast],[MotherFirst],[MotherPrivateNumber],[MotherBirthDate],[FatherLast],[FatherFirst],[FatherPrivateNumber],[FatherBirthDate],[DeathRegistrationDate],[DeathDate],[CONDITION_DESCRIPTION],[APPD_DATE],[APPD_STATUS_DESCRIPTION],[ForegnCountry],[Void_Address],[Without_Address],[Gakrechilia],[Unnom],[Rai] from [Pirvelckaro_23_BAVSHVEBI(165)] (nolock)
+union all 
+select [RecId],[RecDate],[Base_Type],[SourceDataId],[FIRST],[LAST],[GENDER],[PRIVATE_NUMBER],[BIRTH_DATE],[SUB_TYPE],[Region],[Raion],[City],[Village],[RP_Address],[FACT_ADDRESS],[MotherLast],[MotherFirst],[MotherPrivateNumber],[MotherBirthDate],[FatherLast],[FatherFirst],[FatherPrivateNumber],[FatherBirthDate],[DeathRegistrationDate],[DeathDate],[CONDITION_DESCRIPTION],[APPD_DATE],[APPD_STATUS_DESCRIPTION],[ForegnCountry],[Void_Address],[Without_Address],[Gakrechilia],[Unnom],[Rai] from [Pirvelckaro_27_AXALSHOBILEBI(165)] (nolock)"},
+{24,"select * from [Pirvelckaro_24_INVALIDI_BAVSHVEBI] (nolock)"},
+{25,"select * from [Pirvelckaro_25_MKVETRAD_GAMOXATULI_INVALIDI_BAVSHVEBI] (nolock)"},
+{26,"select * from [Pirvelckaro_26_ARASAQARTVELOS_MOQALAQE_PENSIONREBI] (nolock)"},
+            };
+        static int LastUnnom(this SqlConnection conn, int unnom)
+        {
+            var newUnnom = conn.Query<int>("select NewUnnom from UketesiReestri..UnnomisConventori where OldUnnom=@unnom", new { unnom = unnom })
+                .ToList();
+            return newUnnom.Count > 0 ? newUnnom[0] : unnom;
+        }
         public static IList<IDictionary<string, object>> PirvelckarosChanacerebi(this SqlConnection conn, int basetype, int unnom)
         {
-            var pirvelckarosCkhrilebi = conn.Query<string>(
-                    "select TABLE_NAME from Pirvelckaroebi.INFORMATION_SCHEMA.TABLES where TABLE_NAME like 'Pirvelckaro_%_%'")
-                    .Where(x => x.Split('_').Length > 2)
-                    .ToDictionary(x => int.Parse(x.Split('_')[1]));
             var dublebi = conn.Query(
                 "select * from UketesiReestri..UnnomisConventori where OldUnnom=@unnom or NewUnnom=@unnom",
                 new { unnom = unnom }).ToList();
+
             var unnomebi = dublebi.Select(x => (int)x.OldUnnom).Concat(dublebi.Select(x => (int)x.NewUnnom)).Concat(new[]{unnom}).Distinct();
             return conn.Query(@"SELECT *
-FROM [Pirvelckaroebi].[dbo].[" + pirvelckarosCkhrilebi[basetype] + @"] (nolock) g 
-where Unnom in (" + string.Join(",", unnomebi) + @") order by RecId")
+FROM (" + pirvelckaroebi[basetype] + @")  g 
+where Unnom in (" + string.Join(",", unnomebi) + @") order by RecDate")
                                               .Cast<IDictionary<string, object>>()
                                               .ToList();
-
         }
 
         public static dynamic BoloKargiChanaceri(this SqlConnection conn, int unnom)
         {
             return conn.Query(@"SELECT *
 FROM [UketesiReestri].[dbo].vUnnomBoloKargiChanaceri (nolock) 
-WHERE Unnom = @unnom", new { unnom = unnom }).FirstOrDefault();
+WHERE Unnom = @unnom", new { unnom = conn.LastUnnom(unnom) }).FirstOrDefault();
 
         }
 
@@ -58,7 +85,7 @@ WHERE Unnom = @unnom", new { unnom = unnom }).FirstOrDefault();
             return conn.Query(@"SELECT *
 FROM [UketesiReestri].[dbo].UnnomShesadarebeliReestri (nolock) 
 WHERE Unnom = @unnom
-ORDER BY Tarigi", new { unnom = unnom }).ToList();
+ORDER BY Tarigi", new { unnom = conn.LastUnnom(unnom) }).ToList();
 
         }
 
