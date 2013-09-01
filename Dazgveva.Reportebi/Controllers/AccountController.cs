@@ -25,7 +25,7 @@ namespace Dazgveva.Reportebi.Controllers
 
     public class AccountController : Controller
     {
-        //[RequireHttps]
+        [RequireHttps]
         [HttpGet]
         public ActionResult Login(string returnUrl)
         {
@@ -37,7 +37,7 @@ namespace Dazgveva.Reportebi.Controllers
             return View("Avtorizacia", new LoginInput { ReturnUrl = returnUrl });
         }
 
-        //[RequireHttps]
+        [RequireHttps]
         [HttpPost]
         public ActionResult Login(LoginInput input)
         {
