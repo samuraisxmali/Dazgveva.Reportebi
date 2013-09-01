@@ -15,13 +15,14 @@
     <AssemblyName>Dazgveva.Reportebi</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -80,25 +81,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\DeklaraciebisIstoriaList.cs" />
     <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
     <Compile Include="Models\FamiliDataPeriodi.cs" />
     <Compile Include="Models\Gadarickhva.cs" />
-    <Compile Include="Models\InsuranceW.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InsuranceW.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\Kontrakti.cs" />
     <Compile Include="Models\KontraktisPeriodi.cs" />
-    <Compile Include="Models\Pirvelckaroebi2.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\Class1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -174,21 +165,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\helpers.cshtml" />
-    <None Include="Models\InsuranceW.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>InsuranceW.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Home\Dzebna.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Home\Gadarickhvebi.cshtml" />
     <Content Include="Views\Home\FamiliDatas.cshtml" />
     <Content Include="Views\Home\Periodebi.cshtml" />
-    <None Include="Models\Pirvelckaroebi2.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Pirvelckaroebi2.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Home\SourceData.cshtml" />
     <Content Include="Views\Home\DeklaraciebisIstoria.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
@@ -200,16 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\InsuranceW.dbml.layout">
-      <DependentUpon>InsuranceW.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\Pirvelckaroebi2.dbml.layout">
-      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -235,8 +206,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>7152</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:7152/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
