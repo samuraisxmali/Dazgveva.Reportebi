@@ -84,28 +84,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\Damkoreqtirebeli.cs" />
     <Compile Include="Models\DeklaraciebisIstoriaList.cs" />
     <Compile Include="Models\Ganckhadebebi\Angarishebi.cs" />
     <Compile Include="Models\LoginInput.cs" />
+    <Compile Include="Models\Pirvelckaroebi2.designer.cs">
+      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="Models\SourceData.cs" />
     <Compile Include="Models\FamiliDataCevri.cs" />
     <Compile Include="Models\FamiliDataPeriodi.cs" />
     <Compile Include="Models\Gadarickhva.cs" />
-    <Compile Include="Models\InsuranceW.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InsuranceW.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\Kontrakti.cs" />
     <Compile Include="Models\KontraktisPeriodi.cs" />
-    <Compile Include="Models\Pirvelckaroebi2.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\Class1.cs" />
     <Compile Include="Users.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -180,6 +175,14 @@
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="Scripts\jquery-1.5.1.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />
+    <Content Include="Models\Pirvelckaroebi2.dbml">
+      <SubType>Designer</SubType>
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Pirvelckaroebi2.designer.cs</LastGenOutput>
+    </Content>
+    <None Include="Models\Pirvelckaroebi2.dbml.layout">
+      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
@@ -240,21 +243,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\helpers.cshtml" />
-    <None Include="Models\InsuranceW.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>InsuranceW.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Home\Dzebna.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Home\Gadarickhvebi.cshtml" />
     <Content Include="Views\Home\FamiliDatas.cshtml" />
     <Content Include="Views\Home\Periodebi.cshtml" />
-    <None Include="Models\Pirvelckaroebi2.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Pirvelckaroebi2.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Home\SourceData.cshtml" />
     <Content Include="Views\Home\DeklaraciebisIstoria.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
@@ -267,16 +260,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\InsuranceW.dbml.layout">
-      <DependentUpon>InsuranceW.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\Pirvelckaroebi2.dbml.layout">
-      <DependentUpon>Pirvelckaroebi2.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Users.dbml.layout">

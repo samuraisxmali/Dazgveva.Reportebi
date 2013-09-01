@@ -28,13 +28,12 @@ namespace MvcApplication2.Models
 
             }
         }
-    
+
 
         //usefull
         public SqlConnection GaxseniKavshiri()
         {
-            var conn =
-                new SqlConnection(
+            var conn = new SqlConnection(
                     System.Configuration.ConfigurationManager.ConnectionStrings["INSURANCEWConnectionString"]
                         .ConnectionString);
             conn.Open();
@@ -59,7 +58,7 @@ namespace MvcApplication2.Models
 				    ,isnull(d.CITY		    ,'')  as CITY		
 				    ,isnull(d.VILLAGE	    ,'')  as VILLAGE	
 				    ,isnull(d.ADDRESS_FULL  ,'')  as ADDRESS_FULL
-				    FROM INSURANCEW.dbo.DAZGVEVA_201308 d where ID =" + ID;
+				    FROM INSURANCEW.dbo.DAZGVEVA_" + DateTime.Now.ToString("yyyyMM") + " d where ID =" + ID;
             var dasakoreqtirebeliKontraqti = conn.Query<Kontrakti>(sql).ToList();
             return dasakoreqtirebeliKontraqti;
         }
@@ -71,7 +70,7 @@ namespace MvcApplication2.Models
                     @"http://172.17.8.125/CRA_Rest/PersonInfo/JSONPersonInfoPid?piradiNomeri={0}&ckaro=Cra&userName=zurabbat", PID);
             return j;
         }
-        
+
         public Kontrakti CamoigeReestridan(string PID)
         {
             var url = URL(PID);
@@ -88,12 +87,12 @@ namespace MvcApplication2.Models
             Model.RAI_NAME = o.PersonInformacia.RegionStr;
             Model.ADDRESS_FULL = o.PersonInformacia.LivingPlace;
             return Model;
-         
+
         }
 
-        public void DaakoreqtireMisamarti(int ID,string tags, string cityInput, string villageInput, string AddressInput ,SqlConnection con)
+        public void DaakoreqtireMisamarti(int ID, string tags, string cityInput, string villageInput, string AddressInput, SqlConnection con)
         {
-           
+
             var query = string.Format("exec TempO.dbo.Koreqtireba {0},N'{1}',N'{2}',N'{3}',N'{4}' "
              , ID
              , tags
@@ -101,23 +100,22 @@ namespace MvcApplication2.Models
              , villageInput
              , AddressInput
               );
-            con.Execute(query);     
+            con.Execute(query);
         }
 
-        public void DaakoreqtirePiradiMonacemebi(int ID,string PID, string FirstName, string LastName, string BirthDate, SqlConnection con)
+        public void DaakoreqtirePiradiMonacemebi(int ID, string PID, string FirstName, string LastName, string BirthDate, SqlConnection con)
         {
-            
-             var query = string.Format("exec TempO.dbo.PiradiMonacemebisKoreqtireba '{0}',N'{1}',N'{2}',N'{3}'"
-             , ID 
-             , FirstName
-             , LastName
-             , BirthDate
-            );
-            con.Execute(query);     
-        }
-        }
 
+            var query = string.Format("exec TempO.dbo.PiradiMonacemebisKoreqtireba '{0}',N'{1}',N'{2}',N'{3}'"
+            , ID
+            , FirstName
+            , LastName
+            , BirthDate
+           );
+            con.Execute(query);
+        }
     }
 
+}
 
- 
+
